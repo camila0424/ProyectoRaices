@@ -1,7 +1,7 @@
 import { BrowserRouter, Routes, Route } from "react-router-dom";
 import Layout from "./components/common/Layout";
 import LandingPage from "./pages/LandingPage";
-import OnboardingRegistro from "./pages/raices/OnboardingRegistro";
+import OnboardingRegistro from "./pages/raices/register/OnboardingRegister";
 import "./styles/App.css";
 
 function App() {
