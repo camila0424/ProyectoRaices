@@ -1,19 +1,19 @@
 import { useState, useEffect } from "react";
-
+import { useNavigate } from "react-router-dom";
+import { Link } from 'react-router-dom';
 const navLinks = [
     { label: "Cómo funciona", href: "#como-funciona" },
-    { label: "Ciudades", href: "#ciudades" },
     { label: "Semillas", href: "#semillas" },
 ];
 
 function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
+    const navigate = useNavigate();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
         window.addEventListener("scroll", handleScroll);
-
         return () => window.removeEventListener("scroll", handleScroll);
     }, []);
 
@@ -21,6 +21,11 @@ function Header() {
         setMenuOpen(false);
         const el = document.querySelector(href);
         if (el) el.scrollIntoView({ behavior: "smooth" });
+    };
+
+    const handleRegistro = () => {
+        setMenuOpen(false);
+        navigate("/registro");
     };
 
     return (
@@ -32,23 +37,17 @@ function Header() {
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
                 <div className="flex items-center justify-between h-16">
 
-                    {/* ✅ Logo (ANTES estaba mal cerrado con </a>) */}
-                    <div
-                        onClick={() =>
-                            window.scrollTo({ top: 0, behavior: "smooth" })
-                        }
-                        className="flex items-center gap-3 group cursor-pointer"
+                    {/* Logo */}
+                    <Link
+                        to="/"
+                        onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
+                        className="flex items-center gap-3 cursor-pointer hover:opacity-80 transition-opacity"
                     >
-                        <div
-                            className="w-9 h-9 rounded-full flex items-center justify-center font-bold text-white text-sm shrink-0 transition-transform duration-200 group-hover:scale-105"
-                            style={{ backgroundColor: "#2d7a4f" }}
-                        >
-                            R
+                        <div className="w-10 h-10 rounded-full bg-[#1D9E75] flex items-center justify-center">
+                            <span className="text-white font-bold font-serif text-base">R</span>
                         </div>
-                        <span className="text-white font-bold text-xl tracking-tight">
-                            Raíces
-                        </span>
-                    </div>
+                        <span className="text-white font-semibold font-serif text-base">Raíces</span>
+                    </Link>
 
                     {/* Desktop Nav */}
                     <nav className="hidden md:flex items-center gap-8">
@@ -66,18 +65,13 @@ function Header() {
                             </button>
                         ))}
 
-                        {/* ✅ Botón Registrarme (ANTES le faltaba el <a>) */}
-                        <a
-                            href="#registro"
-                            onClick={(e) => {
-                                e.preventDefault();
-                                handleNavClick("#registro");
-                            }}
+                        <button
+                            onClick={handleRegistro}
                             className="px-5 py-2 rounded-full text-sm font-semibold text-white transition-all duration-200 hover:brightness-110 hover:scale-105 active:scale-95"
                             style={{ backgroundColor: "#2d7a4f" }}
                         >
                             Registrarme
-                        </a>
+                        </button>
                     </nav>
 
                     {/* Mobile Hamburger */}
@@ -87,20 +81,10 @@ function Header() {
                         aria-label="Toggle menu"
                         aria-expanded={menuOpen}
                     >
-                        <span
-                            className={`block h-0.5 w-5 bg-white rounded transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""
-                                }`}
-                        />
-                        <span
-                            className={`block h-0.5 w-5 bg-white rounded transition-all duration-300 ${menuOpen ? "opacity-0" : ""
-                                }`}
-                        />
-                        <span
-                            className={`block h-0.5 w-5 bg-white rounded transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""
-                                }`}
-                        />
+                        <span className={`block h-0.5 w-5 bg-white rounded transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+                        <span className={`block h-0.5 w-5 bg-white rounded transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+                        <span className={`block h-0.5 w-5 bg-white rounded transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
                     </button>
-
                 </div>
             </div>
 
@@ -121,18 +105,13 @@ function Header() {
                         </button>
                     ))}
 
-                    {/* ✅ Botón móvil corregido */}
-                    <a
-                        href="#registro"
-                        onClick={(e) => {
-                            e.preventDefault();
-                            handleNavClick("#registro");
-                        }}
+                    <button
+                        onClick={handleRegistro}
                         className="mt-2 px-5 py-2.5 rounded-full text-sm font-semibold text-white text-center hover:brightness-110 active:scale-95"
                         style={{ backgroundColor: "#2d7a4f" }}
                     >
                         Registrarme
-                    </a>
+                    </button>
                 </nav>
             </div>
         </header>

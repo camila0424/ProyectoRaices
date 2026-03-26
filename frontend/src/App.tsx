@@ -1,16 +1,28 @@
-import Header from './layout/Header'
-import LandingPage from './pages/LandingPage'
-import './styles/App.css'
+import { BrowserRouter, Routes, Route } from "react-router-dom";
+import Layout from "./components/common/Layout";
+import LandingPage from "./pages/LandingPage";
+import OnboardingRegistro from "./pages/raices/OnboardingRegistro";
+import "./styles/App.css";
 
 function App() {
-
-
   return (
-    <>
-      <Header />
-      <LandingPage />
-    </>
-  )
+    <BrowserRouter>
+      <Routes>
+        {/* Landing envuelta en Layout (con Header y Footer) */}
+        <Route
+          path="/"
+          element={
+            <Layout>
+              <LandingPage />
+            </Layout>
+          }
+        />
+
+        {/* Onboarding sin Layout: pantalla standalone sin Header ni Footer */}
+        <Route path="/registro" element={<OnboardingRegistro />} />
+      </Routes>
+    </BrowserRouter>
+  );
 }
 
-export default App
+export default App;
