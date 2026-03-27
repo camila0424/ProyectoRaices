@@ -1,123 +1,209 @@
 import { useState, type ChangeEvent } from 'react';
-import { Camera, CheckCircle, ArrowRight, ArrowLeft, Info } from 'lucide-react';
-import Button from "../../../components/common/Button";
+import { Camera, CheckCircle, ArrowRight, ArrowLeft, Info, FileText } from 'lucide-react';
 
-// Definimos una interfaz para los datos de las fotos
 interface IdentityPhotos {
     frontal: string | null;
     selfie: string | null;
 }
 
+interface IdentityData {
+    frontal: string | null;
+    selfie: string | null;
+    nie: string;
+}
+
 interface StepProps {
-    // Reemplazamos 'any' por la interfaz que definimos arriba
-    onNext: (data: IdentityPhotos) => void;
+    onNext: (data: IdentityData) => void;
     onBack: () => void;
 }
 
-const StepIdentidad = ({ onNext, onBack }: StepProps) => {
+function StepIdentidad({ onNext, onBack }: StepProps) {
+
     const [preview, setPreview] = useState<IdentityPhotos>({
         frontal: null,
         selfie: null
     });
 
+    const [nie, setNie] = useState("");
+    const [errors, setErrors] = useState<Record<string, string>>({});
+
+    const nieRegex = /^[XYZ]\d{7}[A-Z]$/i;
+
     const handleFileChange = (e: ChangeEvent<HTMLInputElement>, id: keyof IdentityPhotos) => {
         const file = e.target.files?.[0];
-
         if (!file) return;
 
-        // Validación: Solo permitir imágenes (jpg, png, webp)
         if (!file.type.startsWith('image/')) {
-            alert("Por favor, sube una imagen válida (JPG o PNG)");
+            setErrors(prev => ({ ...prev, [id]: "Archivo no válido" }));
             return;
         }
 
-        // Validación: Tamaño máximo 5MB
         if (file.size > 5 * 1024 * 1024) {
-            alert("La imagen es demasiado pesada. Máximo 5MB");
+            setErrors(prev => ({ ...prev, [id]: "Máximo 5MB" }));
             return;
         }
 
         const url = URL.createObjectURL(file);
         setPreview(prev => ({ ...prev, [id]: url }));
+        setErrors(prev => ({ ...prev, [id]: "" }));
     };
 
-    const isComplete = !!(preview.frontal && preview.selfie);
+    const validate = () => {
+        const newErrors: Record<string, string> = {};
+
+        if (!nieRegex.test(nie)) {
+            newErrors.nie = "NIE/TIE inválido";
+        }
+
+        if (!preview.frontal) {
+            newErrors.frontal = "Sube tu documento";
+        }
+
+        if (!preview.selfie) {
+            newErrors.selfie = "Sube tu selfie";
+        }
+
+        setErrors(newErrors);
+
+        return Object.keys(newErrors).length === 0;
+    };
 
     return (
-        <div className="flex flex-col gap-6 animate-in fade-in slide-in-from-bottom-4 duration-500">
-            <div className="text-center">
-                <h2 className="text-[#FAF9F5] font-serif text-2xl font-semibold">Verifica tu identidad</h2>
-                <p className="text-[#C2C0B6] text-sm mt-2">Necesitamos confirmar que eres tú.</p>
-            </div>
+        <div className="flex flex-col gap-6">
 
-            {/* USO DE 'Info': Bloque informativo */}
-            <div className="bg-[#1D9E75]/10 border border-[#1D9E75]/30 rounded-xl p-4 flex gap-3">
-                <Info className="text-[#1D9E75] shrink-0" size={20} />
-                <p className="text-[#9FE1CB] text-[11px] leading-relaxed">
-                    Asegúrate de que el documento se lea claramente y no haya reflejos.
+            {/* HEADER */}
+            <div className="text-center">
+                <h2 className="text-[#FAF9F5] text-2xl font-semibold">
+                    Verifica tu identidad
+                </h2>
+                <p className="text-[#C2C0B6] text-sm mt-2">
+                    Necesitamos confirmar que eres tú
                 </p>
             </div>
 
-            <div className="grid grid-cols-1 gap-4">
-                {(['frontal', 'selfie'] as const).map((id) => (
-                    <div key={id} className="flex flex-col gap-2">
-                        <label className="text-[#C2C0B6] text-xs font-medium ml-1">
-                            {id === 'frontal' ? 'Lado frontal del documento' : 'Selfie con tu documento'}
-                        </label>
-
-                        <label className={`relative overflow-hidden h-32 border-2 border-dashed rounded-2xl flex flex-col items-center justify-center transition-all cursor-pointer 
-                            ${preview[id] ? 'border-[#1D9E75] bg-[#1D9E75]/5' : 'border-white/10 bg-[#262624] hover:border-white/30'}`}>
-
-                            {/* USO DE 'handleFileChange' */}
-                            <input
-                                type="file"
-                                accept="image/*"
-                                capture={id === 'selfie' ? 'user' : 'environment'}
-                                className="hidden"
-                                onChange={(e) => handleFileChange(e, id)}
-                            />
-
-                            {preview[id] ? (
-                                <>
-                                    <img src={preview[id]!} alt="Preview" className="absolute inset-0 w-full h-full object-cover opacity-40" />
-                                    <div className="z-10 flex flex-col items-center">
-                                        {/* USO DE 'CheckCircle' */}
-                                        <CheckCircle className="text-[#5DCAA5] mb-1" size={28} />
-                                        <span className="text-white text-[11px] font-medium">Foto capturada</span>
-                                    </div>
-                                </>
-                            ) : (
-                                <>
-                                    {/* USO DE 'Camera' */}
-                                    <Camera className="text-[#9C9A92] mb-1" size={24} />
-                                    <span className="text-[#9C9A92] text-[11px]">Toca para capturar</span>
-                                </>
-                            )}
-                        </label>
-                    </div>
-                ))}
+            {/* INFO */}
+            <div className="bg-[#1D9E75]/10 border border-[#1D9E75]/30 rounded-xl p-4 flex gap-3">
+                <Info className="text-[#1D9E75]" size={20} />
+                <p className="text-[#9FE1CB] text-xs">
+                    Asegúrate de que el documento sea legible y sin reflejos
+                </p>
             </div>
 
+            {/* NIE INPUT */}
+            <div>
+                <label className="text-[#C2C0B6] text-xs ml-1">
+                    NIE / TIE
+                </label>
+
+                <div className={`flex items-center gap-3 mt-1 p-3 rounded-xl border
+                    ${errors.nie ? 'border-red-500 bg-red-500/5' : 'border-white/10 bg-[#262624]'}
+                `}>
+                    <div className="p-2 rounded-full bg-[#1D9E75]/10">
+                        <FileText className="text-[#1D9E75]" size={18} />
+                    </div>
+
+                    <input
+                        value={nie}
+                        onChange={(e) => {
+                            setNie(e.target.value.toUpperCase());
+                            setErrors(prev => ({ ...prev, nie: "" }));
+                        }}
+                        placeholder="Ej: X1234567A"
+                        className="w-full bg-transparent text-white outline-none"
+                    />
+                </div>
+
+                {errors.nie && (
+                    <p className="text-red-400 text-xs mt-1">{errors.nie}</p>
+                )}
+            </div>
+
+            {/* UPLOADS */}
+            <div className="grid gap-4">
+                {(['frontal', 'selfie'] as const).map((id) => {
+                    const hasError = errors[id];
+                    const hasImage = preview[id];
+
+                    return (
+                        <div key={id} className="flex flex-col gap-2">
+
+                            <label className="text-[#C2C0B6] text-xs ml-1">
+                                {id === 'frontal'
+                                    ? 'Documento (frontal)'
+                                    : 'Selfie con documento'}
+                            </label>
+
+                            <label className={`relative h-32 rounded-2xl border-2 border-dashed flex items-center justify-center cursor-pointer
+                                ${hasError
+                                    ? 'border-red-500 bg-red-500/5'
+                                    : hasImage
+                                        ? 'border-[#1D9E75] bg-[#1D9E75]/5'
+                                        : 'border-white/10 bg-[#262624]'
+                                }`}>
+
+                                <input
+                                    type="file"
+                                    accept="image/*"
+                                    className="hidden"
+                                    onChange={(e) => handleFileChange(e, id)}
+                                />
+
+                                {hasImage ? (
+                                    <>
+                                        <img
+                                            src={preview[id]!}
+                                            className="absolute inset-0 w-full h-full object-cover opacity-40"
+                                        />
+                                        <div className="z-10 flex flex-col items-center">
+                                            <CheckCircle className="text-[#5DCAA5]" size={28} />
+                                            <span className="text-white text-xs">
+                                                Imagen subida
+                                            </span>
+                                        </div>
+                                    </>
+                                ) : (
+                                    <div className="flex flex-col items-center">
+                                        <Camera className="text-[#9C9A92]" size={24} />
+                                        <span className="text-[#9C9A92] text-xs">
+                                            Toca para subir
+                                        </span>
+                                    </div>
+                                )}
+                            </label>
+
+                            {hasError && (
+                                <p className="text-red-400 text-xs ml-1">{hasError}</p>
+                            )}
+                        </div>
+                    );
+                })}
+            </div>
+
+            {/* ACTIONS */}
             <div className="flex items-center gap-4 pt-4">
+
                 <button
-                    type="button"
                     onClick={onBack}
-                    className="flex items-center gap-2 text-[#C2C0B6] hover:text-white text-sm font-medium transition-colors"
+                    className="flex items-center gap-2 text-[#C2C0B6] hover:text-white text-sm"
                 >
-                    <ArrowLeft size={16} /> Atrás
+                    <ArrowLeft size={16} />
+                    Atrás
                 </button>
 
-                <Button
-                    variant="primary"
-                    disabled={!isComplete}
-                    onClick={() => onNext(preview)}
-                    className="flex-1 py-4 rounded-xl font-bold flex items-center justify-center gap-2"
+                <button
+                    onClick={() => {
+                        if (!validate()) return;
+                        onNext({ ...preview, nie });
+                    }}
+                    className="flex-1 py-4 rounded-xl bg-[#1D9E75] text-white font-bold flex items-center justify-center gap-2"
                 >
-                    Continuar <ArrowRight size={18} />
-                </Button>
+                    Continuar
+                    <ArrowRight size={18} />
+                </button>
             </div>
+
         </div>
     );
-};
+}
 
 export default StepIdentidad;
