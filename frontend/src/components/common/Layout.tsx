@@ -7,21 +7,16 @@ interface LayoutProps {
     className?: string;
 }
 
-const Layout = ({ children, className = "" }: LayoutProps) => {
+function Layout({ children, className = "" }: LayoutProps) {
     return (
-        <div className="flex flex-col min-h-screen bg-gray-50 text-gray-900">
-            {/* Header fijo en la parte superior */}
+        <div className="flex flex-col min-h-screen" style={{ backgroundColor: "#1e2b25" }}>
             <Header />
-
-            {/* Main content */}
-            <main className={`flex-1 w-full  py-6 ${className}`}>
+            <main className={`flex-1 w-full ${className}`}>
                 {children}
             </main>
-
-            {/* Footer */}
             <Footer />
         </div>
     );
-};
+}
 
 export default Layout;

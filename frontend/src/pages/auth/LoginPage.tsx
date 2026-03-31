@@ -48,8 +48,7 @@ function LoginPage() {
     };
 
     return (
-        <div
-            className="min-h-screen flex flex-col items-center justify-center px-4 pt-20"
+        <div className="flex-1 flex flex-col items-center justify-center px-4 pt-20 pb-8"
             style={{ backgroundColor: "#1e2b25" }}
         >
             <div
