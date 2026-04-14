@@ -47,7 +47,7 @@ function HowItWorks() {
             <div className="max-w-6xl mx-auto text-center">
                 {/* HEADER */}
                 <h2 className="text-3xl md:text-4xl font-bold text-gray-900 mb-4">
-                    Cómo funciona Raíces
+                    Cómo funciona parceros
                 </h2>
                 <p className="text-gray-500 text-base md:text-lg mb-16">
                     Simple, seguro y pensado para ti
@@ -85,7 +85,7 @@ function HowItWorks() {
                 {/* CTA */}
                 <div className="mt-16 flex flex-col md:flex-row items-stretch justify-center gap-4">
 
-                    {/* Card 1 — Raíces */}
+                    {/* Card 1 — parceros */}
                     <div className="flex flex-col justify-between bg-green-900 text-white rounded-2xl px-6 py-4 md:px-10 md:py-6 shadow-xl w-full md:max-w-md transition hover:shadow-2xl">
                         <p className="text-sm md:text-base text-green-200 mb-3">
                             ¿Tienes documentación legal en España?
@@ -95,7 +95,7 @@ function HowItWorks() {
                             className="text-center leading-tight transition hover:opacity-90 cursor-pointer"
                         >
                             <span className="block text-xl md:text-2xl font-semibold">
-                                Únete gratis a Raíces →
+                                Únete gratis a parceros →
                             </span>
                         </button>
                     </div>

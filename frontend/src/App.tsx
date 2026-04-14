@@ -9,6 +9,7 @@ import UserIntent from "./pages/selection/UserIntent";
 import WorkerSearch from "./pages/worker/WorkerSearch";
 import EmployerDashboard from "./pages/employer/EmployerDashboard";
 import CreateJob from "./pages/employer/CreateJob";
+import AuthCallback from "./pages/auth/AuthCallback";
 import "./styles/App.css";
 
 function App() {
@@ -57,6 +58,7 @@ function App() {
             </Layout>
           }
         />
+        <Route path="/auth/callback" element={<AuthCallback />} />
 
         {/* Páginas autenticadas — con Header con cerrar sesión y Footer */}
         <Route

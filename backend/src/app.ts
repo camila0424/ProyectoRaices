@@ -1,7 +1,9 @@
 import express from "express";
 import cors from "cors";
+import session from "express-session";
 import dotenv from "dotenv";
 import pool from "./config/db";
+import passport from "./config/passport";
 import authRoutes from "./modules/auth/auth.routes";
 import usersRoutes from "./modules/users/users.routes";
 import jobsRoutes from "./modules/jobs/jobs.routes";
@@ -13,8 +15,16 @@ dotenv.config();
 const app = express();
 const PORT = process.env.PORT ?? 3001;
 
-app.use(cors({ origin: "http://localhost:5173" }));
+app.use(cors({ origin: "http://localhost:5173", credentials: true }));
 app.use(express.json());
+app.use(session({
+  secret: process.env.JWT_SECRET ?? "secreto",
+  resave: false,
+  saveUninitialized: false,
+  cookie: { secure: false, maxAge: 5 * 60 * 1000 },
+}));
+app.use(passport.initialize());
+app.use(passport.session());
 
 // Rutas
 app.use("/api/auth", authRoutes);

@@ -1,5 +1,9 @@
 import { useState } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate, Link } from "react-router-dom";
+import { api } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
+
+const BACKEND_URL = "http://localhost:3001/api";
 
 interface FormLogin {
     correo: string;
@@ -13,8 +17,11 @@ interface FormLoginErrors {
 }
 
 function LoginPage() {
+    const navigate = useNavigate();
+    const { login } = useAuth();
     const [form, setForm] = useState<FormLogin>({ correo: "", contrasena: "" });
     const [errors, setErrors] = useState<FormLoginErrors>({});
+    const [loading, setLoading] = useState(false);
 
     const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const { name, value } = e.target;
@@ -30,35 +37,44 @@ function LoginPage() {
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validate()) return;
-        // TODO: conectar con backend
-        setErrors((prev) => ({
-            ...prev,
-            general: "Próximamente. Aún no tenemos usuarios registrados.",
-        }));
-    };
 
-    const handleSocialLogin = () => {
-        setErrors((prev) => ({
-            ...prev,
-            general: "Próximamente. Aún no tenemos usuarios registrados.",
-        }));
+        setLoading(true);
+        try {
+            const response = await api.post<{
+                token: string;
+                usuario: { id: string; nombre: string; correo: string; rol: "worker" | "employer" };
+            }>("/auth/login", form);
+
+            login(response.token, response.usuario);
+
+            if (response.usuario.rol === "employer") {
+                navigate("/dashboard-empleador");
+            } else {
+                navigate("/busco-empleo");
+            }
+        } catch (error) {
+            setErrors({ general: (error as Error).message });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="flex-1 flex flex-col items-center justify-center px-4 pt-20 pb-8"
-            style={{ backgroundColor: "#1e2b25" }}
+        <div
+            id="login"
+            className="flex-1 flex flex-col items-center justify-center px-4 pt-20 pb-12"
+            style={{ backgroundColor: "var(--bg-main)" }}
         >
             <div
                 className="w-full max-w-md rounded-2xl p-8 shadow-2xl"
-                style={{ backgroundColor: "#182320" }}
+                style={{ backgroundColor: "var(--bg-card)" }}
             >
-                {/* Logo */}
                 <div className="flex justify-center mb-6">
                     <div className="w-12 h-12 rounded-full bg-[#1D9E75] flex items-center justify-center">
-                        <span className="text-white font-bold font-serif text-lg">R</span>
+                        <span className="text-white font-bold font-serif text-lg">P</span>
                     </div>
                 </div>
 
@@ -66,20 +82,18 @@ function LoginPage() {
                     Bienvenido de vuelta
                 </h1>
                 <p className="text-gray-400 text-sm text-center mb-8">
-                    Inicia sesión en tu cuenta Raíces
+                    Inicia sesión en tu cuenta Parceros
                 </p>
 
-                {/* Mensaje general */}
                 {errors.general && (
-                    <div className="mb-6 px-4 py-3 rounded-xl bg-[#1D9E75]/10 border border-[#1D9E75]/30 text-center">
-                        <p className="text-[#1D9E75] text-sm font-medium">{errors.general}</p>
+                    <div className="mb-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30">
+                        <p className="text-red-400 text-sm text-center">{errors.general}</p>
                     </div>
                 )}
 
-                {/* Social login */}
                 <div className="flex flex-col gap-3 mb-6">
-                    <button
-                        onClick={handleSocialLogin}
+
+                    <a href={`${BACKEND_URL}/auth/google`}
                         className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold text-sm hover:bg-gray-100 transition"
                     >
                         <img
@@ -88,17 +102,20 @@ function LoginPage() {
                             className="w-5 h-5"
                         />
                         Continuar con Google
-                    </button>
+                    </a>
 
-                    <button
-                        onClick={handleSocialLogin}
-                        className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-[#1877F2] text-white font-semibold text-sm hover:bg-[#166FE5] transition"
+
+                    <a href={`${BACKEND_URL}/auth/facebook`}
+                        className="flex items-center justify-center gap-3 w-full py-3 rounded-xl text-white font-semibold text-sm transition"
+                        style={{ backgroundColor: "#1877F2" }}
+                        onMouseEnter={(e) => (e.currentTarget.style.backgroundColor = "#166FE5")}
+                        onMouseLeave={(e) => (e.currentTarget.style.backgroundColor = "#1877F2")}
                     >
                         <svg className="w-5 h-5 fill-white" viewBox="0 0 24 24">
                             <path d="M24 12.073C24 5.405 18.627 0 12 0S0 5.405 0 12.073C0 18.1 4.388 23.094 10.125 24v-8.437H7.078v-3.49h3.047V9.41c0-3.025 1.792-4.697 4.533-4.697 1.312 0 2.686.236 2.686.236v2.97h-1.513c-1.491 0-1.956.93-1.956 1.874v2.25h3.328l-.532 3.49h-2.796V24C19.612 23.094 24 18.1 24 12.073z" />
                         </svg>
                         Continuar con Facebook
-                    </button>
+                    </a>
                 </div>
 
                 <div className="flex items-center gap-3 mb-6">
@@ -109,9 +126,7 @@ function LoginPage() {
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-gray-300 font-medium">
-                            Correo electrónico
-                        </label>
+                        <label className="text-sm text-gray-300 font-medium">Correo electrónico</label>
                         <input
                             type="email"
                             name="correo"
@@ -120,9 +135,7 @@ function LoginPage() {
                             placeholder="tu@correo.com"
                             className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
                         />
-                        {errors.correo && (
-                            <p className="text-red-400 text-xs">{errors.correo}</p>
-                        )}
+                        {errors.correo && <p className="text-red-400 text-xs">{errors.correo}</p>}
                     </div>
 
                     <div className="flex flex-col gap-1">
@@ -135,17 +148,16 @@ function LoginPage() {
                             placeholder="••••••••"
                             className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
                         />
-                        {errors.contrasena && (
-                            <p className="text-red-400 text-xs">{errors.contrasena}</p>
-                        )}
+                        {errors.contrasena && <p className="text-red-400 text-xs">{errors.contrasena}</p>}
                     </div>
 
                     <button
                         type="submit"
-                        className="mt-2 w-full py-3 rounded-xl font-semibold text-white text-sm hover:brightness-110 transition"
+                        disabled={loading}
+                        className="mt-2 w-full py-3 rounded-xl font-semibold text-white text-sm hover:brightness-110 transition disabled:opacity-50"
                         style={{ backgroundColor: "#2d7a4f" }}
                     >
-                        Iniciar sesión
+                        {loading ? "Iniciando sesión..." : "Iniciar sesión"}
                     </button>
                 </form>
 
@@ -155,8 +167,8 @@ function LoginPage() {
                         Regístrate gratis
                     </Link>
                 </p>
-            </div>
-        </div>
+            </div >
+        </div >
     );
 }
 

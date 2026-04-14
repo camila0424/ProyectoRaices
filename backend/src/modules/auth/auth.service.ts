@@ -82,6 +82,52 @@ export async function registrarUsuario(datos: RegistroDTO) {
   };
 }
 
+interface GoogleProfile {
+  id: string;
+  displayName: string;
+  emails?: Array<{ value: string }>;
+}
+
+export async function findOrCreateGoogleUser(profile: GoogleProfile) {
+  const email = profile.emails?.[0]?.value;
+  if (!email) throw { status: 400, message: "No se pudo obtener el correo de Google" };
+
+  const [rows] = await pool.query<UserRow[]>(
+    "SELECT id, full_name, email, role FROM users WHERE email = ? AND is_active = true",
+    [email]
+  );
+
+  let userId: string;
+  let nombre: string;
+  let rol: string;
+
+  if (rows.length > 0) {
+    userId = rows[0].id;
+    nombre = rows[0].full_name;
+    rol = rows[0].role;
+    await pool.query("UPDATE users SET last_login_at = NOW() WHERE id = ?", [userId]);
+  } else {
+    const [uuidRow] = await pool.query<RowDataPacket[]>("SELECT UUID() as uuid");
+    userId = uuidRow[0]?.uuid as string;
+    nombre = profile.displayName;
+    rol = "worker";
+
+    await pool.query(
+      `INSERT INTO users (id, email, password_hash, full_name, role, is_active)
+       VALUES (?, ?, '', ?, ?, true)`,
+      [userId, email, nombre, rol]
+    );
+  }
+
+  const token = jwt.sign(
+    { id: userId, role: rol },
+    ENV.JWT_SECRET as string,
+    { expiresIn: ENV.JWT_EXPIRES_IN as unknown as number }
+  );
+
+  return { token, id: userId, nombre, correo: email, rol };
+}
+
 export async function loginUsuario(datos: LoginDTO) {
   const [rows] = await pool.query<UserRow[]>(
     "SELECT id, full_name, email, password_hash, role FROM users WHERE email = ? AND is_active = true",

@@ -1,6 +1,8 @@
 import { useState } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { ciudadesEspana } from "../../data/locationData";
+import { api } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
 
 interface FormState {
     nombre: string;
@@ -10,6 +12,19 @@ interface FormState {
     provincia: string;
     ciudad: string;
     documento: string;
+    tipoUsuario: "worker" | "employer" | "";
+}
+
+interface FormErrors {
+    nombre?: string;
+    telefono?: string;
+    correo?: string;
+    contrasena?: string;
+    provincia?: string;
+    ciudad?: string;
+    documento?: string;
+    tipoUsuario?: string;
+    general?: string;
 }
 
 const initialForm: FormState = {
@@ -20,12 +35,15 @@ const initialForm: FormState = {
     provincia: "",
     ciudad: "",
     documento: "",
+    tipoUsuario: "",
 };
 
 function RegisterManual() {
     const navigate = useNavigate();
+    const { login } = useAuth();
     const [form, setForm] = useState<FormState>(initialForm);
-    const [errors, setErrors] = useState<Partial<FormState>>({});
+    const [errors, setErrors] = useState<FormErrors>({});
+    const [loading, setLoading] = useState(false);
 
     const ciudadesDisponibles =
         ciudadesEspana.find((p) => p.provincia === form.provincia)?.ciudades ?? [];
@@ -39,11 +57,11 @@ function RegisterManual() {
             [name]: value,
             ...(name === "provincia" ? { ciudad: "" } : {}),
         }));
-        setErrors((prev) => ({ ...prev, [name]: "" }));
+        setErrors((prev) => ({ ...prev, [name]: "", general: "" }));
     };
 
     const validate = (): boolean => {
-        const newErrors: Partial<FormState> = {};
+        const newErrors: FormErrors = {};
         if (!form.nombre.trim()) newErrors.nombre = "El nombre es obligatorio";
         if (!form.telefono.trim()) newErrors.telefono = "El teléfono es obligatorio";
         if (!form.correo.trim()) newErrors.correo = "El correo es obligatorio";
@@ -51,45 +69,78 @@ function RegisterManual() {
         if (!form.provincia) newErrors.provincia = "Selecciona una provincia";
         if (!form.ciudad) newErrors.ciudad = "Selecciona una ciudad";
         if (!form.documento.trim()) newErrors.documento = "El documento es obligatorio";
+        if (!form.tipoUsuario) newErrors.tipoUsuario = "Selecciona una opción";
         setErrors(newErrors);
         return Object.keys(newErrors).length === 0;
     };
 
-    const handleSubmit = (e: React.FormEvent) => {
+    const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
         if (!validate()) return;
-        navigate("/registro/tipo");
+
+        setLoading(true);
+        try {
+            const response = await api.post<{
+                token: string;
+                usuario: { id: string; nombre: string; correo: string; rol: "worker" | "employer" };
+            }>("/auth/registro", {
+                nombre: form.nombre,
+                correo: form.correo,
+                contrasena: form.contrasena,
+                telefono: form.telefono,
+                provincia: form.provincia,
+                ciudad: form.ciudad,
+                documento: form.documento,
+                tipoUsuario: form.tipoUsuario,
+            });
+
+            login(response.token, response.usuario);
+
+            if (response.usuario.rol === "employer") {
+                navigate("/dashboard-empleador");
+            } else {
+                navigate("/busco-empleo");
+            }
+        } catch (error) {
+            setErrors({ general: (error as Error).message });
+        } finally {
+            setLoading(false);
+        }
     };
 
     return (
-        <div className="flex-1 flex flex-col items-center justify-center px-4 pt-20 pb-8"
-            style={{ backgroundColor: "#1e2b25" }}
+        <div
+            id="registro-manual"
+            className="flex-1 flex flex-col items-center justify-center px-4 pt-20 pb-12"
+            style={{ backgroundColor: "var(--bg-main)" }}
         >
             <div
                 className="w-full max-w-lg rounded-2xl p-8 shadow-2xl"
-                style={{ backgroundColor: "#182320" }}
+                style={{ backgroundColor: "var(--bg-card)" }}
             >
-                {/* Logo */}
                 <div className="flex justify-center mb-6">
                     <div className="w-12 h-12 rounded-full bg-[#1D9E75] flex items-center justify-center">
-                        <span className="text-white font-bold font-serif text-lg">R</span>
+                        <span className="text-white font-bold font-serif text-lg">P</span>
                     </div>
                 </div>
 
                 <h1 className="text-white text-2xl font-bold text-center mb-1">
-                    Crea tu cuenta
+                    Crea tu cuenta en Parceros
                 </h1>
                 <p className="text-gray-400 text-sm text-center mb-8">
                     Completa tus datos para empezar
                 </p>
 
+                {errors.general && (
+                    <div className="mb-6 px-4 py-3 rounded-xl bg-red-500/10 border border-red-500/30">
+                        <p className="text-red-400 text-sm">{errors.general}</p>
+                    </div>
+                )}
+
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
-                    {/* Nombre */}
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-gray-300 font-medium">
-                            Nombre completo
-                        </label>
+                        <label className="text-sm text-gray-300 font-medium">Nombre completo</label>
                         <input
                             type="text"
                             name="nombre"
@@ -98,12 +149,9 @@ function RegisterManual() {
                             placeholder="Tu nombre"
                             className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
                         />
-                        {errors.nombre && (
-                            <p className="text-red-400 text-xs mt-0.5">{errors.nombre}</p>
-                        )}
+                        {errors.nombre && <p className="text-red-400 text-xs">{errors.nombre}</p>}
                     </div>
 
-                    {/* Teléfono + Correo */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-gray-300 font-medium">Teléfono</label>
@@ -115,15 +163,11 @@ function RegisterManual() {
                                 placeholder="+34 600 000 000"
                                 className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
                             />
-                            {errors.telefono && (
-                                <p className="text-red-400 text-xs mt-0.5">{errors.telefono}</p>
-                            )}
+                            {errors.telefono && <p className="text-red-400 text-xs">{errors.telefono}</p>}
                         </div>
 
                         <div className="flex flex-col gap-1">
-                            <label className="text-sm text-gray-300 font-medium">
-                                Correo electrónico
-                            </label>
+                            <label className="text-sm text-gray-300 font-medium">Correo electrónico</label>
                             <input
                                 type="email"
                                 name="correo"
@@ -132,13 +176,10 @@ function RegisterManual() {
                                 placeholder="tu@correo.com"
                                 className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
                             />
-                            {errors.correo && (
-                                <p className="text-red-400 text-xs mt-0.5">{errors.correo}</p>
-                            )}
+                            {errors.correo && <p className="text-red-400 text-xs">{errors.correo}</p>}
                         </div>
                     </div>
 
-                    {/* Contraseña */}
                     <div className="flex flex-col gap-1">
                         <label className="text-sm text-gray-300 font-medium">Contraseña</label>
                         <input
@@ -149,12 +190,9 @@ function RegisterManual() {
                             placeholder="Mínimo 8 caracteres"
                             className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
                         />
-                        {errors.contrasena && (
-                            <p className="text-red-400 text-xs mt-0.5">{errors.contrasena}</p>
-                        )}
+                        {errors.contrasena && <p className="text-red-400 text-xs">{errors.contrasena}</p>}
                     </div>
 
-                    {/* Provincia + Ciudad */}
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1">
                             <label className="text-sm text-gray-300 font-medium">Provincia</label>
@@ -171,9 +209,7 @@ function RegisterManual() {
                                     </option>
                                 ))}
                             </select>
-                            {errors.provincia && (
-                                <p className="text-red-400 text-xs mt-0.5">{errors.provincia}</p>
-                            )}
+                            {errors.provincia && <p className="text-red-400 text-xs">{errors.provincia}</p>}
                         </div>
 
                         <div className="flex flex-col gap-1">
@@ -187,22 +223,15 @@ function RegisterManual() {
                             >
                                 <option value="" className="bg-[#182320]">Selecciona ciudad</option>
                                 {ciudadesDisponibles.map((c) => (
-                                    <option key={c} value={c} className="bg-[#182320]">
-                                        {c}
-                                    </option>
+                                    <option key={c} value={c} className="bg-[#182320]">{c}</option>
                                 ))}
                             </select>
-                            {errors.ciudad && (
-                                <p className="text-red-400 text-xs mt-0.5">{errors.ciudad}</p>
-                            )}
+                            {errors.ciudad && <p className="text-red-400 text-xs">{errors.ciudad}</p>}
                         </div>
                     </div>
 
-                    {/* Documento */}
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-gray-300 font-medium">
-                            Documento de identidad
-                        </label>
+                        <label className="text-sm text-gray-300 font-medium">Documento de identidad</label>
                         <input
                             type="text"
                             name="documento"
@@ -211,17 +240,51 @@ function RegisterManual() {
                             placeholder="NIE, DNI o Pasaporte"
                             className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
                         />
-                        {errors.documento && (
-                            <p className="text-red-400 text-xs mt-0.5">{errors.documento}</p>
-                        )}
+                        {errors.documento && <p className="text-red-400 text-xs">{errors.documento}</p>}
+                    </div>
+
+                    {/* Busco / Ofrezco */}
+                    <div className="flex flex-col gap-2">
+                        <label className="text-sm text-gray-300 font-medium">¿Qué buscas?</label>
+                        <div className="grid grid-cols-2 gap-3">
+                            <button
+                                type="button"
+                                onClick={() => setForm((prev) => ({ ...prev, tipoUsuario: "worker" }))}
+                                className={`p-4 rounded-xl border text-left transition-all duration-200 ${form.tipoUsuario === "worker"
+                                    ? "border-[#1D9E75] bg-[#1D9E75]/10"
+                                    : "border-white/10 hover:border-white/20"
+                                    }`}
+                            >
+                                <p className={`text-sm font-semibold ${form.tipoUsuario === "worker" ? "text-[#1D9E75]" : "text-white"}`}>
+                                    🔍 Busco empleo
+                                </p>
+                                <p className="text-gray-400 text-xs mt-0.5">Quiero trabajar</p>
+                            </button>
+
+                            <button
+                                type="button"
+                                onClick={() => setForm((prev) => ({ ...prev, tipoUsuario: "employer" }))}
+                                className={`p-4 rounded-xl border text-left transition-all duration-200 ${form.tipoUsuario === "employer"
+                                    ? "border-[#1D9E75] bg-[#1D9E75]/10"
+                                    : "border-white/10 hover:border-white/20"
+                                    }`}
+                            >
+                                <p className={`text-sm font-semibold ${form.tipoUsuario === "employer" ? "text-[#1D9E75]" : "text-white"}`}>
+                                    📋 Ofrezco empleo
+                                </p>
+                                <p className="text-gray-400 text-xs mt-0.5">Quiero contratar</p>
+                            </button>
+                        </div>
+                        {errors.tipoUsuario && <p className="text-red-400 text-xs">{errors.tipoUsuario}</p>}
                     </div>
 
                     <button
                         type="submit"
-                        className="mt-2 w-full py-3 rounded-xl font-semibold text-white text-sm hover:brightness-110 transition"
+                        disabled={loading}
+                        className="mt-2 w-full py-3 rounded-xl font-semibold text-white text-sm hover:brightness-110 transition disabled:opacity-50"
                         style={{ backgroundColor: "#2d7a4f" }}
                     >
-                        Continuar
+                        {loading ? "Creando cuenta..." : "Continuar"}
                     </button>
                 </form>
 
