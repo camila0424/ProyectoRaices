@@ -1,9 +1,7 @@
 import { useEffect } from "react";
-import { useNavigate } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
 function AuthCallback() {
-    const navigate = useNavigate();
     const { login } = useAuth();
 
     useEffect(() => {
@@ -16,13 +14,27 @@ function AuthCallback() {
         if (token && rol) {
             try {
                 const payload = JSON.parse(atob(token.split(".")[1]));
+
+                localStorage.setItem("token", token);
+                localStorage.setItem("usuario", JSON.stringify({
+                    id: payload.id,
+                    nombre,
+                    correo,
+                    rol
+                }));
+
                 login(token, { id: payload.id, nombre, correo, rol });
-                navigate(rol === "employer" ? "/dashboard-empleador" : "/busco-empleo", { replace: true });
+
+                setTimeout(() => {
+                    window.location.href = rol === "employer"
+                        ? "/dashboard-empleador"
+                        : "/busco-empleo";
+                }, 100);
             } catch {
-                navigate("/login?error=google", { replace: true });
+                window.location.href = "/login?error=google";
             }
         } else {
-            navigate("/login?error=google", { replace: true });
+            window.location.href = "/login?error=google";
         }
     }, []);
 

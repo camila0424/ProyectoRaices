@@ -12,9 +12,9 @@ interface ButtonProps {
 }
 
 const variantClasses = {
-    primary: "bg-green-600 text-white hover:bg-green-700 focus:ring-2 focus:ring-green-500",
-    secondary: "bg-gray-200 text-gray-900 hover:bg-gray-300 focus:ring-2 focus:ring-gray-400",
-    outline: "border border-gray-400 text-gray-900 hover:bg-gray-100 focus:ring-2 focus:ring-gray-400",
+    primary:   "bg-[#4F46E5] text-white hover:bg-[#4338CA] focus:ring-2 focus:ring-[#C7D2FE]",
+    secondary: "bg-[#F1F0EB] text-[#1E1B4B] hover:bg-[#E5E3DC] focus:ring-2 focus:ring-[#E5E3DC]",
+    outline:   "border border-[#E5E3DC] text-[#1E1B4B] hover:bg-[#F1F0EB] focus:ring-2 focus:ring-[#E5E3DC]",
 };
 
 const sizeClasses = {

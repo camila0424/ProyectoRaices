@@ -2,7 +2,7 @@ import pool from "../../config/db";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { ENV } from "../../config/env";
-import { RowDataPacket, ResultSetHeader } from "mysql2";
+import { RowDataPacket } from "mysql2";
 
 interface RegistroDTO {
   nombre: string;

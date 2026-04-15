@@ -1,4 +1,4 @@
-import { BrowserRouter, Routes, Route } from "react-router-dom";
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Layout from "./components/common/Layout";
 import AuthLayout from "./components/common/AuthLayout";
 import LandingPage from "./pages/LandingPage";
@@ -10,7 +10,15 @@ import WorkerSearch from "./pages/worker/WorkerSearch";
 import EmployerDashboard from "./pages/employer/EmployerDashboard";
 import CreateJob from "./pages/employer/CreateJob";
 import AuthCallback from "./pages/auth/AuthCallback";
+import { useAuth } from "./context/AuthContext";
 import "./styles/App.css";
+
+function ProtectedRoute({ children }: { children: React.ReactNode }) {
+  const { isAuthenticated } = useAuth();
+  const location = useLocation();
+  if (!isAuthenticated) return <Navigate to="/login" state={{ from: location.pathname }} replace />;
+  return <>{children}</>;
+}
 
 function App() {
   return (
@@ -64,25 +72,31 @@ function App() {
         <Route
           path="/busco-empleo"
           element={
-            <AuthLayout>
-              <WorkerSearch />
-            </AuthLayout>
+            <ProtectedRoute>
+              <AuthLayout>
+                <WorkerSearch />
+              </AuthLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/dashboard-empleador"
           element={
-            <AuthLayout>
-              <EmployerDashboard />
-            </AuthLayout>
+            <ProtectedRoute>
+              <AuthLayout>
+                <EmployerDashboard />
+              </AuthLayout>
+            </ProtectedRoute>
           }
         />
         <Route
           path="/publicar-empleo"
           element={
-            <AuthLayout>
-              <CreateJob />
-            </AuthLayout>
+            <ProtectedRoute>
+              <AuthLayout>
+                <CreateJob />
+              </AuthLayout>
+            </ProtectedRoute>
           }
         />
 

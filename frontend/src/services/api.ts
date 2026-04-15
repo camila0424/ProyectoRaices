@@ -27,6 +27,11 @@ async function request<T>(
   const data = await response.json();
 
   if (!response.ok) {
+    if (response.status === 401) {
+      localStorage.removeItem("token");
+      localStorage.removeItem("usuario");
+      window.location.href = "/login";
+    }
     throw new Error(data.mensaje ?? "Error en la solicitud");
   }
 

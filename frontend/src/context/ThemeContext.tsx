@@ -6,7 +6,7 @@ interface ThemeContextType {
     toggleTheme: () => void;
 }
 
-const ThemeContext = createContext<ThemeContextType>({ isDark: true, toggleTheme: () => {} });
+const ThemeContext = createContext<ThemeContextType | null>(null);
 
 export function ThemeProvider({ children }: { children: ReactNode }) {
     const [isDark, setIsDark] = useState(() => {
@@ -16,9 +16,9 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 
     useEffect(() => {
         if (isDark) {
-            document.documentElement.classList.remove("light");
+            document.documentElement.classList.add("dark");
         } else {
-            document.documentElement.classList.add("light");
+            document.documentElement.classList.remove("dark");
         }
         localStorage.setItem("parceros_theme", isDark ? "dark" : "light");
     }, [isDark]);
@@ -31,5 +31,7 @@ export function ThemeProvider({ children }: { children: ReactNode }) {
 }
 
 export function useTheme() {
-    return useContext(ThemeContext);
+    const context = useContext(ThemeContext);
+    if (!context) throw new Error("useTheme debe usarse dentro de ThemeProvider");
+    return context;
 }

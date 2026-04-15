@@ -3,27 +3,14 @@
 /* ─── CSS Custom Properties ──────────────────────────────────────────────────── */
 
 :root {
-    /* Dark mode (default) */
-    --bg-main: #1e2b25;
-    --bg-card: #182320;
-    --bg-hero: #0d3d2b;
-    --bg-header: #1e2b25;
-    --text-hero: #ffffff;
-    --text-hero-muted: rgba(255, 255, 255, 0.80);
-    --text-hero-subtle: rgba(255, 255, 255, 0.70);
-    --border-hero-btn: rgba(255, 255, 255, 0.60);
-}
-
-html.light {
-    /* Light mode */
-    --bg-main: #ffffff;
-    --bg-card: #ecf8f2;
-    --bg-hero: #ddf0e8;
-    --bg-header: #ffffff;
-    --text-hero: #0d3d2b;
-    --text-hero-muted: rgba(13, 61, 43, 0.80);
-    --text-hero-subtle: rgba(13, 61, 43, 0.70);
-    --border-hero-btn: rgba(13, 61, 43, 0.45);
+    --bg-main:            #FAFAF9;
+    --bg-card:            #F1F0EB;
+    --bg-hero:            #FAFAF9;
+    --bg-header:          #FAFAF9;
+    --text-hero:          #1E1B4B;
+    --text-hero-muted:    rgba(30, 27, 75, 0.70);
+    --text-hero-subtle:   rgba(30, 27, 75, 0.55);
+    --border-hero-btn:    rgba(30, 27, 75, 0.20);
 }
 
 /* ─── Animations ─────────────────────────────────────────────────────────────── */
@@ -41,80 +28,53 @@ html.light {
 .animate-fade-in  { animation: fade-in  0.8s ease-out forwards; }
 .animate-slide-up { animation: slide-up 0.8s ease-out forwards; }
 
-/* ─── Light mode: text colours ───────────────────────────────────────────────── */
+/* ─── Dark mode ──────────────────────────────────────────────────────────────── */
 
-html.light .text-white    { color: #0d3d2b !important; }
-html.light .text-gray-100 { color: #1a4d35 !important; }
-html.light .text-gray-200 { color: #1a4d35 !important; }
-html.light .text-gray-300 { color: #1e5c3a !important; }
-html.light .text-gray-400 { color: #2d7a4f !important; }
-html.light .text-gray-500 { color: #4a9467 !important; }
-html.light .text-gray-600 { color: #5a7a6a !important; }
-
-/* Green text — already green, make them slightly darker for white bg */
-html.light .text-green-200 { color: #1e5c3a !important; }
-html.light .text-green-300 { color: #1e5c3a !important; }
-html.light .text-green-400 { color: #1D9E75 !important; }
-
-/* ─── Preserve WHITE text on solid-colored buttons & anchors ─────────────────── */
-/* Buttons / anchors that carry their own background colour keep white text       */
-
-html.light button.text-white[style*="background-color"],
-html.light a.text-white[style*="background-color"],
-html.light button.text-white[style*="background"],
-/* Tailwind bg class buttons used in the app */
-html.light .bg-green-900.text-white,
-html.light .bg-yellow-800.text-white,
-html.light .bg-\[\#1877F2\].text-white,
-html.light .bg-\[\#2d7a4f\].text-white,
-html.light .bg-\[\#1D9E75\].text-white {
-    color: white !important;
+html.dark {
+    color-scheme: dark;
+    --bg-main:            #16152a;
+    --bg-card:            #1a1a2e;
+    --bg-hero:            #16152a;
+    --bg-header:          #16152a;
+    --text-hero:          #ffffff;
+    --text-hero-muted:    rgba(255, 255, 255, 0.75);
+    --text-hero-subtle:   rgba(255, 255, 255, 0.55);
+    --border-hero-btn:    rgba(255, 255, 255, 0.25);
 }
 
-/* ─── Light mode: borders ────────────────────────────────────────────────────── */
+/* ─── Scroll animations ──────────────────────────────────────────────────────── */
 
-html.light .border-white\/5   { border-color: rgba(13, 61, 43, 0.08)  !important; }
-html.light .border-white\/10  { border-color: rgba(13, 61, 43, 0.14)  !important; }
-html.light .border-white\/20  { border-color: rgba(13, 61, 43, 0.22)  !important; }
-html.light .border-white\/60  { border-color: rgba(13, 61, 43, 0.38)  !important; }
-html.light .border-white      { border-color: rgba(13, 61, 43, 0.45)  !important; }
-html.light .border-green-800  { border-color: rgba(13, 61, 43, 0.15)  !important; }
+.step-item {
+    opacity: 0;
+    transform: translateY(24px);
+    transition: opacity 0.5s ease, transform 0.5s ease;
+}
+.step-item:nth-child(2) { transition-delay: 0.1s; }
+.step-item:nth-child(3) { transition-delay: 0.2s; }
+.step-item:nth-child(4) { transition-delay: 0.3s; }
+.step-item.visible {
+    opacity: 1;
+    transform: translateY(0);
+}
 
-/* ─── Light mode: translucent backgrounds ────────────────────────────────────── */
+/* ─── Select & option colors ─────────────────────────────────────────────────── */
 
-html.light .bg-white\/5  { background-color: rgba(13, 61, 43, 0.04) !important; }
-html.light .bg-white\/10 { background-color: rgba(13, 61, 43, 0.07) !important; }
+select option {
+  background-color: #ffffff;
+  color: #1E1B4B;
+}
 
-html.light .hover\:bg-white\/5:hover  { background-color: rgba(13, 61, 43, 0.04) !important; }
-html.light .hover\:bg-white\/10:hover { background-color: rgba(13, 61, 43, 0.07) !important; }
+html.dark select option {
+  background-color: #1e1d35;
+  color: #ffffff;
+}
 
-/* Tailwind arbitrary card bg — some selects / inputs use bg-[#182320] class */
-html.light .bg-\[\#182320\] { background-color: var(--bg-card) !important; }
-html.light .bg-\[\#1e2b25\] { background-color: var(--bg-main) !important; }
-html.light .bg-\[\#0d3d2b\] { background-color: var(--bg-hero) !important; }
+select {
+  background-color: #ffffff;
+  color: #1E1B4B;
+}
 
-/* Footer Tailwind bg — un tono más oscuro que el fondo principal */
-html.light .bg-green-950 { background-color: #cceedd !important; }
-
-/* ─── Light mode: preserve text in dark-bg containers (HowItWorks cards) ────── */
-
-/* Todo el texto dentro de las cards oscuras permanece claro */
-html.light :is(.bg-green-900, .bg-yellow-800) { color: white !important; }
-html.light :is(.bg-green-900, .bg-yellow-800) .text-white  { color: white !important; }
-html.light :is(.bg-green-900, .bg-yellow-800) .text-green-200 { color: #bbf7d0 !important; }
-html.light :is(.bg-green-900, .bg-yellow-800) span,
-html.light :is(.bg-green-900, .bg-yellow-800) p,
-html.light :is(.bg-green-900, .bg-yellow-800) button { color: white !important; }
-
-/* ─── Light mode: placeholders ───────────────────────────────────────────────── */
-
-html.light .placeholder-gray-500::placeholder { color: #7ab89b !important; }
-
-/* ─── Light mode: input option dropdowns ─────────────────────────────────────── */
-
-html.light option { background-color: #ecf8f2 !important; color: #0d3d2b !important; }
-
-/* ─── Light mode: dividers ───────────────────────────────────────────────────── */
-
-html.light .bg-white\/10.h-px,
-html.light .h-px.bg-white\/10 { background-color: rgba(13, 61, 43, 0.14) !important; }
+html.dark select {
+  background-color: #1e1d35;
+  color: #ffffff;
+}
