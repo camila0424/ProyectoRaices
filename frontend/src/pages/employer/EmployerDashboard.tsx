@@ -1,6 +1,13 @@
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { api } from "../../services/api";
+import { useAuth } from "../../context/AuthContext";
+
+const SECTORES = [
+    "Hostelería", "Construcción", "Limpieza", "Cuidado de personas",
+    "Logística", "Comercio", "Administración", "Tecnología",
+    "Agricultura", "Educación", "Salud", "Seguridad", "Otro",
+];
 
 type TipoContrato = "full_time" | "part_time" | "temporary" | "freelance" | "internship";
 
@@ -21,6 +28,7 @@ interface PerfilCandidato {
     id: string;
     full_name: string;
     role: string;
+    sector?: string;
     ciudad: string;
     bio: string;
     is_available: boolean;
@@ -46,10 +54,34 @@ type PestanaActiva = "anuncios" | "perfiles";
 
 function EmployerDashboard() {
     const navigate = useNavigate();
+    const { logout, usuario } = useAuth();
     const [pestana, setPestana] = useState<PestanaActiva>("anuncios");
     const [anuncios, setAnuncios] = useState<Anuncio[]>([]);
     const [perfiles, setPerfiles] = useState<PerfilCandidato[]>([]);
     const [loading, setLoading] = useState(true);
+    const [sectorFiltro, setSectorFiltro] = useState("");
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+    const handleDeleteAccount = async () => {
+        try {
+            console.log("usuario completo:", usuario);
+            console.log("id a eliminar:", usuario?.id);
+
+            if (!usuario?.id) {
+                alert("Error: no se encontró el ID de usuario");
+                return;
+            }
+
+            const response = await api.delete(`/users/${usuario.id}`);
+            console.log("respuesta:", response);
+
+            logout();
+            window.location.href = "/";
+        } catch (error) {
+            console.error("Error eliminando cuenta:", error);
+            alert("No se pudo eliminar la cuenta. Intenta de nuevo.");
+        }
+    };
 
     useEffect(() => {
         const cargarDatos = async () => {
@@ -81,6 +113,7 @@ function EmployerDashboard() {
     };
 
     return (
+        <>
         <div className="min-h-screen pt-20 pb-12 px-4" style={{ backgroundColor: "var(--bg-main)" }}>
             <div className="max-w-5xl mx-auto">
 
@@ -213,15 +246,32 @@ function EmployerDashboard() {
                         )}
                     </div>
                 ) : (
+                    <>
+                        {/* Sector pills */}
+                        <div className="flex flex-wrap gap-2 mb-6">
+                            {SECTORES.map((sector) => (
+                                <button
+                                    key={sector}
+                                    onClick={() => setSectorFiltro(prev => prev === sector ? "" : sector)}
+                                    className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${sectorFiltro === sector
+                                        ? "bg-[#4F46E5] text-white border-[#4F46E5]"
+                                        : "bg-white dark:bg-white/5 text-[#1E1B4B] dark:text-white border-[#E5E3DC] dark:border-white/10 hover:border-[#4F46E5]"
+                                    }`}
+                                >
+                                    {sector}
+                                </button>
+                            ))}
+                        </div>
+
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                        {perfiles.length === 0 ? (
+                        {perfiles.filter(p => !sectorFiltro || p.sector === sectorFiltro).length === 0 ? (
                             <div className="col-span-2 rounded-2xl p-12 text-center" style={{ backgroundColor: "var(--bg-card)" }}>
                                 <span className="text-4xl block mb-4">👥</span>
                                 <p className="text-[#1E1B4B] dark:text-white font-semibold text-lg mb-2">No hay candidatos disponibles</p>
                                 <p className="text-[#312E81] dark:text-[#1E1B4B] dark:text-white text-sm">Los candidatos aparecerán aquí cuando se registren</p>
                             </div>
                         ) : (
-                            perfiles.map((perfil) => (
+                            perfiles.filter(p => !sectorFiltro || p.sector === sectorFiltro).map((perfil) => (
                                 <div
                                     key={perfil.id}
                                     className="rounded-2xl p-6 border border-white/5 hover:border-[#E5E3DC] dark:border-white/10 transition"
@@ -256,9 +306,48 @@ function EmployerDashboard() {
                             ))
                         )}
                     </div>
+                    </>
                 )}
+                <div className="mt-16 pt-8 border-t border-[#E5E3DC] dark:border-white/10 text-center">
+                    <button
+                        onClick={() => setShowDeleteModal(true)}
+                        className="text-sm text-red-400 hover:text-red-600 transition-colors underline"
+                    >
+                        Eliminar mi cuenta
+                    </button>
+                </div>
+
             </div>
         </div>
+
+        {showDeleteModal && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
+                <div className="bg-white dark:bg-[#1e1d35] rounded-2xl p-8 max-w-sm w-full shadow-xl">
+                    <h3 className="text-lg font-medium text-[#1E1B4B] dark:text-white mb-2">
+                        ¿Eliminar tu cuenta?
+                    </h3>
+                    <p className="text-sm text-[#6B7280] dark:text-white/70 mb-6">
+                        Esta acción es permanente y no se puede deshacer.
+                        Se eliminarán todos tus datos y aplicaciones.
+                    </p>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => setShowDeleteModal(false)}
+                            className="flex-1 px-4 py-2.5 rounded-xl border border-[#E5E3DC] dark:border-white/20 text-sm font-medium text-[#1E1B4B] dark:text-white hover:bg-[#F1F0EB] dark:hover:bg-white/10 transition-all"
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            onClick={handleDeleteAccount}
+                            className="flex-1 px-4 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-all"
+                        >
+                            Sí, eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+        </>
     );
 }
 

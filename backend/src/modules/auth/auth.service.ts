@@ -88,7 +88,10 @@ interface GoogleProfile {
   emails?: Array<{ value: string }>;
 }
 
-export async function findOrCreateGoogleUser(profile: GoogleProfile) {
+export async function findOrCreateGoogleUser(
+  profile: GoogleProfile,
+  defaultRole: "worker" | "employer" = "worker"
+) {
   const email = profile.emails?.[0]?.value;
   if (!email) throw { status: 400, message: "No se pudo obtener el correo de Google" };
 
@@ -110,7 +113,7 @@ export async function findOrCreateGoogleUser(profile: GoogleProfile) {
     const [uuidRow] = await pool.query<RowDataPacket[]>("SELECT UUID() as uuid");
     userId = uuidRow[0]?.uuid as string;
     nombre = profile.displayName;
-    rol = "worker";
+    rol = defaultRole;
 
     await pool.query(
       `INSERT INTO users (id, email, password_hash, full_name, role, is_active)

@@ -1,5 +1,5 @@
 import type { ReactNode } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 import { useTheme } from "../../context/ThemeContext";
 import Footer from "./Footer";
@@ -10,13 +10,12 @@ interface AuthLayoutProps {
 }
 
 function AuthLayout({ children, className = "" }: AuthLayoutProps) {
-    const navigate = useNavigate();
     const { logout, usuario } = useAuth();
     const { isDark, toggleTheme } = useTheme();
 
     const handleCerrarSesion = () => {
         logout();
-        navigate("/");
+        window.location.href = "/";
     };
 
     return (
@@ -29,10 +28,8 @@ function AuthLayout({ children, className = "" }: AuthLayoutProps) {
                     <div className="flex items-center justify-between h-16">
 
                         <Link to="/" className="flex items-center gap-3 hover:opacity-80 transition-opacity">
-                            <div className="w-8 h-8 rounded-[9px] bg-[#1E1B4B] flex items-center justify-center">
-                                <span className="text-white font-medium text-sm">P</span>
-                            </div>
-                            <span className="text-[#1E1B4B] font-medium text-sm tracking-tight">Parceros</span>
+                            <img src="/parceros-logo.svg" alt="Parceros" className="w-8 h-8" />
+                            <span className="text-[#1E1B4B] dark:text-white font-medium text-sm tracking-tight">Parceros</span>
                         </Link>
 
                         <div className="flex items-center gap-3">

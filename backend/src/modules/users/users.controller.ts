@@ -5,6 +5,7 @@ import {
   obtenerCandidatosDisponibles,
   actualizarPerfil,
 } from "./users.service";
+import pool from "../../config/db";
 
 export async function getPerfil(
   req: AuthRequest,
@@ -45,5 +46,18 @@ export async function putPerfil(
     res.json(perfil);
   } catch (error) {
     next(error);
+  }
+}
+
+export async function deleteUser(
+  req: AuthRequest,
+  res: Response
+): Promise<void> {
+  try {
+    await pool.query("DELETE FROM users WHERE id = ?", [req.params.id]);
+    res.json({ mensaje: "Cuenta eliminada correctamente" });
+  } catch (error) {
+    console.error("Error eliminando cuenta:", error);
+    res.status(500).json({ mensaje: "Error al eliminar cuenta" });
   }
 }

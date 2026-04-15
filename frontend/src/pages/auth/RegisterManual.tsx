@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 import { ciudadesEspana } from "../../data/locationData";
 import { api } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
@@ -41,7 +41,12 @@ const initialForm: FormState = {
 function RegisterManual() {
     const navigate = useNavigate();
     const { login } = useAuth();
-    const [form, setForm] = useState<FormState>(initialForm);
+    const [params] = useSearchParams();
+    const tipo = params.get("tipo");
+    const [form, setForm] = useState<FormState>({
+        ...initialForm,
+        tipoUsuario: tipo === "employer" ? "employer" : "",
+    });
     const [errors, setErrors] = useState<FormErrors>({});
     const [loading, setLoading] = useState(false);
 

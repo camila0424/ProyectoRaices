@@ -1,7 +1,9 @@
 import { Link } from "react-router-dom";
 import { paisesOrigen } from "../../data/locationData";
+import { useAuth } from "../../context/AuthContext";
 
 function Hero() {
+    const { isAuthenticated } = useAuth();
     return (
         <section
             className="relative w-full min-h-screen flex items-center overflow-hidden"
@@ -69,8 +71,8 @@ function Hero() {
                         Buscar empleo
                     </Link>
 
-                    <Link
-                        to="/registro"
+                    <a
+                        href={isAuthenticated ? "/dashboard-empleador" : "http://localhost:3001/api/auth/google?rol=employer"}
                         className="w-full sm:w-auto text-center inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.03]"
                         style={{
                             color: "var(--text-hero)",
@@ -80,7 +82,7 @@ function Hero() {
                         }}
                     >
                         Tengo una oportunidad
-                    </Link>
+                    </a>
                 </div>
             </div>
         </section>

@@ -8,10 +8,13 @@ const router = Router();
 router.post("/registro", registro);
 router.post("/login", login);
 
-router.get(
-  "/google",
-  passport.authenticate("google", { scope: ["profile", "email"] })
-);
+router.get("/google", (req, res, next) => {
+  const rol = (req.query.rol as string) ?? "worker";
+  passport.authenticate("google", {
+    scope: ["profile", "email"],
+    state: rol,
+  })(req, res, next);
+});
 
 router.get(
   "/google/callback",

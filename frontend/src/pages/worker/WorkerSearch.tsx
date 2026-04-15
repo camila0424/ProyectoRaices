@@ -472,7 +472,7 @@ function loadSavedJobs(): Record<string, Empleo> {
 // ─── Main component ───────────────────────────────────────────────────────────
 
 function WorkerSearch() {
-    const { usuario } = useAuth();
+    const { usuario, logout } = useAuth();
 
     // Tab state
     const [tab, setTab] = useState<Tab>("empleos");
@@ -498,8 +498,32 @@ function WorkerSearch() {
     // Saved jobs state (localStorage)
     const [guardados, setGuardados] = useState<Record<string, Empleo>>(loadSavedJobs);
 
+    // Delete account modal state
+    const [showDeleteModal, setShowDeleteModal] = useState(false);
+
     const ciudadesDisponibles =
         ciudadesEspana.find((p) => p.provincia === provinciaSeleccionada)?.ciudades ?? [];
+
+    const handleDeleteAccount = async () => {
+        try {
+            console.log("usuario completo:", usuario);
+            console.log("id a eliminar:", usuario?.id);
+
+            if (!usuario?.id) {
+                alert("Error: no se encontró el ID de usuario");
+                return;
+            }
+
+            const response = await api.delete(`/users/${usuario.id}`);
+            console.log("respuesta:", response);
+
+            logout();
+            window.location.href = "/";
+        } catch (error) {
+            console.error("Error eliminando cuenta:", error);
+            alert("No se pudo eliminar la cuenta. Intenta de nuevo.");
+        }
+    };
 
     // ── Fetch jobs ──────────────────────────────────────────────────────────────
     const cargarEmpleos = (ciudad: string) => {
@@ -642,6 +666,7 @@ function WorkerSearch() {
     ];
 
     return (
+        <>
         <div className="min-h-screen pt-20 pb-16 px-4" style={{ backgroundColor: "var(--bg-main)" }}>
             <div className="max-w-5xl mx-auto">
 
@@ -1134,8 +1159,46 @@ function WorkerSearch() {
                     </div>
                 )}
 
+                <div className="mt-16 pt-8 border-t border-[#E5E3DC] dark:border-white/10 text-center">
+                    <button
+                        onClick={() => setShowDeleteModal(true)}
+                        className="text-sm text-red-400 hover:text-red-600 transition-colors underline"
+                    >
+                        Eliminar mi cuenta
+                    </button>
+                </div>
+
             </div>
         </div>
+
+        {showDeleteModal && (
+            <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
+                <div className="bg-white dark:bg-[#1e1d35] rounded-2xl p-8 max-w-sm w-full shadow-xl">
+                    <h3 className="text-lg font-medium text-[#1E1B4B] dark:text-white mb-2">
+                        ¿Eliminar tu cuenta?
+                    </h3>
+                    <p className="text-sm text-[#6B7280] dark:text-white/70 mb-6">
+                        Esta acción es permanente y no se puede deshacer.
+                        Se eliminarán todos tus datos y aplicaciones.
+                    </p>
+                    <div className="flex gap-3">
+                        <button
+                            onClick={() => setShowDeleteModal(false)}
+                            className="flex-1 px-4 py-2.5 rounded-xl border border-[#E5E3DC] dark:border-white/20 text-sm font-medium text-[#1E1B4B] dark:text-white hover:bg-[#F1F0EB] dark:hover:bg-white/10 transition-all"
+                        >
+                            Cancelar
+                        </button>
+                        <button
+                            onClick={handleDeleteAccount}
+                            className="flex-1 px-4 py-2.5 rounded-xl bg-red-500 hover:bg-red-600 text-white text-sm font-medium transition-all"
+                        >
+                            Sí, eliminar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        )}
+        </>
     );
 }
 

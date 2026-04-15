@@ -11,14 +11,16 @@ const ThemeContext = createContext<ThemeContextType | null>(null);
 export function ThemeProvider({ children }: { children: ReactNode }) {
     const [isDark, setIsDark] = useState(() => {
         const stored = localStorage.getItem("parceros_theme");
-        return stored !== "light";
+        return stored === "dark";
     });
 
     useEffect(() => {
         if (isDark) {
             document.documentElement.classList.add("dark");
+            document.documentElement.classList.remove("light");
         } else {
             document.documentElement.classList.remove("dark");
+            document.documentElement.classList.add("light");
         }
         localStorage.setItem("parceros_theme", isDark ? "dark" : "light");
     }, [isDark]);

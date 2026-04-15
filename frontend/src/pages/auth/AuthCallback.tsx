@@ -10,6 +10,7 @@ function AuthCallback() {
         const nombre = params.get("nombre") ?? "Usuario";
         const correo = params.get("correo") ?? "";
         const rol = params.get("rol") as "worker" | "employer" | null;
+        console.log("rol recibido:", rol);
 
         if (token && rol) {
             try {

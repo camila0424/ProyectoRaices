@@ -1,9 +1,11 @@
-import { useNavigate, Link } from "react-router-dom";
+import { useNavigate, Link, useSearchParams } from "react-router-dom";
 
 const BACKEND_URL = "http://localhost:3001/api";
 
 function AuthChoice() {
     const navigate = useNavigate();
+    const [params] = useSearchParams();
+    const tipo = params.get("tipo");
 
     return (
         <div
@@ -58,7 +60,7 @@ function AuthChoice() {
                 </div>
 
                 <button
-                    onClick={() => navigate("/registro/manual")}
+                    onClick={() => navigate(tipo === "employer" ? "/registro/manual?tipo=employer" : "/registro/manual")}
                     className="w-full py-3 rounded-xl font-semibold text-white text-sm bg-[#4F46E5] hover:bg-[#4338CA] transition"
                 >
                     Añadir mis datos manualmente

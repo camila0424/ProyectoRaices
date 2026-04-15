@@ -9,10 +9,13 @@ passport.use(
       clientID: ENV.GOOGLE_CLIENT_ID,
       clientSecret: ENV.GOOGLE_CLIENT_SECRET,
       callbackURL: ENV.GOOGLE_CALLBACK_URL,
+      passReqToCallback: true,
     },
-    async (_accessToken, _refreshToken, profile, done) => {
+    async (req: any, _accessToken: string, _refreshToken: string, profile: any, done: any) => {
       try {
-        const user = await findOrCreateGoogleUser(profile);
+        const state = req.query?.state as string;
+        const defaultRole = state === "employer" ? "employer" : "worker";
+        const user = await findOrCreateGoogleUser(profile, defaultRole);
         done(null, user);
       } catch (error) {
         done(error as Error, undefined);
