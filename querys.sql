@@ -307,7 +307,7 @@ CREATE TABLE notifications (
  ref_id          CHAR(36) NULL,
  title           VARCHAR(200) NOT NULL,
  body            VARCHAR(500),
-user_documents is_read         BOOLEAN NOT NULL DEFAULT FALSE,
+is_read         BOOLEAN NOT NULL DEFAULT FALSE,         BOOLEAN NOT NULL DEFAULT FALSE,
  created_at      TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
  CONSTRAINT fk_notif_user FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE,
  INDEX idx_notif_user   (user_id, is_read),
