@@ -12,19 +12,11 @@ function AuthCallback() {
         const rol = params.get("rol") as "worker" | "employer" | null;
         console.log("rol recibido:", rol);
 
-        if (token && rol) {
+        const id = params.get("id") ?? "";
+
+        if (token && rol && id) {
             try {
-                const payload = JSON.parse(atob(token.split(".")[1]));
-
-                localStorage.setItem("token", token);
-                localStorage.setItem("usuario", JSON.stringify({
-                    id: payload.id,
-                    nombre,
-                    correo,
-                    rol
-                }));
-
-                login(token, { id: payload.id, nombre, correo, rol });
+                login(token, { id, nombre, correo, rol });
 
                 setTimeout(() => {
                     window.location.href = rol === "employer"

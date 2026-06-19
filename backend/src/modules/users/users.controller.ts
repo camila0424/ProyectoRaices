@@ -53,8 +53,12 @@ export async function deleteUser(
   req: AuthRequest,
   res: Response
 ): Promise<void> {
+  if (req.params.id !== req.userId) {
+    res.status(403).json({ mensaje: "No autorizado para eliminar esta cuenta" });
+    return;
+  }
   try {
-    await pool.query("DELETE FROM users WHERE id = ?", [req.params.id]);
+    await pool.query("DELETE FROM users WHERE id = ?", [req.userId]);
     res.json({ mensaje: "Cuenta eliminada correctamente" });
   } catch (error) {
     console.error("Error eliminando cuenta:", error);

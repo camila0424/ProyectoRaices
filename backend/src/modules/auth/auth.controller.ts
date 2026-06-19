@@ -29,9 +29,10 @@ export async function login(
 }
 
 export function googleCallback(req: Request, res: Response): void {
-  const user = req.user as { token: string; nombre: string; correo: string; rol: string };
+  const user = req.user as { token: string; id: string; nombre: string; correo: string; rol: string };
   const params = new URLSearchParams({
     token: user.token,
+    id: user.id,
     nombre: user.nombre,
     correo: user.correo,
     rol: user.rol,
