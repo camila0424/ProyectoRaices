@@ -23,7 +23,7 @@ function PrivacyPolicy() {
                             1. Quiénes somos
                         </h2>
                         <p className="text-sm leading-relaxed">
-                            Hausseup ("nosotros", "nuestro") es una plataforma digital de empleo para personas migrantes en España,
+                            Hausseup es una plataforma digital de empleo para personas migrantes en España,
                             operada por Hausseup (<a href="mailto:hausseup@gmail.com" className="underline hover:opacity-70 transition">hausseup@gmail.com</a>).
                             Puedes contactarnos en cualquier momento escribiendo a{" "}
                             <a href="mailto:hausseup@gmail.com" className="underline hover:opacity-70 transition">hausseup@gmail.com</a>.
