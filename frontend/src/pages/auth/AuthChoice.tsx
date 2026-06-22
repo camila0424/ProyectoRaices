@@ -15,7 +15,7 @@ function AuthChoice() {
         >
             <div className="w-full max-w-md rounded-2xl p-8 shadow-sm border border-[#E8D9C4] bg-white">
                 <div className="flex justify-center mb-6">
-                    <img src="/logo.jpeg" alt="Hausseup" className="h-12 w-auto" />
+                    <img src="/logo.png" alt="Hausseup" className="h-12 w-auto" />
                 </div>
 
                 <h1 className="text-[#1F2A44] text-2xl font-bold text-center mb-1">

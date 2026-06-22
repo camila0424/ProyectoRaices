@@ -26,7 +26,7 @@ function AuthLayout({ children, className = "" }: AuthLayoutProps) {
                     <div className="flex items-center justify-between h-16">
 
                         <Link to="/" className="flex items-center hover:opacity-80 transition-opacity">
-                            <img src="/logo.jpeg" alt="Hausseup" className="h-10 w-auto" />
+                            <img src="/logo.png" alt="Hausseup" className="h-10 w-auto" />
                         </Link>
 
                         <div className="flex items-center gap-3">

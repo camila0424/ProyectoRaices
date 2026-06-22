@@ -43,7 +43,7 @@ function Header() {
                         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
                         className="flex items-center hover:opacity-80 transition-opacity"
                     >
-                        <img src="/logo.jpeg" alt="Hausseup" className="h-10 w-auto" />
+                        <img src="/logo.png" alt="Hausseup" className="h-10 w-auto" />
                     </Link>
 
                     {/* Desktop Nav */}

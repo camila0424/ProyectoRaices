@@ -127,7 +127,7 @@ function RegisterManual() {
                 style={{ backgroundColor: "var(--bg-card)" }}
             >
                 <div className="flex justify-center mb-6">
-                    <img src="/logo.jpeg" alt="Hausseup" className="h-12 w-auto" />
+                    <img src="/logo.png" alt="Hausseup" className="h-12 w-auto" />
                 </div>
 
                 <h1 className="text-[#1F2A44] text-2xl font-bold text-center mb-1">

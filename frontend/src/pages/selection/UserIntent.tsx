@@ -9,7 +9,7 @@ function UserIntent() {
         >
             <div className="w-full max-w-lg text-center mb-10">
                 <div className="flex justify-center mb-6">
-                    <img src="/logo.jpeg" alt="Hausseup" className="h-12 w-auto" />
+                    <img src="/logo.png" alt="Hausseup" className="h-12 w-auto" />
                 </div>
                 <h1 className="text-[#1F2A44] text-3xl font-bold mb-3">
                     ¿Qué estás buscando?
