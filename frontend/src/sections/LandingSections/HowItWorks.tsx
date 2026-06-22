@@ -59,13 +59,13 @@ function HowItWorks() {
     return (
         <section
             id="como-funciona"
-            className="w-full py-20 px-6 md:px-12 dark:bg-[#16152a]"
+            className="w-full py-20 px-6 md:px-12 dark:bg-[#0F1A2C]"
             style={{ backgroundColor: "var(--bg-main)" }}
         >
             <div className="max-w-6xl mx-auto text-center">
                 {/* HEADER */}
-                <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-[#1E1B4B] dark:text-white mb-4">
-                    Cómo funciona parceros
+                <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-[#1F2A44] dark:text-white mb-4">
+                    Cómo funciona Hausseup
                 </h2>
                 <p className="text-[#6B7280] dark:text-white/80 text-base md:text-lg mb-16">
                     Simple, seguro y pensado para ti
@@ -82,13 +82,13 @@ function HowItWorks() {
                             {index < steps.length - 1 && (
                                 <div
                                     className="hidden md:block absolute top-10 left-[60%] w-full h-0.5 border-t border-dashed opacity-60"
-                                    style={{ borderColor: "#C7D2FE" }}
+                                    style={{ borderColor: "#E8A33D" }}
                                 />
                             )}
 
                             {/* Círculo */}
-                            <div className="relative z-10 w-20 h-20 flex items-center justify-center rounded-2xl border border-[#C7D2FE] dark:border-white/10 bg-[#EEF2FF] dark:bg-[#1e1d35] shadow-sm transition-transform duration-300 group-hover:scale-110">
-                                <div className="text-[#4F46E5]">{step.icon}</div>
+                            <div className="relative z-10 w-20 h-20 flex items-center justify-center rounded-2xl border border-[#E8A33D] dark:border-white/10 bg-[#F7EEE0] dark:bg-[#162236] shadow-sm transition-transform duration-300 group-hover:scale-110">
+                                <div className="text-[#C1502E]">{step.icon}</div>
                                 <span className="absolute -bottom-6 text-sm font-semibold text-[#6B7280] dark:text-white/50">
                                     {step.id}
                                 </span>
@@ -96,7 +96,7 @@ function HowItWorks() {
 
                             {/* Texto */}
                             <div className="mt-5">
-                                <h3 className="font-medium text-[#1E1B4B] dark:text-white">{step.title}</h3>
+                                <h3 className="font-medium text-[#1F2A44] dark:text-white">{step.title}</h3>
                                 <p className="text-sm text-[#6B7280] dark:text-white/70 mt-1">{step.description}</p>
                             </div>
                         </div>
@@ -106,8 +106,8 @@ function HowItWorks() {
                 {/* CTA */}
                 <div className="mt-16 flex flex-col md:flex-row items-stretch justify-center gap-4">
 
-                    {/* Card 1 — parceros */}
-                    <div className="flex flex-col justify-between bg-[#1E1B4B] text-white rounded-2xl px-6 py-4 md:px-10 md:py-6 shadow-xl w-full md:max-w-md transition hover:shadow-2xl">
+                    {/* Card 1 — Hausseup */}
+                    <div className="flex flex-col justify-between bg-[#1F2A44] text-white rounded-2xl px-6 py-4 md:px-10 md:py-6 shadow-xl w-full md:max-w-md transition hover:shadow-2xl">
                         <p className="text-sm md:text-base mb-3" style={{ color: "rgba(255,255,255,0.65)" }}>
                             ¿Tienes documentación legal en España?
                         </p>
@@ -116,7 +116,7 @@ function HowItWorks() {
                             className="text-center leading-tight transition hover:opacity-90 cursor-pointer"
                         >
                             <span className="block text-xl md:text-2xl font-semibold">
-                                Únete gratis a parceros →
+                                Únete gratis a Hausseup →
                             </span>
                         </button>
                     </div>
@@ -130,9 +130,9 @@ function HowItWorks() {
                             onClick={() => { navigate("/registro"); window.scrollTo({ top: 0, behavior: "smooth" }); }}
                             className="text-center leading-tight transition hover:opacity-90 cursor-pointer"
                         >
-                            <span className="flex items-center justify-center gap-2 text-xl md:text-2xl font-semibold text-[#1E1B4B]">
+                            <span className="flex items-center justify-center gap-2 text-xl md:text-2xl font-semibold text-[#1F2A44]">
                                 Únete gratis a Semillas
-                                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#FDE68A] text-[#1E1B4B] text-base">→</span>
+                                <span className="inline-flex items-center justify-center w-8 h-8 rounded-full bg-[#FDE68A] text-[#1F2A44] text-base">→</span>
                             </span>
                         </button>
                     </div>

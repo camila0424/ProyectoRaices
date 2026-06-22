@@ -34,7 +34,7 @@ function Header() {
 
     return (
         <header
-            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-[#E5E3DC] dark:border-[#2d2b4e] dark:bg-[#16152a] ${scrolled ? "shadow-sm" : ""}`}
+            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-[#E8D9C4] dark:border-[#1F3558] dark:bg-[#0F1A2C] ${scrolled ? "shadow-sm" : ""}`}
             style={{ backgroundColor: "var(--bg-header)" }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -43,10 +43,9 @@ function Header() {
                     <Link
                         to="/"
                         onClick={() => window.scrollTo({ top: 0, behavior: "smooth" })}
-                        className="flex items-center gap-3 hover:opacity-80 transition-opacity"
+                        className="flex items-center hover:opacity-80 transition-opacity"
                     >
-                        <img src="/parceros-logo.svg" alt="Parceros" className="w-8 h-8" />
-                        <span className="text-[#1E1B4B] dark:text-white font-medium text-sm tracking-tight">Parceros</span>
+                        <img src="/logo.jpeg" alt="Hausseup" className="h-10 w-auto" />
                     </Link>
 
                     {/* Desktop Nav */}
@@ -55,7 +54,7 @@ function Header() {
                             <button
                                 key={link.href}
                                 onClick={() => handleNavClick(link.href)}
-                                className="text-[#6B7280] dark:text-white hover:text-[#1E1B4B] dark:hover:text-white text-sm font-medium transition-colors duration-200 bg-transparent border-none cursor-pointer"
+                                className="text-[#6B7280] dark:text-white hover:text-[#1F2A44] dark:hover:text-white text-sm font-medium transition-colors duration-200 bg-transparent border-none cursor-pointer"
                             >
                                 {link.label}
                             </button>
@@ -63,7 +62,7 @@ function Header() {
 
                         <button
                             onClick={() => navigate("/busco-empleo")}
-                            className="text-[#6B7280] dark:text-white hover:text-[#1E1B4B] dark:hover:text-white text-sm font-medium transition-colors duration-200 bg-transparent border-none cursor-pointer"
+                            className="text-[#6B7280] dark:text-white hover:text-[#1F2A44] dark:hover:text-white text-sm font-medium transition-colors duration-200 bg-transparent border-none cursor-pointer"
                         >
                             Empleos
                         </button>
@@ -72,21 +71,21 @@ function Header() {
                         <button
                             onClick={toggleTheme}
                             title={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
-                            className="w-9 h-9 flex items-center justify-center rounded-full border border-[#E5E3DC] hover:bg-[#F1F0EB] transition-all duration-200 text-base"
+                            className="w-9 h-9 flex items-center justify-center rounded-full border border-[#E8D9C4] hover:bg-[#EDE1CE] transition-all duration-200 text-base"
                         >
                             {isDark ? "☀️" : "🌙"}
                         </button>
 
                         <button
                             onClick={() => navigate("/login")}
-                            className="px-4 py-1.5 rounded-lg text-sm font-medium text-[#1E1B4B] dark:text-white border border-[#E5E3DC] dark:border-white/30 hover:bg-[#F1F0EB] dark:hover:bg-white/10 transition-all duration-200"
+                            className="px-4 py-1.5 rounded-lg text-sm font-medium text-[#1F2A44] dark:text-white border border-[#E8D9C4] dark:border-white/30 hover:bg-[#EDE1CE] dark:hover:bg-white/10 transition-all duration-200"
                         >
                             Iniciar sesión
                         </button>
 
                         <button
                             onClick={() => navigate("/registro")}
-                            className="px-4 py-1.5 rounded-lg text-sm font-medium text-white bg-[#4F46E5] hover:bg-[#4338CA] transition-all duration-200"
+                            className="px-4 py-1.5 rounded-lg text-sm font-medium text-white bg-[#C1502E] hover:bg-[#A6401F] transition-all duration-200"
                         >
                             Registrarme
                         </button>
@@ -97,19 +96,19 @@ function Header() {
                         <button
                             onClick={toggleTheme}
                             title={isDark ? "Modo claro" : "Modo oscuro"}
-                            className="w-9 h-9 flex items-center justify-center rounded-full border border-[#E5E3DC] hover:bg-[#F1F0EB] transition text-base"
+                            className="w-9 h-9 flex items-center justify-center rounded-full border border-[#E8D9C4] hover:bg-[#EDE1CE] transition text-base"
                         >
                             {isDark ? "☀️" : "🌙"}
                         </button>
                         <button
-                            className="flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-md hover:bg-[#F1F0EB]"
+                            className="flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-md hover:bg-[#EDE1CE]"
                             onClick={() => setMenuOpen((prev) => !prev)}
                             aria-label="Toggle menu"
                             aria-expanded={menuOpen}
                         >
-                            <span className={`block h-0.5 w-5 bg-[#1E1B4B] rounded transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
-                            <span className={`block h-0.5 w-5 bg-[#1E1B4B] rounded transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
-                            <span className={`block h-0.5 w-5 bg-[#1E1B4B] rounded transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
+                            <span className={`block h-0.5 w-5 bg-[#1F2A44] rounded transition-all duration-300 ${menuOpen ? "rotate-45 translate-y-2" : ""}`} />
+                            <span className={`block h-0.5 w-5 bg-[#1F2A44] rounded transition-all duration-300 ${menuOpen ? "opacity-0" : ""}`} />
+                            <span className={`block h-0.5 w-5 bg-[#1F2A44] rounded transition-all duration-300 ${menuOpen ? "-rotate-45 -translate-y-2" : ""}`} />
                         </button>
                     </div>
                 </div>
@@ -125,28 +124,28 @@ function Header() {
                         <button
                             key={link.href}
                             onClick={() => handleNavClick(link.href)}
-                            className="text-[#6B7280] dark:text-white hover:text-[#1E1B4B] dark:hover:text-white text-sm font-medium text-left py-3 px-3 rounded-lg transition-colors duration-200 hover:bg-[#F1F0EB] bg-transparent border-none cursor-pointer w-full"
+                            className="text-[#6B7280] dark:text-white hover:text-[#1F2A44] dark:hover:text-white text-sm font-medium text-left py-3 px-3 rounded-lg transition-colors duration-200 hover:bg-[#EDE1CE] bg-transparent border-none cursor-pointer w-full"
                         >
                             {link.label}
                         </button>
                     ))}
                     <button
                         onClick={() => { setMenuOpen(false); navigate("/busco-empleo"); }}
-                        className="text-[#6B7280] dark:text-white hover:text-[#1E1B4B] dark:hover:text-white text-sm font-medium text-left py-3 px-3 rounded-lg transition-colors duration-200 hover:bg-[#F1F0EB] bg-transparent border-none cursor-pointer w-full"
+                        className="text-[#6B7280] dark:text-white hover:text-[#1F2A44] dark:hover:text-white text-sm font-medium text-left py-3 px-3 rounded-lg transition-colors duration-200 hover:bg-[#EDE1CE] bg-transparent border-none cursor-pointer w-full"
                     >
                         Empleos
                     </button>
 
                     <button
                         onClick={() => { setMenuOpen(false); navigate("/login"); }}
-                        className="mt-2 px-4 py-2.5 rounded-lg text-sm font-medium text-[#1E1B4B] dark:text-white text-center border border-[#E5E3DC] dark:border-white/30 hover:bg-[#F1F0EB] dark:hover:bg-white/10 transition"
+                        className="mt-2 px-4 py-2.5 rounded-lg text-sm font-medium text-[#1F2A44] dark:text-white text-center border border-[#E8D9C4] dark:border-white/30 hover:bg-[#EDE1CE] dark:hover:bg-white/10 transition"
                     >
                         Iniciar sesión
                     </button>
 
                     <button
                         onClick={() => { setMenuOpen(false); navigate("/registro"); }}
-                        className="mt-2 px-4 py-2.5 rounded-lg text-sm font-medium text-white text-center bg-[#4F46E5] hover:bg-[#4338CA] transition"
+                        className="mt-2 px-4 py-2.5 rounded-lg text-sm font-medium text-white text-center bg-[#C1502E] hover:bg-[#A6401F] transition"
                     >
                         Registrarme
                     </button>

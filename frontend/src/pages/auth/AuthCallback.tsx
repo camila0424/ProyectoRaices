@@ -36,10 +36,10 @@ function AuthCallback() {
             className="min-h-screen flex flex-col items-center justify-center gap-4"
             style={{ backgroundColor: "var(--bg-main)" }}
         >
-            <div className="w-10 h-10 rounded-full bg-[#1D9E75] flex items-center justify-center animate-pulse">
-                <span className="text-white font-bold font-serif text-base">P</span>
+            <div className="w-10 h-10 rounded-full bg-[#C1502E] flex items-center justify-center animate-pulse">
+                <span className="text-white font-bold font-serif text-base">H</span>
             </div>
-            <p className="text-white text-sm">Iniciando sesión con Google...</p>
+            <p className="text-[#1F2A44] dark:text-white text-sm">Iniciando sesión con Google...</p>
         </div>
     );
 }

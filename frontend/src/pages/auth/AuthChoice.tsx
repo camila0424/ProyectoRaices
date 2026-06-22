@@ -13,15 +13,13 @@ function AuthChoice() {
             className="flex-1 flex flex-col items-center justify-center px-4 pt-20 pb-12"
             style={{ backgroundColor: "var(--bg-main)" }}
         >
-            <div className="w-full max-w-md rounded-2xl p-8 shadow-sm border border-[#E5E3DC] bg-white">
+            <div className="w-full max-w-md rounded-2xl p-8 shadow-sm border border-[#E8D9C4] bg-white">
                 <div className="flex justify-center mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-[#1E1B4B] flex items-center justify-center">
-                        <span className="text-white font-medium text-lg">P</span>
-                    </div>
+                    <img src="/logo.jpeg" alt="Hausseup" className="h-12 w-auto" />
                 </div>
 
-                <h1 className="text-[#1E1B4B] text-2xl font-bold text-center mb-1">
-                    Únete a Parceros
+                <h1 className="text-[#1F2A44] text-2xl font-bold text-center mb-1">
+                    Únete a Hausseup
                 </h1>
                 <p className="text-[#6B7280] text-sm text-center mb-8">
                     Red de oportunidades para latinos en España
@@ -30,7 +28,7 @@ function AuthChoice() {
                 <div className="flex flex-col gap-3 mb-6">
 
                     <a href={`${BACKEND_URL}/auth/google`}
-                        className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold text-sm border border-[#E5E3DC] hover:bg-[#F1F0EB] transition"
+                        className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold text-sm border border-[#E8D9C4] hover:bg-[#EDE1CE] transition"
                     >
                         <img
                             src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -54,21 +52,21 @@ function AuthChoice() {
                 </div>
 
                 <div className="flex items-center gap-3 mb-6">
-                    <div className="flex-1 h-px bg-[#E5E3DC]" />
+                    <div className="flex-1 h-px bg-[#E8D9C4]" />
                     <span className="text-[#6B7280] text-xs">o regístrate manualmente</span>
-                    <div className="flex-1 h-px bg-[#E5E3DC]" />
+                    <div className="flex-1 h-px bg-[#E8D9C4]" />
                 </div>
 
                 <button
                     onClick={() => navigate(tipo === "employer" ? "/registro/manual?tipo=employer" : "/registro/manual")}
-                    className="w-full py-3 rounded-xl font-semibold text-white text-sm bg-[#4F46E5] hover:bg-[#4338CA] transition"
+                    className="w-full py-3 rounded-xl font-semibold text-white text-sm bg-[#C1502E] hover:bg-[#A6401F] transition"
                 >
                     Añadir mis datos manualmente
                 </button>
 
                 <p className="text-center text-[#6B7280] text-xs mt-6">
                     ¿Ya tienes cuenta?{" "}
-                    <Link to="/login" className="text-[#4F46E5] hover:underline font-medium">
+                    <Link to="/login" className="text-[#C1502E] hover:underline font-medium">
                         Inicia sesión
                     </Link>
                 </p>

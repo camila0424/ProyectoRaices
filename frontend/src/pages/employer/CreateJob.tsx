@@ -135,20 +135,20 @@ function CreateJob() {
                     Volver al panel
                 </button>
 
-                <h1 className="text-[#1E1B4B] dark:text-white text-3xl font-bold mb-1">Publicar oferta</h1>
+                <h1 className="text-[#1F2A44] dark:text-white text-3xl font-bold mb-1">Publicar oferta</h1>
                 <p className="text-[#6B7280] dark:text-white/70 text-base mb-8">
                     Completa los detalles para que los candidatos encuentren tu oferta
                 </p>
 
                 {!usuario && (
-                    <div className="mb-6 px-5 py-4 rounded-xl border border-[#1D9E75]/40 bg-[#1D9E75]/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
-                        <p className="text-green-300 text-sm">
+                    <div className="mb-6 px-5 py-4 rounded-xl border border-[#C1502E]/40 bg-[#C1502E]/10 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3">
+                        <p className="text-orange-300 text-sm">
                             ¿Aún no tienes cuenta? Necesitarás una para publicar tu oferta.
                         </p>
                         <div className="flex gap-3 shrink-0">
                             <Link
                                 to="/registro"
-                                className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-[#1D9E75] hover:brightness-110 transition"
+                                className="px-4 py-2 rounded-lg text-sm font-semibold text-white bg-[#C1502E] hover:brightness-110 transition"
                             >
                                 Crear cuenta
                             </Link>
@@ -174,36 +174,36 @@ function CreateJob() {
                     style={{ backgroundColor: "var(--bg-card)" }}
                 >
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1E1B4B] dark:text-white font-medium">Título del puesto</label>
+                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Título del puesto</label>
                         <input
                             type="text"
                             name="titulo"
                             value={form.titulo}
                             onChange={handleChange}
                             placeholder="Ej: Camarero/a de sala..."
-                            className="w-full rounded-xl px-4 py-2.5 bg-white dark:bg-white/5 border border-white/10 text-[#1E1B4B] dark:text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white dark:bg-white/5 border border-white/10 text-[#1F2A44] dark:text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                         {errors.titulo && <p className="text-red-400 text-xs">{errors.titulo}</p>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1E1B4B] dark:text-white font-medium">Sector</label>
+                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Sector</label>
                         <select
                             name="sector"
                             value={form.sector}
                             onChange={handleChange}
-                            className="w-full rounded-xl px-4 py-2.5 bg-[#182320] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75] appearance-none"
+                            className="w-full rounded-xl px-4 py-2.5 bg-[#162236] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] appearance-none"
                         >
-                            <option value="" className="bg-[#182320]">Selecciona un sector</option>
+                            <option value="" className="bg-[#162236]">Selecciona un sector</option>
                             {SECTORES.map((s) => (
-                                <option key={s} value={s} className="bg-[#182320]">{s}</option>
+                                <option key={s} value={s} className="bg-[#162236]">{s}</option>
                             ))}
                         </select>
                         {errors.sector && <p className="text-red-400 text-xs">{errors.sector}</p>}
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm text-[#1E1B4B] dark:text-white font-medium">Tipo de contrato</label>
+                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Tipo de contrato</label>
                         <div className="grid grid-cols-2 gap-3">
                             {CONTRATOS.map((c) => (
                                 <button
@@ -211,11 +211,11 @@ function CreateJob() {
                                     type="button"
                                     onClick={() => handleContrato(c.value)}
                                     className={`p-4 rounded-xl border text-left transition-all duration-200 ${form.contrato === c.value
-                                            ? "border-[#1D9E75] bg-[#1D9E75]/10"
+                                            ? "border-[#C1502E] bg-[#C1502E]/10"
                                             : "border-white/10 hover:border-white/20"
                                         }`}
                                 >
-                                    <p className={`text-sm font-semibold ${form.contrato === c.value ? "text-[#1D9E75]" : "text-[#1E1B4B] dark:text-white"}`}>
+                                    <p className={`text-sm font-semibold ${form.contrato === c.value ? "text-[#C1502E]" : "text-[#1F2A44] dark:text-white"}`}>
                                         {c.label}
                                     </p>
                                     <p className="text-[#6B7280] dark:text-white/70 text-xs mt-0.5">{c.descripcion}</p>
@@ -227,33 +227,33 @@ function CreateJob() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1">
-                            <label className="text-sm text-[#1E1B4B] dark:text-white font-medium">Provincia</label>
+                            <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Provincia</label>
                             <select
                                 name="provincia"
                                 value={form.provincia}
                                 onChange={handleChange}
-                                className="w-full rounded-xl px-4 py-2.5 bg-[#182320] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75] appearance-none"
+                                className="w-full rounded-xl px-4 py-2.5 bg-[#162236] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] appearance-none"
                             >
-                                <option value="" className="bg-[#182320]">Selecciona provincia</option>
+                                <option value="" className="bg-[#162236]">Selecciona provincia</option>
                                 {regiones.map((r) => (
-                                    <option key={r} value={r} className="bg-[#182320]">{r}</option>
+                                    <option key={r} value={r} className="bg-[#162236]">{r}</option>
                                 ))}
                             </select>
                             {errors.provincia && <p className="text-red-400 text-xs">{errors.provincia}</p>}
                         </div>
 
                         <div className="flex flex-col gap-1">
-                            <label className="text-sm text-[#1E1B4B] dark:text-white font-medium">Ciudad</label>
+                            <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Ciudad</label>
                             <select
                                 name="cityId"
                                 value={String(form.cityId)}
                                 onChange={handleChange}
                                 disabled={!form.provincia}
-                                className="w-full rounded-xl px-4 py-2.5 bg-[#182320] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75] appearance-none disabled:opacity-40"
+                                className="w-full rounded-xl px-4 py-2.5 bg-[#162236] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] appearance-none disabled:opacity-40"
                             >
-                                <option value="" className="bg-[#182320]">Selecciona ciudad</option>
+                                <option value="" className="bg-[#162236]">Selecciona ciudad</option>
                                 {ciudadesDisponibles.map((c) => (
-                                    <option key={c.id} value={String(c.id)} className="bg-[#182320]">{c.name}</option>
+                                    <option key={c.id} value={String(c.id)} className="bg-[#162236]">{c.name}</option>
                                 ))}
                             </select>
                             {errors.cityId && <p className="text-red-400 text-xs">{errors.cityId}</p>}
@@ -261,7 +261,7 @@ function CreateJob() {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1E1B4B] dark:text-white font-medium">Número de vacantes</label>
+                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Número de vacantes</label>
                         <input
                             type="number"
                             name="vacantes"
@@ -269,19 +269,19 @@ function CreateJob() {
                             onChange={handleChange}
                             min={1}
                             max={99}
-                            className="w-full rounded-xl px-4 py-2.5 bg-white dark:bg-white/5 border border-white/10 text-[#1E1B4B] dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white dark:bg-white/5 border border-white/10 text-[#1F2A44] dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1E1B4B] dark:text-white font-medium">Descripción del puesto</label>
+                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Descripción del puesto</label>
                         <textarea
                             name="descripcion"
                             value={form.descripcion}
                             onChange={handleChange}
                             rows={5}
                             placeholder="Describe el puesto, requisitos, condiciones, horarios..."
-                            className="w-full rounded-xl px-4 py-2.5 bg-white dark:bg-white/5 border border-white/10 text-[#1E1B4B] dark:text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75] resize-none"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white dark:bg-white/5 border border-white/10 text-[#1F2A44] dark:text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] resize-none"
                         />
                         {errors.descripcion && <p className="text-red-400 text-xs">{errors.descripcion}</p>}
                     </div>
@@ -298,7 +298,7 @@ function CreateJob() {
                             type="submit"
                             disabled={loading}
                             className="flex-1 py-3 rounded-xl font-semibold text-white text-sm hover:brightness-110 transition disabled:opacity-50"
-                            style={{ backgroundColor: "#2d7a4f" }}
+                            style={{ backgroundColor: "#C1502E" }}
                         >
                             {loading ? "Publicando..." : "Publicar oferta"}
                         </button>

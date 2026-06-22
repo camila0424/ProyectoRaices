@@ -5,14 +5,21 @@
 /* ─── CSS Custom Properties ──────────────────────────────────────────────────── */
 
 :root {
-    --bg-main:            #FAFAF9;
-    --bg-card:            #F1F0EB;
-    --bg-hero:            #FAFAF9;
-    --bg-header:          #FAFAF9;
-    --text-hero:          #1E1B4B;
-    --text-hero-muted:    rgba(30, 27, 75, 0.70);
-    --text-hero-subtle:   rgba(30, 27, 75, 0.55);
-    --border-hero-btn:    rgba(30, 27, 75, 0.20);
+    /* Hausseup brand palette */
+    --color-primary:      #C1502E;
+    --color-accent:       #E8A33D;
+    --color-anchor:       #1F2A44;
+    --color-background:   #F7EEE0;
+
+    /* Layout tokens */
+    --bg-main:            #F7EEE0;
+    --bg-card:            #EDE1CE;
+    --bg-hero:            #F7EEE0;
+    --bg-header:          #F7EEE0;
+    --text-hero:          #1F2A44;
+    --text-hero-muted:    rgba(31, 42, 68, 0.70);
+    --text-hero-subtle:   rgba(31, 42, 68, 0.55);
+    --border-hero-btn:    rgba(31, 42, 68, 0.20);
 }
 
 /* ─── Animations ─────────────────────────────────────────────────────────────── */
@@ -34,10 +41,10 @@
 
 html.dark {
     color-scheme: dark;
-    --bg-main:            #16152a;
-    --bg-card:            #1a1a2e;
-    --bg-hero:            #16152a;
-    --bg-header:          #16152a;
+    --bg-main:            #0F1A2C;
+    --bg-card:            #162236;
+    --bg-hero:            #0F1A2C;
+    --bg-header:          #0F1A2C;
     --text-hero:          #ffffff;
     --text-hero-muted:    rgba(255, 255, 255, 0.75);
     --text-hero-subtle:   rgba(255, 255, 255, 0.55);
@@ -63,20 +70,20 @@ html.dark {
 
 select option {
   background-color: #ffffff;
-  color: #1E1B4B;
+  color: #1F2A44;
 }
 
 html.dark select option {
-  background-color: #1e1d35;
+  background-color: #162236;
   color: #ffffff;
 }
 
 select {
   background-color: #ffffff;
-  color: #1E1B4B;
+  color: #1F2A44;
 }
 
 html.dark select {
-  background-color: #1e1d35;
+  background-color: #162236;
   color: #ffffff;
 }

@@ -10,15 +10,15 @@ function Hero() {
             style={{ backgroundColor: "var(--bg-hero)" }}
         >
             {/* Background blobs */}
-            <div className="absolute -top-16 right-10 w-48 h-48 rounded-full bg-[#C7D2FE]/30 blur-2xl animate-pulse" />
-            <div className="absolute -bottom-12 right-24 w-32 h-32 rounded-full bg-[#C7D2FE]/30 blur-2xl animate-pulse delay-300" />
+            <div className="absolute -top-16 right-10 w-48 h-48 rounded-full bg-[#E8A33D]/20 blur-2xl animate-pulse" />
+            <div className="absolute -bottom-12 right-24 w-32 h-32 rounded-full bg-[#E8A33D]/20 blur-2xl animate-pulse delay-300" />
 
             {/* Container */}
             <div className="relative z-10 w-full max-w-7xl mx-auto px-5 sm:px-8 md:px-12 lg:px-16 pt-20 pb-20 flex flex-col">
 
                 {/* Eyebrow pill */}
-                <div className="inline-flex items-center gap-1.5 bg-[#EEF2FF] text-[#4F46E5] text-xs font-medium tracking-widest uppercase px-3 py-1 rounded-full mb-4 sm:mb-5">
-                    <span className="w-1.5 h-1.5 rounded-full bg-[#4F46E5] inline-block" />
+                <div className="inline-flex items-center gap-1.5 bg-[#F7EEE0] text-[#C1502E] text-xs font-medium tracking-widest uppercase px-3 py-1 rounded-full mb-4 sm:mb-5 border border-[#E8D9C4]">
+                    <span className="w-1.5 h-1.5 rounded-full bg-[#C1502E] inline-block" />
                     Red de empleo para latinos en España
                 </div>
 
@@ -27,7 +27,7 @@ function Hero() {
                     {paisesOrigen.map(({ code, name }) => (
                         <div
                             key={code}
-                            className="inline-flex items-center gap-1.5 bg-[#F1F0EB] border border-[#E5E3DC] rounded-full px-2.5 py-1 text-xs text-[#312E81]"
+                            className="inline-flex items-center gap-1.5 bg-[#EDE1CE] border border-[#E8D9C4] rounded-full px-2.5 py-1 text-xs text-[#1F2A44]"
                         >
                             <img
                                 src={`https://flagcdn.com/w40/${code}.png`}
@@ -47,7 +47,7 @@ function Hero() {
                     style={{ color: "var(--text-hero)" }}
                 >
                     Tu próxima{" "}
-                    <span className="text-[#4F46E5] italic">oportunidad</span>{" "}
+                    <span className="text-[#C1502E] italic">oportunidad</span>{" "}
                     viene de un paisano
                 </h1>
 
@@ -66,7 +66,7 @@ function Hero() {
 
                     <Link
                         to="/busco-empleo"
-                        className="w-full sm:w-auto text-center inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold text-white bg-[#4F46E5] hover:bg-[#4338CA] transition-all duration-300 shadow-sm hover:scale-[1.02]"
+                        className="w-full sm:w-auto text-center inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold text-white bg-[#C1502E] hover:bg-[#A6401F] transition-all duration-300 shadow-sm hover:scale-[1.02]"
                     >
                         Buscar empleo
                     </Link>

@@ -2,11 +2,11 @@ import { Play, Mail, MapPin } from "lucide-react";
 
 function Footer() {
     return (
-        <footer className="bg-[#1E1B4B] text-white">
+        <footer className="bg-[#1F2A44] text-white">
             <div className="max-w-7xl mx-auto px-6 py-6 grid gap-10 md:grid-cols-2 lg:grid-cols-4">
 
                 <div>
-                    <h2 className="text-white font-medium tracking-tight text-xl">Parceros</h2>
+                    <h2 className="text-white font-medium tracking-tight text-xl">Hausseup</h2>
                     <p className="mt-3 text-sm leading-relaxed" style={{ color: "rgba(255,255,255,0.45)" }}>
                         Red de oportunidades para latinos en España.
                         Conectamos talento, empresas y crecimiento profesional.
@@ -19,17 +19,17 @@ function Footer() {
                     </h3>
                     <ul className="mt-4 space-y-2 text-sm">
                         <li>
-                            <a href="#como-funciona" className="hover:text-[#A5B4FC] transition">
+                            <a href="#como-funciona" className="hover:text-[#E8A33D] transition">
                                 Cómo funciona
                             </a>
                         </li>
                         <li>
-                            <a href="#empleos" className="hover:text-[#A5B4FC] transition">
+                            <a href="#empleos" className="hover:text-[#E8A33D] transition">
                                 Empleos
                             </a>
                         </li>
                         <li>
-                            <a href="#contacto" className="hover:text-[#A5B4FC] transition">
+                            <a href="#contacto" className="hover:text-[#E8A33D] transition">
                                 Contacto
                             </a>
                         </li>
@@ -43,7 +43,7 @@ function Footer() {
                     <ul className="mt-4 space-y-3 text-sm" style={{ color: "rgba(255,255,255,0.45)" }}>
                         <li className="flex items-center gap-2">
                             <Mail size={16} />
-                            parceros.info@gmail.com
+                            hausseup@gmail.com
                         </li>
                         <li className="flex items-center gap-2">
                             <MapPin size={16} />
@@ -72,7 +72,7 @@ function Footer() {
             <div className="border-t" style={{ borderColor: "rgba(255,255,255,0.08)" }} />
 
             <div className="max-w-7xl mx-auto px-6 py-6 flex flex-col md:flex-row items-center justify-between gap-4 text-xs" style={{ color: "rgba(255,255,255,0.30)" }}>
-                <p>© {new Date().getFullYear()} Parceros. Todos los derechos reservados.</p>
+                <p>© {new Date().getFullYear()} Hausseup. Todos los derechos reservados.</p>
                 <div className="flex gap-6">
                     <a href="#" className="hover:text-white transition">Privacidad</a>
                     <a href="#" className="hover:text-white transition">Términos</a>

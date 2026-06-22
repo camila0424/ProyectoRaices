@@ -124,13 +124,11 @@ function RegisterManual() {
                 style={{ backgroundColor: "var(--bg-card)" }}
             >
                 <div className="flex justify-center mb-6">
-                    <div className="w-12 h-12 rounded-full bg-[#1D9E75] flex items-center justify-center">
-                        <span className="text-white font-bold font-serif text-lg">P</span>
-                    </div>
+                    <img src="/logo.jpeg" alt="Hausseup" className="h-12 w-auto" />
                 </div>
 
-                <h1 className="text-white text-2xl font-bold text-center mb-1">
-                    Crea tu cuenta en Parceros
+                <h1 className="text-[#1F2A44] dark:text-white text-2xl font-bold text-center mb-1">
+                    Crea tu cuenta en Hausseup
                 </h1>
                 <p className="text-gray-400 text-sm text-center mb-8">
                     Completa tus datos para empezar
@@ -152,7 +150,7 @@ function RegisterManual() {
                             value={form.nombre}
                             onChange={handleChange}
                             placeholder="Tu nombre"
-                            className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                         {errors.nombre && <p className="text-red-400 text-xs">{errors.nombre}</p>}
                     </div>
@@ -166,7 +164,7 @@ function RegisterManual() {
                                 value={form.telefono}
                                 onChange={handleChange}
                                 placeholder="+34 600 000 000"
-                                className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
+                                className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                             />
                             {errors.telefono && <p className="text-red-400 text-xs">{errors.telefono}</p>}
                         </div>
@@ -179,7 +177,7 @@ function RegisterManual() {
                                 value={form.correo}
                                 onChange={handleChange}
                                 placeholder="tu@correo.com"
-                                className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
+                                className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                             />
                             {errors.correo && <p className="text-red-400 text-xs">{errors.correo}</p>}
                         </div>
@@ -193,7 +191,7 @@ function RegisterManual() {
                             value={form.contrasena}
                             onChange={handleChange}
                             placeholder="Mínimo 8 caracteres"
-                            className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                         {errors.contrasena && <p className="text-red-400 text-xs">{errors.contrasena}</p>}
                     </div>
@@ -205,11 +203,11 @@ function RegisterManual() {
                                 name="provincia"
                                 value={form.provincia}
                                 onChange={handleChange}
-                                className="w-full rounded-xl px-4 py-2.5 bg-[#182320] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75] appearance-none"
+                                className="w-full rounded-xl px-4 py-2.5 bg-[#162236] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] appearance-none"
                             >
-                                <option value="" className="bg-[#182320]">Selecciona provincia</option>
+                                <option value="" className="bg-[#162236]">Selecciona provincia</option>
                                 {ciudadesEspana.map((p) => (
-                                    <option key={p.provincia} value={p.provincia} className="bg-[#182320]">
+                                    <option key={p.provincia} value={p.provincia} className="bg-[#162236]">
                                         {p.provincia}
                                     </option>
                                 ))}
@@ -224,11 +222,11 @@ function RegisterManual() {
                                 value={form.ciudad}
                                 onChange={handleChange}
                                 disabled={!form.provincia}
-                                className="w-full rounded-xl px-4 py-2.5 bg-[#182320] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75] appearance-none disabled:opacity-40"
+                                className="w-full rounded-xl px-4 py-2.5 bg-[#162236] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] appearance-none disabled:opacity-40"
                             >
-                                <option value="" className="bg-[#182320]">Selecciona ciudad</option>
+                                <option value="" className="bg-[#162236]">Selecciona ciudad</option>
                                 {ciudadesDisponibles.map((c) => (
-                                    <option key={c} value={c} className="bg-[#182320]">{c}</option>
+                                    <option key={c} value={c} className="bg-[#162236]">{c}</option>
                                 ))}
                             </select>
                             {errors.ciudad && <p className="text-red-400 text-xs">{errors.ciudad}</p>}
@@ -243,7 +241,7 @@ function RegisterManual() {
                             value={form.documento}
                             onChange={handleChange}
                             placeholder="NIE, DNI o Pasaporte"
-                            className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#1D9E75]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                         {errors.documento && <p className="text-red-400 text-xs">{errors.documento}</p>}
                     </div>
@@ -256,11 +254,11 @@ function RegisterManual() {
                                 type="button"
                                 onClick={() => setForm((prev) => ({ ...prev, tipoUsuario: "worker" }))}
                                 className={`p-4 rounded-xl border text-left transition-all duration-200 ${form.tipoUsuario === "worker"
-                                    ? "border-[#1D9E75] bg-[#1D9E75]/10"
+                                    ? "border-[#C1502E] bg-[#C1502E]/10"
                                     : "border-white/10 hover:border-white/20"
                                     }`}
                             >
-                                <p className={`text-sm font-semibold ${form.tipoUsuario === "worker" ? "text-[#1D9E75]" : "text-white"}`}>
+                                <p className={`text-sm font-semibold ${form.tipoUsuario === "worker" ? "text-[#C1502E]" : "text-white"}`}>
                                     🔍 Busco empleo
                                 </p>
                                 <p className="text-gray-400 text-xs mt-0.5">Quiero trabajar</p>
@@ -270,11 +268,11 @@ function RegisterManual() {
                                 type="button"
                                 onClick={() => setForm((prev) => ({ ...prev, tipoUsuario: "employer" }))}
                                 className={`p-4 rounded-xl border text-left transition-all duration-200 ${form.tipoUsuario === "employer"
-                                    ? "border-[#1D9E75] bg-[#1D9E75]/10"
+                                    ? "border-[#C1502E] bg-[#C1502E]/10"
                                     : "border-white/10 hover:border-white/20"
                                     }`}
                             >
-                                <p className={`text-sm font-semibold ${form.tipoUsuario === "employer" ? "text-[#1D9E75]" : "text-white"}`}>
+                                <p className={`text-sm font-semibold ${form.tipoUsuario === "employer" ? "text-[#C1502E]" : "text-white"}`}>
                                     📋 Ofrezco empleo
                                 </p>
                                 <p className="text-gray-400 text-xs mt-0.5">Quiero contratar</p>
@@ -287,7 +285,7 @@ function RegisterManual() {
                         type="submit"
                         disabled={loading}
                         className="mt-2 w-full py-3 rounded-xl font-semibold text-white text-sm hover:brightness-110 transition disabled:opacity-50"
-                        style={{ backgroundColor: "#2d7a4f" }}
+                        style={{ backgroundColor: "#C1502E" }}
                     >
                         {loading ? "Creando cuenta..." : "Continuar"}
                     </button>
@@ -295,7 +293,7 @@ function RegisterManual() {
 
                 <p className="text-center text-gray-500 text-xs mt-6">
                     ¿Ya tienes cuenta?{" "}
-                    <Link to="/login" className="text-[#1D9E75] hover:underline font-medium">
+                    <Link to="/login" className="text-[#C1502E] hover:underline font-medium">
                         Inicia sesión
                     </Link>
                 </p>

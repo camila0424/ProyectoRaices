@@ -68,18 +68,16 @@ function LoginPage() {
             className="flex-1 flex flex-col items-center justify-center px-4 pt-20 pb-12"
             style={{ backgroundColor: "var(--bg-main)" }}
         >
-            <div className="w-full max-w-md rounded-2xl p-8 shadow-sm border border-[#E5E3DC] bg-white">
+            <div className="w-full max-w-md rounded-2xl p-8 shadow-sm border border-[#E8D9C4] bg-white">
                 <div className="flex justify-center mb-6">
-                    <div className="w-12 h-12 rounded-xl bg-[#1E1B4B] flex items-center justify-center">
-                        <span className="text-white font-medium text-lg">P</span>
-                    </div>
+                    <img src="/logo.jpeg" alt="Hausseup" className="h-12 w-auto" />
                 </div>
 
-                <h1 className="text-[#1E1B4B] text-2xl font-bold text-center mb-1">
+                <h1 className="text-[#1F2A44] text-2xl font-bold text-center mb-1">
                     Bienvenido de vuelta
                 </h1>
                 <p className="text-[#6B7280] text-sm text-center mb-8">
-                    Inicia sesión en tu cuenta Parceros
+                    Inicia sesión en tu cuenta Hausseup
                 </p>
 
                 {errors.general && (
@@ -91,7 +89,7 @@ function LoginPage() {
                 <div className="flex flex-col gap-3 mb-6">
 
                     <a href={`${BACKEND_URL}/auth/google`}
-                        className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold text-sm border border-[#E5E3DC] hover:bg-[#F1F0EB] transition"
+                        className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold text-sm border border-[#E8D9C4] hover:bg-[#EDE1CE] transition"
                     >
                         <img
                             src="https://www.svgrepo.com/show/475656/google-color.svg"
@@ -115,34 +113,34 @@ function LoginPage() {
                 </div>
 
                 <div className="flex items-center gap-3 mb-6">
-                    <div className="flex-1 h-px bg-[#E5E3DC]" />
+                    <div className="flex-1 h-px bg-[#E8D9C4]" />
                     <span className="text-[#6B7280] text-xs">o con tu correo</span>
-                    <div className="flex-1 h-px bg-[#E5E3DC]" />
+                    <div className="flex-1 h-px bg-[#E8D9C4]" />
                 </div>
 
                 <form onSubmit={handleSubmit} className="flex flex-col gap-4">
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1E1B4B] font-medium">Correo electrónico</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Correo electrónico</label>
                         <input
                             type="email"
                             name="correo"
                             value={form.correo}
                             onChange={handleChange}
                             placeholder="tu@correo.com"
-                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E5E3DC] text-[#1E1B4B] placeholder-[#9CA3AF] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7D2FE] focus:border-[#4F46E5]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E8D9C4] text-[#1F2A44] placeholder-[#9CA3AF] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] focus:border-[#C1502E]"
                         />
                         {errors.correo && <p className="text-red-500 text-xs">{errors.correo}</p>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1E1B4B] font-medium">Contraseña</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Contraseña</label>
                         <input
                             type="password"
                             name="contrasena"
                             value={form.contrasena}
                             onChange={handleChange}
                             placeholder="••••••••"
-                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E5E3DC] text-[#1E1B4B] placeholder-[#9CA3AF] text-sm focus:outline-none focus:ring-2 focus:ring-[#C7D2FE] focus:border-[#4F46E5]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E8D9C4] text-[#1F2A44] placeholder-[#9CA3AF] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] focus:border-[#C1502E]"
                         />
                         {errors.contrasena && <p className="text-red-500 text-xs">{errors.contrasena}</p>}
                     </div>
@@ -150,7 +148,7 @@ function LoginPage() {
                     <button
                         type="submit"
                         disabled={loading}
-                        className="mt-2 w-full py-3 rounded-xl font-semibold text-white text-sm bg-[#4F46E5] hover:bg-[#4338CA] transition disabled:opacity-50"
+                        className="mt-2 w-full py-3 rounded-xl font-semibold text-white text-sm bg-[#C1502E] hover:bg-[#A6401F] transition disabled:opacity-50"
                     >
                         {loading ? "Iniciando sesión..." : "Iniciar sesión"}
                     </button>
@@ -158,7 +156,7 @@ function LoginPage() {
 
                 <p className="text-center text-[#6B7280] text-xs mt-6">
                     ¿No tienes cuenta?{" "}
-                    <Link to="/registro" className="text-[#4F46E5] hover:underline font-medium">
+                    <Link to="/registro" className="text-[#C1502E] hover:underline font-medium">
                         Regístrate gratis
                     </Link>
                 </p>
