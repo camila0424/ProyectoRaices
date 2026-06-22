@@ -67,14 +67,14 @@ const estadoColor: Record<Aplicacion["status"], string> = {
     pending: "bg-yellow-500/20 text-yellow-300 border-yellow-500/30",
     accepted: "bg-green-500/20 text-[#E8A33D] border-[#C1502E]/30",
     rejected: "bg-red-500/20 text-red-300 border-red-500/30",
-    withdrawn: "bg-gray-500/20 text-[#1F2A44] dark:text-[#1F2A44] dark:text-white border-gray-500/30",
+    withdrawn: "bg-gray-500/20 text-[#1F2A44] border-gray-500/30",
 };
 
 const demandaColor: Record<string, string> = {
     "Muy alta": "bg-red-500/20 text-red-300",
     "Alta": "bg-orange-500/20 text-orange-300",
     "Media": "bg-blue-500/20 text-blue-300",
-    "Baja": "bg-gray-500/20 text-[#1F2A44] dark:text-[#1F2A44] dark:text-white",
+    "Baja": "bg-gray-500/20 text-[#1F2A44]",
 };
 
 // ─── Resources data ───────────────────────────────────────────────────────────
@@ -602,12 +602,12 @@ function WorkerSearch() {
 
         return (
             <div
-                className="rounded-2xl p-6 border border-white/5 hover:border-[#E8D9C4] dark:border-white/10 transition-all duration-200"
+                className="rounded-2xl p-6 border border-white/5 hover:border-[#E8D9C4] transition-all duration-200"
                 style={{ backgroundColor: "var(--bg-card)" }}
             >
                 <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                     <div className="flex-1 min-w-0">
-                        <h3 className="text-[#1F2A44] dark:text-white font-bold text-lg leading-snug">{empleo.titulo}</h3>
+                        <h3 className="text-[#1F2A44] font-bold text-lg leading-snug">{empleo.titulo}</h3>
                         <p className="text-[#C1502E] text-sm font-medium mt-0.5">{empleo.employer_nombre}</p>
                     </div>
                     <div className="flex items-center gap-2 shrink-0">
@@ -619,7 +619,7 @@ function WorkerSearch() {
                             title={guardado ? "Quitar de guardados" : "Guardar oferta"}
                             className={`w-8 h-8 flex items-center justify-center rounded-full border transition-all duration-200 ${guardado
                                 ? "border-[#C1502E] bg-[#C1502E]/20 text-[#C1502E]"
-                                : "border-[#E8D9C4] dark:border-white/10 text-gray-500 hover:border-white/30 hover:text-[#1F2A44] dark:text-white"
+                                : "border-[#E8D9C4] text-gray-500 hover:border-white/30 hover:text-[#1F2A44]"
                                 }`}
                         >
                             {guardado ? "🔖" : "🤍"}
@@ -627,7 +627,7 @@ function WorkerSearch() {
                     </div>
                 </div>
 
-                <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm leading-relaxed mb-4 line-clamp-2">{empleo.descripcion}</p>
+                <p className="text-[#1F2A44] text-sm leading-relaxed mb-4 line-clamp-2">{empleo.descripcion}</p>
 
                 <div className="flex flex-wrap items-center gap-4 text-xs text-gray-500 mb-4">
                     <span>📍 {empleo.ciudad}</span>
@@ -645,7 +645,7 @@ function WorkerSearch() {
                         <button
                             onClick={() => aplicar(empleo)}
                             disabled={estaAplicando}
-                            className="px-5 py-2 rounded-xl text-sm font-semibold text-[#1F2A44] dark:text-white hover:brightness-110 transition disabled:opacity-50"
+                            className="px-5 py-2 rounded-xl text-sm font-semibold text-[#1F2A44] hover:brightness-110 transition disabled:opacity-50"
                             style={{ backgroundColor: "#A6401F" }}
                         >
                             {estaAplicando ? "Enviando..." : "Aplicar ahora"}
@@ -672,10 +672,10 @@ function WorkerSearch() {
 
                 {/* Header */}
                 <div className="mb-6">
-                    <h1 className="text-[#1F2A44] dark:text-white text-3xl font-bold mb-1">
+                    <h1 className="text-[#1F2A44] text-3xl font-bold mb-1">
                         Hola{usuario ? `, ${usuario.nombre.split(" ")[0]}` : ""}
                     </h1>
-                    <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-base">
+                    <p className="text-[#1F2A44] text-base">
                         Tu espacio para crecer profesionalmente en España
                     </p>
                 </div>
@@ -690,8 +690,8 @@ function WorkerSearch() {
                             key={t.id}
                             onClick={() => setTab(t.id)}
                             className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap transition-all duration-200 ${tab === t.id
-                                ? "bg-[#C1502E] text-[#1F2A44] dark:text-white shadow"
-                                : "text-[#1F2A44] dark:text-[#1F2A44] dark:text-white hover:text-[#1F2A44] dark:text-white hover:bg-[#EDE1CE] dark:bg-white/5"
+                                ? "bg-[#C1502E] text-[#1F2A44] shadow"
+                                : "text-[#1F2A44] hover:text-[#1F2A44] hover:bg-[#EDE1CE]"
                                 }`}
                         >
                             <span>{t.icono}</span>
@@ -705,14 +705,14 @@ function WorkerSearch() {
                     <div>
                         {/* Sector chips */}
                         <div className="mb-6">
-                            <p className="text-[#1F2A44] dark:text-white text-sm font-medium mb-3">
+                            <p className="text-[#1F2A44] text-sm font-medium mb-3">
                                 Sector
                                 {sectores.length > 0 && (
                                     <span className="text-xs text-[#C1502E] ml-2 font-medium">
                                         {sectores.length}/5 seleccionados
                                         <button
                                             onClick={() => setSectores([])}
-                                            className="ml-2 text-[#6B7280] hover:text-[#1F2A44] dark:hover:text-white underline"
+                                            className="ml-2 text-[#6B7280] hover:text-[#1F2A44] underline"
                                         >
                                             limpiar
                                         </button>
@@ -726,7 +726,7 @@ function WorkerSearch() {
                                         onClick={() => toggleSector(sector)}
                                         className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${sectores.includes(sector)
                                             ? "bg-[#C1502E] text-white border-[#C1502E]"
-                                            : "bg-white dark:bg-white/5 text-[#1F2A44] dark:text-white border-[#E8D9C4] dark:border-white/10 hover:border-[#C1502E]"
+                                            : "bg-white text-[#1F2A44] border-[#E8D9C4] hover:border-[#C1502E]"
                                             }`}
                                     >
                                         {sector}
@@ -741,11 +741,11 @@ function WorkerSearch() {
                             style={{ backgroundColor: "var(--bg-card)" }}
                         >
                             <div className="flex flex-col gap-1 flex-1">
-                                <label className="text-sm text-[#1F2A44] dark:text-[#1F2A44] dark:text-white font-medium">Provincia</label>
+                                <label className="text-sm text-[#1F2A44] font-medium">Provincia</label>
                                 <select
                                     value={provinciaSeleccionada}
                                     onChange={(e) => { setProvinciaSeleccionada(e.target.value); setCiudadSeleccionada(""); }}
-                                    className="w-full rounded-xl px-4 py-2.5 bg-[#EDE1CE] dark:bg-white/5 border border-[#E8D9C4] dark:border-white/10 text-[#1F2A44] dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C1502E] appearance-none"
+                                    className="w-full rounded-xl px-4 py-2.5 bg-[#EDE1CE] border border-[#E8D9C4] text-[#1F2A44] text-sm focus:outline-none focus:ring-2 focus:ring-[#C1502E] appearance-none"
                                 >
                                     <option value="" className="bg-[#162236]">Todas las provincias</option>
                                     {ciudadesEspana.map((p) => (
@@ -754,12 +754,12 @@ function WorkerSearch() {
                                 </select>
                             </div>
                             <div className="flex flex-col gap-1 flex-1">
-                                <label className="text-sm text-[#1F2A44] dark:text-[#1F2A44] dark:text-white font-medium">Ciudad</label>
+                                <label className="text-sm text-[#1F2A44] font-medium">Ciudad</label>
                                 <select
                                     value={ciudadSeleccionada}
                                     onChange={(e) => setCiudadSeleccionada(e.target.value)}
                                     disabled={!provinciaSeleccionada}
-                                    className="w-full rounded-xl px-4 py-2.5 bg-[#EDE1CE] dark:bg-white/5 border border-[#E8D9C4] dark:border-white/10 text-[#1F2A44] dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#C1502E] appearance-none disabled:opacity-40"
+                                    className="w-full rounded-xl px-4 py-2.5 bg-[#EDE1CE] border border-[#E8D9C4] text-[#1F2A44] text-sm focus:outline-none focus:ring-2 focus:ring-[#C1502E] appearance-none disabled:opacity-40"
                                 >
                                     <option value="" className="bg-[#162236]">Todas las ciudades</option>
                                     {ciudadesDisponibles.map((c) => (
@@ -770,7 +770,7 @@ function WorkerSearch() {
                             {(sectores.length > 0 || provinciaSeleccionada || ciudadSeleccionada) && (
                                 <button
                                     onClick={limpiarFiltros}
-                                    className="px-4 py-2.5 rounded-xl text-sm text-[#1F2A44] dark:text-[#1F2A44] dark:text-white hover:text-[#1F2A44] dark:text-white border border-[#E8D9C4] dark:border-white/10 hover:border-white/30 transition whitespace-nowrap"
+                                    className="px-4 py-2.5 rounded-xl text-sm text-[#1F2A44] hover:text-[#1F2A44] border border-[#E8D9C4] hover:border-white/30 transition whitespace-nowrap"
                                 >
                                     Limpiar filtros
                                 </button>
@@ -784,8 +784,8 @@ function WorkerSearch() {
                                 : empleos.filter(e => sectores.includes(e.sector));
                             return (
                                 <>
-                                    <p className="text-[#1F2A44] dark:text-white text-sm mb-4">
-                                        <span className="text-[#1F2A44] dark:text-white font-semibold">{empleosFiltrados.length}</span>{" "}
+                                    <p className="text-[#1F2A44] text-sm mb-4">
+                                        <span className="text-[#1F2A44] font-semibold">{empleosFiltrados.length}</span>{" "}
                                         {empleosFiltrados.length === 1 ? "oferta encontrada" : "ofertas encontradas"}
                                     </p>
 
@@ -800,8 +800,8 @@ function WorkerSearch() {
                                     ) : empleosFiltrados.length === 0 ? (
                                         <div className="rounded-2xl p-12 text-center" style={{ backgroundColor: "var(--bg-card)" }}>
                                             <span className="text-4xl block mb-4">🔍</span>
-                                            <p className="text-[#1F2A44] dark:text-white font-semibold text-lg mb-2">No hay ofertas con estos filtros</p>
-                                            <p className="text-[#1F2A44] dark:text-white text-sm">Prueba a cambiar el sector o la ubicación</p>
+                                            <p className="text-[#1F2A44] font-semibold text-lg mb-2">No hay ofertas con estos filtros</p>
+                                            <p className="text-[#1F2A44] text-sm">Prueba a cambiar el sector o la ubicación</p>
                                         </div>
                                     ) : (
                                         <div className="flex flex-col gap-4">
@@ -820,8 +820,8 @@ function WorkerSearch() {
                 {tab === "aplicaciones" && (
                     <div>
                         <div className="mb-6">
-                            <h2 className="text-[#1F2A44] dark:text-white text-xl font-bold mb-1">Mis aplicaciones</h2>
-                            <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm">Ofertas a las que has enviado tu candidatura</p>
+                            <h2 className="text-[#1F2A44] text-xl font-bold mb-1">Mis aplicaciones</h2>
+                            <p className="text-[#1F2A44] text-sm">Ofertas a las que has enviado tu candidatura</p>
                         </div>
 
                         {loadingAplicaciones ? (
@@ -835,11 +835,11 @@ function WorkerSearch() {
                         ) : aplicaciones.length === 0 ? (
                             <div className="rounded-2xl p-12 text-center" style={{ backgroundColor: "var(--bg-card)" }}>
                                 <span className="text-4xl block mb-4">📋</span>
-                                <p className="text-[#1F2A44] dark:text-white font-semibold text-lg mb-2">Aún no has aplicado a ninguna oferta</p>
-                                <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm mb-6">Explora las ofertas disponibles y envía tu candidatura</p>
+                                <p className="text-[#1F2A44] font-semibold text-lg mb-2">Aún no has aplicado a ninguna oferta</p>
+                                <p className="text-[#1F2A44] text-sm mb-6">Explora las ofertas disponibles y envía tu candidatura</p>
                                 <button
                                     onClick={() => setTab("empleos")}
-                                    className="px-6 py-2.5 rounded-xl text-sm font-semibold text-[#1F2A44] dark:text-white hover:brightness-110 transition"
+                                    className="px-6 py-2.5 rounded-xl text-sm font-semibold text-[#1F2A44] hover:brightness-110 transition"
                                     style={{ backgroundColor: "#A6401F" }}
                                 >
                                     Ver empleos
@@ -855,7 +855,7 @@ function WorkerSearch() {
                                     >
                                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                                             <div>
-                                                <h3 className="text-[#1F2A44] dark:text-white font-bold text-lg">{aplicacion.titulo}</h3>
+                                                <h3 className="text-[#1F2A44] font-bold text-lg">{aplicacion.titulo}</h3>
                                                 <p className="text-[#C1502E] text-sm font-medium mt-0.5">{aplicacion.empresa}</p>
                                             </div>
                                             <span className={`self-start px-3 py-1 rounded-full text-xs font-semibold border ${estadoColor[aplicacion.status]}`}>
@@ -866,7 +866,7 @@ function WorkerSearch() {
                                             <span>📍 {aplicacion.ciudad}</span>
                                             <span>🕐 Aplicado {formatFecha(aplicacion.created_at)}</span>
                                             {aplicacion.cover_note && (
-                                                <span className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white italic truncate max-w-xs">"{aplicacion.cover_note}"</span>
+                                                <span className="text-[#1F2A44] italic truncate max-w-xs">"{aplicacion.cover_note}"</span>
                                             )}
                                         </div>
                                     </div>
@@ -880,20 +880,20 @@ function WorkerSearch() {
                 {tab === "guardados" && (
                     <div>
                         <div className="mb-6">
-                            <h2 className="text-[#1F2A44] dark:text-white text-xl font-bold mb-1">Ofertas guardadas</h2>
-                            <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm">Empleos que has marcado para revisar más tarde</p>
+                            <h2 className="text-[#1F2A44] text-xl font-bold mb-1">Ofertas guardadas</h2>
+                            <p className="text-[#1F2A44] text-sm">Empleos que has marcado para revisar más tarde</p>
                         </div>
 
                         {Object.keys(guardados).length === 0 ? (
                             <div className="rounded-2xl p-12 text-center" style={{ backgroundColor: "var(--bg-card)" }}>
                                 <span className="text-4xl block mb-4">🔖</span>
-                                <p className="text-[#1F2A44] dark:text-white font-semibold text-lg mb-2">No tienes ofertas guardadas</p>
-                                <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm mb-6">
+                                <p className="text-[#1F2A44] font-semibold text-lg mb-2">No tienes ofertas guardadas</p>
+                                <p className="text-[#1F2A44] text-sm mb-6">
                                     Pulsa el icono 🤍 en cualquier oferta para guardarla aquí
                                 </p>
                                 <button
                                     onClick={() => setTab("empleos")}
-                                    className="px-6 py-2.5 rounded-xl text-sm font-semibold text-[#1F2A44] dark:text-white hover:brightness-110 transition"
+                                    className="px-6 py-2.5 rounded-xl text-sm font-semibold text-[#1F2A44] hover:brightness-110 transition"
                                     style={{ backgroundColor: "#A6401F" }}
                                 >
                                     Explorar empleos
@@ -913,8 +913,8 @@ function WorkerSearch() {
                 {tab === "recursos" && (
                     <div>
                         <div className="mb-6">
-                            <h2 className="text-[#1F2A44] dark:text-white text-xl font-bold mb-1">Recursos y ayudas</h2>
-                            <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm">
+                            <h2 className="text-[#1F2A44] text-xl font-bold mb-1">Recursos y ayudas</h2>
+                            <p className="text-[#1F2A44] text-sm">
                                 Organizaciones, prestaciones y datos para orientarte en España
                             </p>
                         </div>
@@ -932,7 +932,7 @@ function WorkerSearch() {
                                     onClick={() => setRecursosSeccion(s.id)}
                                     className={`flex items-center gap-2 px-4 py-2.5 rounded-xl text-sm font-semibold whitespace-nowrap border transition-all duration-200 ${recursosSeccion === s.id
                                         ? "border-[#C1502E] bg-[#C1502E]/15 text-[#C1502E]"
-                                        : "border-[#E8D9C4] dark:border-white/10 text-[#1F2A44] dark:text-[#1F2A44] dark:text-white hover:text-[#1F2A44] dark:text-white hover:border-[#E8A33D] dark:border-white/20"
+                                        : "border-[#E8D9C4] text-[#1F2A44] hover:text-[#1F2A44] hover:border-[#E8A33D]"
                                         }`}
                                 >
                                     <span>{s.icono}</span>
@@ -948,7 +948,7 @@ function WorkerSearch() {
                                     <p className="text-[#C1502E] font-semibold text-base mb-1">
                                         ✈️ ¿Acabas de llegar a España?
                                     </p>
-                                    <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm">
+                                    <p className="text-[#1F2A44] text-sm">
                                         Aquí tienes el orden exacto de lo que debes hacer para instalarte correctamente, acceder a servicios y poder trabajar legalmente.
                                     </p>
                                 </div>
@@ -957,7 +957,7 @@ function WorkerSearch() {
                                     {PRIMEROS_PASOS.map((paso) => (
                                         <div
                                             key={paso.paso}
-                                            className="rounded-2xl p-5 border border-white/5 hover:border-[#E8D9C4] dark:border-white/10 transition-all"
+                                            className="rounded-2xl p-5 border border-white/5 hover:border-[#E8D9C4] transition-all"
                                             style={{ backgroundColor: "var(--bg-card)" }}
                                         >
                                             <div className="flex items-start gap-4">
@@ -969,16 +969,16 @@ function WorkerSearch() {
                                                 <div className="flex-1 min-w-0">
                                                     <div className="flex items-center gap-2 mb-1">
                                                         <span className="text-lg">{paso.icono}</span>
-                                                        <h3 className="text-[#1F2A44] dark:text-white font-bold text-base">{paso.titulo}</h3>
+                                                        <h3 className="text-[#1F2A44] font-bold text-base">{paso.titulo}</h3>
                                                     </div>
 
-                                                    <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm leading-relaxed mb-3">
+                                                    <p className="text-[#1F2A44] text-sm leading-relaxed mb-3">
                                                         {paso.descripcion}
                                                     </p>
 
-                                                    <div className="bg-[#EDE1CE] dark:bg-white/5 rounded-xl px-4 py-3 mb-3">
+                                                    <div className="bg-[#EDE1CE] rounded-xl px-4 py-3 mb-3">
                                                         <p className="text-gray-500 text-xs font-semibold uppercase tracking-wide mb-1">Cómo hacerlo</p>
-                                                        <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm leading-relaxed">{paso.como}</p>
+                                                        <p className="text-[#1F2A44] text-sm leading-relaxed">{paso.como}</p>
                                                     </div>
 
                                                     <div className="flex items-start gap-2 mb-3">
@@ -990,7 +990,7 @@ function WorkerSearch() {
                                                         href={paso.enlace}
                                                         target="_blank"
                                                         rel="noopener noreferrer"
-                                                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-[#1F2A44] dark:text-white border border-[#C1502E]/40 bg-[#C1502E]/10 hover:bg-[#C1502E]/20 transition"
+                                                        className="inline-flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-semibold text-[#1F2A44] border border-[#C1502E]/40 bg-[#C1502E]/10 hover:bg-[#C1502E]/20 transition"
                                                     >
                                                         🔗 {paso.enlaceTexto}
                                                     </a>
@@ -1011,7 +1011,7 @@ function WorkerSearch() {
                         {/* Entidades */}
                         {recursosSeccion === "entidades" && (
                             <div>
-                                <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm mb-6">
+                                <p className="text-[#1F2A44] text-sm mb-6">
                                     Organizaciones públicas y privadas que ofrecen apoyo a migrantes latinos en España.
                                     Haz clic en el nombre o en "Ir al sitio web" para acceder directamente.
                                 </p>
@@ -1031,7 +1031,7 @@ function WorkerSearch() {
                                                             href={entidad.url}
                                                             target="_blank"
                                                             rel="noopener noreferrer"
-                                                            className="text-[#1F2A44] dark:text-white font-bold text-base hover:text-[#C1502E] transition-colors"
+                                                            className="text-[#1F2A44] font-bold text-base hover:text-[#C1502E] transition-colors"
                                                         >
                                                             {entidad.nombre} ↗
                                                         </a>
@@ -1043,11 +1043,11 @@ function WorkerSearch() {
                                                 </div>
                                             </div>
 
-                                            <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm leading-relaxed">{entidad.descripcion}</p>
+                                            <p className="text-[#1F2A44] text-sm leading-relaxed">{entidad.descripcion}</p>
 
                                             <div className="flex flex-wrap gap-1.5">
                                                 {entidad.servicios.map((s) => (
-                                                    <span key={s} className="text-xs px-2 py-0.5 rounded-full bg-[#EDE1CE] dark:bg-white/5 text-[#1F2A44] dark:text-[#1F2A44] dark:text-white border border-white/5">
+                                                    <span key={s} className="text-xs px-2 py-0.5 rounded-full bg-[#EDE1CE] text-[#1F2A44] border border-white/5">
                                                         {s}
                                                     </span>
                                                 ))}
@@ -1059,7 +1059,7 @@ function WorkerSearch() {
                                                     href={entidad.url}
                                                     target="_blank"
                                                     rel="noopener noreferrer"
-                                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-[#1F2A44] dark:text-white border border-[#C1502E]/40 bg-[#C1502E]/10 hover:bg-[#C1502E]/20 transition"
+                                                    className="inline-flex items-center gap-1.5 px-4 py-2 rounded-xl text-sm font-semibold text-[#1F2A44] border border-[#C1502E]/40 bg-[#C1502E]/10 hover:bg-[#C1502E]/20 transition"
                                                 >
                                                     🌐 Ir al sitio web
                                                 </a>
@@ -1073,36 +1073,36 @@ function WorkerSearch() {
                         {/* Ayudas para niños */}
                         {recursosSeccion === "ninos" && (
                             <div>
-                                <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm mb-6">
+                                <p className="text-[#1F2A44] text-sm mb-6">
                                     Prestaciones, becas y ayudas disponibles para familias con hijos en España. Los requisitos pueden variar según la comunidad autónoma.
                                 </p>
                                 <div className="flex flex-col gap-4">
                                     {AYUDAS_NINOS.map((ayuda) => (
                                         <div
                                             key={ayuda.nombre}
-                                            className="rounded-2xl p-5 border border-white/5 hover:border-[#E8D9C4] dark:border-white/10 transition-all"
+                                            className="rounded-2xl p-5 border border-white/5 hover:border-[#E8D9C4] transition-all"
                                             style={{ backgroundColor: "var(--bg-card)" }}
                                         >
                                             <div className="flex items-start gap-3 mb-3">
                                                 <span className="text-2xl mt-0.5">{ayuda.icono}</span>
                                                 <div>
                                                     <div className="flex items-center gap-2 flex-wrap mb-0.5">
-                                                        <h3 className="text-[#1F2A44] dark:text-white font-bold text-base">{ayuda.nombre}</h3>
+                                                        <h3 className="text-[#1F2A44] font-bold text-base">{ayuda.nombre}</h3>
                                                         <span className="text-xs px-2 py-0.5 rounded-full bg-blue-500/15 text-blue-300 font-medium">
                                                             {ayuda.tipo}
                                                         </span>
                                                     </div>
-                                                    <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm leading-relaxed">{ayuda.descripcion}</p>
+                                                    <p className="text-[#1F2A44] text-sm leading-relaxed">{ayuda.descripcion}</p>
                                                 </div>
                                             </div>
                                             <div className="ml-9 grid grid-cols-1 sm:grid-cols-2 gap-3 text-xs">
-                                                <div className="bg-[#EDE1CE] dark:bg-white/5 rounded-xl px-3 py-2">
+                                                <div className="bg-[#EDE1CE] rounded-xl px-3 py-2">
                                                     <p className="text-gray-500 mb-0.5">Gestiona</p>
-                                                    <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white">{ayuda.gestiona}</p>
+                                                    <p className="text-[#1F2A44]">{ayuda.gestiona}</p>
                                                 </div>
-                                                <div className="bg-[#EDE1CE] dark:bg-white/5 rounded-xl px-3 py-2">
+                                                <div className="bg-[#EDE1CE] rounded-xl px-3 py-2">
                                                     <p className="text-gray-500 mb-0.5">Requisitos</p>
-                                                    <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white">{ayuda.requisitos}</p>
+                                                    <p className="text-[#1F2A44]">{ayuda.requisitos}</p>
                                                 </div>
                                             </div>
                                         </div>
@@ -1121,25 +1121,25 @@ function WorkerSearch() {
                         {/* Empleos por zona */}
                         {recursosSeccion === "demanda" && (
                             <div>
-                                <p className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm mb-6">
+                                <p className="text-[#1F2A44] text-sm mb-6">
                                     Sectores con mayor demanda de trabajadores según la región. Útil para decidir dónde buscar empleo.
                                 </p>
                                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                                     {EMPLEOS_DEMANDADOS.map((zona) => (
                                         <div
                                             key={zona.zona}
-                                            className="rounded-2xl p-5 border border-white/5 hover:border-[#E8D9C4] dark:border-white/10 transition-all"
+                                            className="rounded-2xl p-5 border border-white/5 hover:border-[#E8D9C4] transition-all"
                                             style={{ backgroundColor: "var(--bg-card)" }}
                                         >
                                             <div className="flex items-center gap-3 mb-1">
                                                 <span className="text-2xl">{zona.icono}</span>
-                                                <h3 className="text-[#1F2A44] dark:text-white font-bold text-base">{zona.zona}</h3>
+                                                <h3 className="text-[#1F2A44] font-bold text-base">{zona.zona}</h3>
                                             </div>
                                             <p className="text-gray-500 text-xs mb-4">{zona.descripcion}</p>
                                             <div className="flex flex-col gap-2">
                                                 {zona.sectores.map((s) => (
                                                     <div key={s.nombre} className="flex items-center justify-between gap-2">
-                                                        <span className="text-[#1F2A44] dark:text-[#1F2A44] dark:text-white text-sm">{s.nombre}</span>
+                                                        <span className="text-[#1F2A44] text-sm">{s.nombre}</span>
                                                         <span className={`text-xs px-2 py-0.5 rounded-full font-medium whitespace-nowrap ${demandaColor[s.demanda]}`}>
                                                             {s.demanda}
                                                         </span>
@@ -1159,7 +1159,7 @@ function WorkerSearch() {
                     </div>
                 )}
 
-                <div className="mt-16 pt-8 border-t border-[#E8D9C4] dark:border-white/10 text-center">
+                <div className="mt-16 pt-8 border-t border-[#E8D9C4] text-center">
                     <button
                         onClick={() => setShowDeleteModal(true)}
                         className="text-sm text-red-400 hover:text-red-600 transition-colors underline"
@@ -1173,18 +1173,18 @@ function WorkerSearch() {
 
         {showDeleteModal && (
             <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
-                <div className="bg-white dark:bg-[#162236] rounded-2xl p-8 max-w-sm w-full shadow-xl">
-                    <h3 className="text-lg font-medium text-[#1F2A44] dark:text-white mb-2">
+                <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-xl">
+                    <h3 className="text-lg font-medium text-[#1F2A44] mb-2">
                         ¿Eliminar tu cuenta?
                     </h3>
-                    <p className="text-sm text-[#6B7280] dark:text-white/70 mb-6">
+                    <p className="text-sm text-[#6B7280] mb-6">
                         Esta acción es permanente y no se puede deshacer.
                         Se eliminarán todos tus datos y aplicaciones.
                     </p>
                     <div className="flex gap-3">
                         <button
                             onClick={() => setShowDeleteModal(false)}
-                            className="flex-1 px-4 py-2.5 rounded-xl border border-[#E8D9C4] dark:border-white/20 text-sm font-medium text-[#1F2A44] dark:text-white hover:bg-[#EDE1CE] dark:hover:bg-white/10 transition-all"
+                            className="flex-1 px-4 py-2.5 rounded-xl border border-[#E8D9C4] text-sm font-medium text-[#1F2A44] hover:bg-[#EDE1CE] transition-all"
                         >
                             Cancelar
                         </button>

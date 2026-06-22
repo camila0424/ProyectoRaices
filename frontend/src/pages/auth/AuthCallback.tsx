@@ -39,7 +39,7 @@ function AuthCallback() {
             <div className="w-10 h-10 rounded-full bg-[#C1502E] flex items-center justify-center animate-pulse">
                 <span className="text-white font-bold font-serif text-base">H</span>
             </div>
-            <p className="text-[#1F2A44] dark:text-white text-sm">Iniciando sesión con Google...</p>
+            <p className="text-[#1F2A44] text-sm">Iniciando sesión con Google...</p>
         </div>
     );
 }

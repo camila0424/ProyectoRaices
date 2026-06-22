@@ -59,15 +59,15 @@ function HowItWorks() {
     return (
         <section
             id="como-funciona"
-            className="w-full py-20 px-6 md:px-12 dark:bg-[#0F1A2C]"
+            className="w-full py-20 px-6 md:px-12"
             style={{ backgroundColor: "var(--bg-main)" }}
         >
             <div className="max-w-6xl mx-auto text-center">
                 {/* HEADER */}
-                <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-[#1F2A44] dark:text-white mb-4">
+                <h2 className="text-3xl md:text-4xl font-medium tracking-tight text-[#1F2A44] mb-4">
                     Cómo funciona Hausseup
                 </h2>
-                <p className="text-[#6B7280] dark:text-white/80 text-base md:text-lg mb-16">
+                <p className="text-[#6B7280] text-base md:text-lg mb-16">
                     Simple, seguro y pensado para ti
                 </p>
 
@@ -87,17 +87,17 @@ function HowItWorks() {
                             )}
 
                             {/* Círculo */}
-                            <div className="relative z-10 w-20 h-20 flex items-center justify-center rounded-2xl border border-[#E8A33D] dark:border-white/10 bg-[#F7EEE0] dark:bg-[#162236] shadow-sm transition-transform duration-300 group-hover:scale-110">
+                            <div className="relative z-10 w-20 h-20 flex items-center justify-center rounded-2xl border border-[#E8A33D] bg-[#F7EEE0] shadow-sm transition-transform duration-300 group-hover:scale-110">
                                 <div className="text-[#C1502E]">{step.icon}</div>
-                                <span className="absolute -bottom-6 text-sm font-semibold text-[#6B7280] dark:text-white/50">
+                                <span className="absolute -bottom-6 text-sm font-semibold text-[#6B7280]">
                                     {step.id}
                                 </span>
                             </div>
 
                             {/* Texto */}
                             <div className="mt-5">
-                                <h3 className="font-medium text-[#1F2A44] dark:text-white">{step.title}</h3>
-                                <p className="text-sm text-[#6B7280] dark:text-white/70 mt-1">{step.description}</p>
+                                <h3 className="font-medium text-[#1F2A44]">{step.title}</h3>
+                                <p className="text-sm text-[#6B7280] mt-1">{step.description}</p>
                             </div>
                         </div>
                     ))}

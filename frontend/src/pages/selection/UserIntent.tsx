@@ -11,7 +11,7 @@ function UserIntent() {
                 <div className="flex justify-center mb-6">
                     <img src="/logo.jpeg" alt="Hausseup" className="h-12 w-auto" />
                 </div>
-                <h1 className="text-[#1F2A44] dark:text-white text-3xl font-bold mb-3">
+                <h1 className="text-[#1F2A44] text-3xl font-bold mb-3">
                     ¿Qué estás buscando?
                 </h1>
                 <p className="text-[#6B7280] text-base">
@@ -31,7 +31,7 @@ function UserIntent() {
                         <span className="text-3xl">🔍</span>
                     </div>
                     <div>
-                        <h2 className="text-[#1F2A44] dark:text-white font-bold text-lg mb-1">Busco empleo</h2>
+                        <h2 className="text-[#1F2A44] font-bold text-lg mb-1">Busco empleo</h2>
                         <p className="text-[#6B7280] text-sm leading-relaxed">
                             Encuentra oportunidades laborales en España según tu sector y ciudad
                         </p>
@@ -54,7 +54,7 @@ function UserIntent() {
                         <span className="text-3xl">📋</span>
                     </div>
                     <div>
-                        <h2 className="text-[#1F2A44] dark:text-white font-bold text-lg mb-1">Ofrezco empleo</h2>
+                        <h2 className="text-[#1F2A44] font-bold text-lg mb-1">Ofrezco empleo</h2>
                         <p className="text-[#6B7280] text-sm leading-relaxed">
                             Publica ofertas y encuentra perfiles de la comunidad latina disponibles
                         </p>

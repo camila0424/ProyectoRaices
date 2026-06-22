@@ -1,7 +1,6 @@
 import type { ReactNode } from "react";
 import { Link } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
-import { useTheme } from "../../context/ThemeContext";
 import Footer from "./Footer";
 
 interface AuthLayoutProps {
@@ -11,7 +10,6 @@ interface AuthLayoutProps {
 
 function AuthLayout({ children, className = "" }: AuthLayoutProps) {
     const { logout, usuario } = useAuth();
-    const { isDark, toggleTheme } = useTheme();
 
     const handleCerrarSesion = () => {
         logout();
@@ -37,15 +35,6 @@ function AuthLayout({ children, className = "" }: AuthLayoutProps) {
                                     Hola, <span className="text-[#C1502E] font-medium">{usuario.nombre.split(" ")[0]}</span>
                                 </span>
                             )}
-
-                            {/* Theme toggle */}
-                            <button
-                                onClick={toggleTheme}
-                                title={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
-                                className="w-9 h-9 flex items-center justify-center rounded-full border border-[#E8D9C4] hover:bg-[#EDE1CE] transition-all duration-200 text-base"
-                            >
-                                {isDark ? "☀️" : "🌙"}
-                            </button>
 
                             <button
                                 onClick={handleCerrarSesion}

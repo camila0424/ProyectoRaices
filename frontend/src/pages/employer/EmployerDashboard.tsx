@@ -119,8 +119,8 @@ function EmployerDashboard() {
 
                 <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 mb-8">
                     <div>
-                        <h1 className="text-[#1F2A44] dark:text-white text-3xl font-bold mb-1">Mi panel</h1>
-                        <p className="text-[#1F2A44]/70 dark:text-white text-base">
+                        <h1 className="text-[#1F2A44] text-3xl font-bold mb-1">Mi panel</h1>
+                        <p className="text-[#1F2A44]/70 text-base">
                             Gestiona tus ofertas y encuentra candidatos disponibles
                         </p>
                     </div>
@@ -147,8 +147,8 @@ function EmployerDashboard() {
                             style={{ backgroundColor: "var(--bg-card)" }}
                         >
                             <span className="text-2xl">{stat.emoji}</span>
-                            <span className="text-[#1F2A44] dark:text-white font-bold text-xl">{stat.valor}</span>
-                            <span className="text-[#1F2A44]/60 dark:text-white text-xs">{stat.label}</span>
+                            <span className="text-[#1F2A44] font-bold text-xl">{stat.valor}</span>
+                            <span className="text-[#1F2A44]/60 text-xs">{stat.label}</span>
                         </div>
                     ))}
                 </div>
@@ -157,14 +157,14 @@ function EmployerDashboard() {
                 <div className="flex rounded-xl p-1 mb-6 w-fit" style={{ backgroundColor: "var(--bg-card)" }}>
                     <button
                         onClick={() => setPestana("anuncios")}
-                        className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${pestana === "anuncios" ? "bg-[#C1502E] text-white shadow" : "text-[#1F2A44]/70 dark:text-white hover:text-[#1F2A44] dark:hover:text-white"
+                        className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${pestana === "anuncios" ? "bg-[#C1502E] text-white shadow" : "text-[#1F2A44]/70 hover:text-[#1F2A44]"
                             }`}
                     >
                         Mis ofertas
                     </button>
                     <button
                         onClick={() => setPestana("perfiles")}
-                        className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${pestana === "perfiles" ? "bg-[#C1502E] text-white shadow" : "text-[#1F2A44]/70 dark:text-white hover:text-[#1F2A44] dark:hover:text-white"
+                        className={`px-5 py-2 rounded-lg text-sm font-semibold transition-all duration-200 ${pestana === "perfiles" ? "bg-[#C1502E] text-white shadow" : "text-[#1F2A44]/70 hover:text-[#1F2A44]"
                             }`}
                     >
                         Perfiles disponibles
@@ -180,8 +180,8 @@ function EmployerDashboard() {
                         {anuncios.length === 0 ? (
                             <div className="rounded-2xl p-12 text-center" style={{ backgroundColor: "var(--bg-card)" }}>
                                 <span className="text-4xl block mb-4">📋</span>
-                                <p className="text-[#1F2A44] dark:text-white font-semibold text-lg mb-2">No tienes ofertas publicadas</p>
-                                <p className="text-[#1F2A44]/60 dark:text-white text-sm mb-6">Publica tu primera oferta para encontrar candidatos</p>
+                                <p className="text-[#1F2A44] font-semibold text-lg mb-2">No tienes ofertas publicadas</p>
+                                <p className="text-[#1F2A44]/60 text-sm mb-6">Publica tu primera oferta para encontrar candidatos</p>
                                 <button
                                     onClick={() => navigate("/publicar-empleo")}
                                     className="px-6 py-2.5 rounded-xl text-sm font-semibold text-white hover:brightness-110 transition"
@@ -200,15 +200,15 @@ function EmployerDashboard() {
                                     >
                                         <div className="flex flex-col sm:flex-row sm:items-start sm:justify-between gap-3 mb-3">
                                             <div>
-                                                <h3 className="text-[#1F2A44] dark:text-white font-bold text-lg">{anuncio.titulo}</h3>
-                                                <p className="text-[#1F2A44]/60 dark:text-white text-sm mt-0.5">{anuncio.ciudad} · {anuncio.sector}</p>
+                                                <h3 className="text-[#1F2A44] font-bold text-lg">{anuncio.titulo}</h3>
+                                                <p className="text-[#1F2A44]/60 text-sm mt-0.5">{anuncio.ciudad} · {anuncio.sector}</p>
                                             </div>
                                             <span className={`px-3 py-1 rounded-full text-xs font-semibold ${contratoColor[anuncio.contract_type]}`}>
                                                 {contratoLabel[anuncio.contract_type]}
                                             </span>
                                         </div>
 
-                                        <p className="text-[#1F2A44]/60 dark:text-white text-sm mb-4">{anuncio.descripcion}</p>
+                                        <p className="text-[#1F2A44]/60 text-sm mb-4">{anuncio.descripcion}</p>
 
                                         <div className="flex items-center justify-between">
                                             <div className="flex items-center gap-4 text-xs text-gray-500">
@@ -218,7 +218,7 @@ function EmployerDashboard() {
                                                 </span>
                                             </div>
                                             <div className="flex gap-2">
-                                                <button className="px-4 py-1.5 rounded-lg text-xs text-[#1F2A44] dark:text-white hover:text-[#1F2A44] dark:hover:text-white border border-[#E8D9C4] dark:border-white/10 hover:border-[#E8A33D] dark:border-white/20 transition">
+                                                <button className="px-4 py-1.5 rounded-lg text-xs text-[#1F2A44] hover:text-[#1F2A44] border border-[#E8D9C4] hover:border-[#E8A33D] transition">
                                                     Editar
                                                 </button>
                                                 <button
@@ -234,11 +234,11 @@ function EmployerDashboard() {
 
                                 <button
                                     onClick={() => navigate("/publicar-empleo")}
-                                    className="rounded-2xl p-6 border border-dashed border-[#E8D9C4] dark:border-white/10 hover:border-[#C1502E]/50 text-center transition-all duration-200 group"
+                                    className="rounded-2xl p-6 border border-dashed border-[#E8D9C4] hover:border-[#C1502E]/50 text-center transition-all duration-200 group"
                                     style={{ backgroundColor: "var(--bg-card)" }}
                                 >
                                     <span className="text-3xl block mb-2">+</span>
-                                    <p className="text-[#1F2A44]/70 dark:text-white group-hover:text-[#1F2A44] dark:group-hover:text-white text-sm font-medium transition">
+                                    <p className="text-[#1F2A44]/70 group-hover:text-[#1F2A44] text-sm font-medium transition">
                                         Publicar nueva oferta
                                     </p>
                                 </button>
@@ -255,7 +255,7 @@ function EmployerDashboard() {
                                     onClick={() => setSectorFiltro(prev => prev === sector ? "" : sector)}
                                     className={`px-4 py-2 rounded-full text-sm font-medium transition-all duration-200 border ${sectorFiltro === sector
                                         ? "bg-[#C1502E] text-white border-[#C1502E]"
-                                        : "bg-white dark:bg-white/5 text-[#1F2A44] dark:text-white border-[#E8D9C4] dark:border-white/10 hover:border-[#C1502E]"
+                                        : "bg-white text-[#1F2A44] border-[#E8D9C4] hover:border-[#C1502E]"
                                     }`}
                                 >
                                     {sector}
@@ -267,14 +267,14 @@ function EmployerDashboard() {
                         {perfiles.filter(p => !sectorFiltro || p.sector === sectorFiltro).length === 0 ? (
                             <div className="col-span-2 rounded-2xl p-12 text-center" style={{ backgroundColor: "var(--bg-card)" }}>
                                 <span className="text-4xl block mb-4">👥</span>
-                                <p className="text-[#1F2A44] dark:text-white font-semibold text-lg mb-2">No hay candidatos disponibles</p>
-                                <p className="text-[#1F2A44]/60 dark:text-white text-sm">Los candidatos aparecerán aquí cuando se registren</p>
+                                <p className="text-[#1F2A44] font-semibold text-lg mb-2">No hay candidatos disponibles</p>
+                                <p className="text-[#1F2A44]/60 text-sm">Los candidatos aparecerán aquí cuando se registren</p>
                             </div>
                         ) : (
                             perfiles.filter(p => !sectorFiltro || p.sector === sectorFiltro).map((perfil) => (
                                 <div
                                     key={perfil.id}
-                                    className="rounded-2xl p-6 border border-white/5 hover:border-[#E8D9C4] dark:border-white/10 transition"
+                                    className="rounded-2xl p-6 border border-white/5 hover:border-[#E8D9C4] transition"
                                     style={{ backgroundColor: "var(--bg-card)" }}
                                 >
                                     <div className="flex items-start gap-4 mb-3">
@@ -284,13 +284,13 @@ function EmployerDashboard() {
                                             </span>
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <h3 className="text-[#1F2A44] dark:text-white font-bold text-base">{perfil.full_name}</h3>
+                                            <h3 className="text-[#1F2A44] font-bold text-base">{perfil.full_name}</h3>
                                             <p className="text-[#C1502E] text-sm">{perfil.role}</p>
                                         </div>
                                     </div>
 
                                     {perfil.bio && (
-                                        <p className="text-[#1F2A44]/60 dark:text-white text-sm leading-relaxed mb-4">{perfil.bio}</p>
+                                        <p className="text-[#1F2A44]/60 text-sm leading-relaxed mb-4">{perfil.bio}</p>
                                     )}
 
                                     <div className="flex items-center justify-between">
@@ -308,7 +308,7 @@ function EmployerDashboard() {
                     </div>
                     </>
                 )}
-                <div className="mt-16 pt-8 border-t border-[#E8D9C4] dark:border-white/10 text-center">
+                <div className="mt-16 pt-8 border-t border-[#E8D9C4] text-center">
                     <button
                         onClick={() => setShowDeleteModal(true)}
                         className="text-sm text-red-400 hover:text-red-600 transition-colors underline"
@@ -322,18 +322,18 @@ function EmployerDashboard() {
 
         {showDeleteModal && (
             <div className="fixed inset-0 bg-black/50 z-50 flex items-center justify-center px-4">
-                <div className="bg-white dark:bg-[#162236] rounded-2xl p-8 max-w-sm w-full shadow-xl">
-                    <h3 className="text-lg font-medium text-[#1F2A44] dark:text-white mb-2">
+                <div className="bg-white rounded-2xl p-8 max-w-sm w-full shadow-xl">
+                    <h3 className="text-lg font-medium text-[#1F2A44] mb-2">
                         ¿Eliminar tu cuenta?
                     </h3>
-                    <p className="text-sm text-[#6B7280] dark:text-white/70 mb-6">
+                    <p className="text-sm text-[#6B7280] mb-6">
                         Esta acción es permanente y no se puede deshacer.
                         Se eliminarán todos tus datos y aplicaciones.
                     </p>
                     <div className="flex gap-3">
                         <button
                             onClick={() => setShowDeleteModal(false)}
-                            className="flex-1 px-4 py-2.5 rounded-xl border border-[#E8D9C4] dark:border-white/20 text-sm font-medium text-[#1F2A44] dark:text-white hover:bg-[#EDE1CE] dark:hover:bg-white/10 transition-all"
+                            className="flex-1 px-4 py-2.5 rounded-xl border border-[#E8D9C4] text-sm font-medium text-[#1F2A44] hover:bg-[#EDE1CE] transition-all"
                         >
                             Cancelar
                         </button>

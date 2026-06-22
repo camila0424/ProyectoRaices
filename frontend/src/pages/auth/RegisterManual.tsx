@@ -127,7 +127,7 @@ function RegisterManual() {
                     <img src="/logo.jpeg" alt="Hausseup" className="h-12 w-auto" />
                 </div>
 
-                <h1 className="text-[#1F2A44] dark:text-white text-2xl font-bold text-center mb-1">
+                <h1 className="text-[#1F2A44] text-2xl font-bold text-center mb-1">
                     Crea tu cuenta en Hausseup
                 </h1>
                 <p className="text-gray-400 text-sm text-center mb-8">

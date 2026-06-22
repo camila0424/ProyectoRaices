@@ -1,7 +1,5 @@
 @import "tailwindcss";
 
-@variant dark (&:where(.dark, .dark *));
-
 /* ─── CSS Custom Properties ──────────────────────────────────────────────────── */
 
 :root {
@@ -37,20 +35,6 @@
 .animate-fade-in  { animation: fade-in  0.8s ease-out forwards; }
 .animate-slide-up { animation: slide-up 0.8s ease-out forwards; }
 
-/* ─── Dark mode ──────────────────────────────────────────────────────────────── */
-
-html.dark {
-    color-scheme: dark;
-    --bg-main:            #0F1A2C;
-    --bg-card:            #162236;
-    --bg-hero:            #0F1A2C;
-    --bg-header:          #0F1A2C;
-    --text-hero:          #ffffff;
-    --text-hero-muted:    rgba(255, 255, 255, 0.75);
-    --text-hero-subtle:   rgba(255, 255, 255, 0.55);
-    --border-hero-btn:    rgba(255, 255, 255, 0.25);
-}
-
 /* ─── Scroll animations ──────────────────────────────────────────────────────── */
 
 .step-item {
@@ -73,17 +57,7 @@ select option {
   color: #1F2A44;
 }
 
-html.dark select option {
-  background-color: #162236;
-  color: #ffffff;
-}
-
 select {
   background-color: #ffffff;
   color: #1F2A44;
-}
-
-html.dark select {
-  background-color: #162236;
-  color: #ffffff;
 }

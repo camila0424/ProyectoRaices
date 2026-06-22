@@ -1,6 +1,5 @@
 import { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
-import { useTheme } from "../../context/ThemeContext";
 
 const navLinks = [
     { label: "Cómo funciona", href: "#como-funciona" },
@@ -10,7 +9,6 @@ function Header() {
     const [menuOpen, setMenuOpen] = useState(false);
     const [scrolled, setScrolled] = useState(false);
     const navigate = useNavigate();
-    const { isDark, toggleTheme } = useTheme();
 
     useEffect(() => {
         const handleScroll = () => setScrolled(window.scrollY > 10);
@@ -34,7 +32,7 @@ function Header() {
 
     return (
         <header
-            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-[#E8D9C4] dark:border-[#1F3558] dark:bg-[#0F1A2C] ${scrolled ? "shadow-sm" : ""}`}
+            className={`fixed top-0 left-0 w-full z-50 transition-all duration-300 border-b border-[#E8D9C4] ${scrolled ? "shadow-sm" : ""}`}
             style={{ backgroundColor: "var(--bg-header)" }}
         >
             <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
@@ -54,7 +52,7 @@ function Header() {
                             <button
                                 key={link.href}
                                 onClick={() => handleNavClick(link.href)}
-                                className="text-[#6B7280] dark:text-white hover:text-[#1F2A44] dark:hover:text-white text-sm font-medium transition-colors duration-200 bg-transparent border-none cursor-pointer"
+                                className="text-[#6B7280] hover:text-[#1F2A44] text-sm font-medium transition-colors duration-200 bg-transparent border-none cursor-pointer"
                             >
                                 {link.label}
                             </button>
@@ -62,23 +60,14 @@ function Header() {
 
                         <button
                             onClick={() => navigate("/busco-empleo")}
-                            className="text-[#6B7280] dark:text-white hover:text-[#1F2A44] dark:hover:text-white text-sm font-medium transition-colors duration-200 bg-transparent border-none cursor-pointer"
+                            className="text-[#6B7280] hover:text-[#1F2A44] text-sm font-medium transition-colors duration-200 bg-transparent border-none cursor-pointer"
                         >
                             Empleos
                         </button>
 
-                        {/* Theme toggle */}
-                        <button
-                            onClick={toggleTheme}
-                            title={isDark ? "Cambiar a modo claro" : "Cambiar a modo oscuro"}
-                            className="w-9 h-9 flex items-center justify-center rounded-full border border-[#E8D9C4] hover:bg-[#EDE1CE] transition-all duration-200 text-base"
-                        >
-                            {isDark ? "☀️" : "🌙"}
-                        </button>
-
                         <button
                             onClick={() => navigate("/login")}
-                            className="px-4 py-1.5 rounded-lg text-sm font-medium text-[#1F2A44] dark:text-white border border-[#E8D9C4] dark:border-white/30 hover:bg-[#EDE1CE] dark:hover:bg-white/10 transition-all duration-200"
+                            className="px-4 py-1.5 rounded-lg text-sm font-medium text-[#1F2A44] border border-[#E8D9C4] hover:bg-[#EDE1CE] transition-all duration-200"
                         >
                             Iniciar sesión
                         </button>
@@ -93,13 +82,6 @@ function Header() {
 
                     {/* Mobile right section */}
                     <div className="md:hidden flex items-center gap-2">
-                        <button
-                            onClick={toggleTheme}
-                            title={isDark ? "Modo claro" : "Modo oscuro"}
-                            className="w-9 h-9 flex items-center justify-center rounded-full border border-[#E8D9C4] hover:bg-[#EDE1CE] transition text-base"
-                        >
-                            {isDark ? "☀️" : "🌙"}
-                        </button>
                         <button
                             className="flex flex-col justify-center items-center w-9 h-9 gap-1.5 rounded-md hover:bg-[#EDE1CE]"
                             onClick={() => setMenuOpen((prev) => !prev)}
@@ -124,21 +106,21 @@ function Header() {
                         <button
                             key={link.href}
                             onClick={() => handleNavClick(link.href)}
-                            className="text-[#6B7280] dark:text-white hover:text-[#1F2A44] dark:hover:text-white text-sm font-medium text-left py-3 px-3 rounded-lg transition-colors duration-200 hover:bg-[#EDE1CE] bg-transparent border-none cursor-pointer w-full"
+                            className="text-[#6B7280] hover:text-[#1F2A44] text-sm font-medium text-left py-3 px-3 rounded-lg transition-colors duration-200 hover:bg-[#EDE1CE] bg-transparent border-none cursor-pointer w-full"
                         >
                             {link.label}
                         </button>
                     ))}
                     <button
                         onClick={() => { setMenuOpen(false); navigate("/busco-empleo"); }}
-                        className="text-[#6B7280] dark:text-white hover:text-[#1F2A44] dark:hover:text-white text-sm font-medium text-left py-3 px-3 rounded-lg transition-colors duration-200 hover:bg-[#EDE1CE] bg-transparent border-none cursor-pointer w-full"
+                        className="text-[#6B7280] hover:text-[#1F2A44] text-sm font-medium text-left py-3 px-3 rounded-lg transition-colors duration-200 hover:bg-[#EDE1CE] bg-transparent border-none cursor-pointer w-full"
                     >
                         Empleos
                     </button>
 
                     <button
                         onClick={() => { setMenuOpen(false); navigate("/login"); }}
-                        className="mt-2 px-4 py-2.5 rounded-lg text-sm font-medium text-[#1F2A44] dark:text-white text-center border border-[#E8D9C4] dark:border-white/30 hover:bg-[#EDE1CE] dark:hover:bg-white/10 transition"
+                        className="mt-2 px-4 py-2.5 rounded-lg text-sm font-medium text-[#1F2A44] text-center border border-[#E8D9C4] hover:bg-[#EDE1CE] transition"
                     >
                         Iniciar sesión
                     </button>

@@ -129,14 +129,14 @@ function CreateJob() {
 
                 <button
                     onClick={() => navigate(-1)}
-                    className="flex items-center gap-2 text-[#6B7280] dark:text-white/70 hover:text-white text-sm mb-6 transition"
+                    className="flex items-center gap-2 text-[#6B7280] hover:text-white text-sm mb-6 transition"
                 >
                     <span>←</span>
                     Volver al panel
                 </button>
 
-                <h1 className="text-[#1F2A44] dark:text-white text-3xl font-bold mb-1">Publicar oferta</h1>
-                <p className="text-[#6B7280] dark:text-white/70 text-base mb-8">
+                <h1 className="text-[#1F2A44] text-3xl font-bold mb-1">Publicar oferta</h1>
+                <p className="text-[#6B7280] text-base mb-8">
                     Completa los detalles para que los candidatos encuentren tu oferta
                 </p>
 
@@ -174,20 +174,20 @@ function CreateJob() {
                     style={{ backgroundColor: "var(--bg-card)" }}
                 >
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Título del puesto</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Título del puesto</label>
                         <input
                             type="text"
                             name="titulo"
                             value={form.titulo}
                             onChange={handleChange}
                             placeholder="Ej: Camarero/a de sala..."
-                            className="w-full rounded-xl px-4 py-2.5 bg-white dark:bg-white/5 border border-white/10 text-[#1F2A44] dark:text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-white/10 text-[#1F2A44] placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                         {errors.titulo && <p className="text-red-400 text-xs">{errors.titulo}</p>}
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Sector</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Sector</label>
                         <select
                             name="sector"
                             value={form.sector}
@@ -203,7 +203,7 @@ function CreateJob() {
                     </div>
 
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Tipo de contrato</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Tipo de contrato</label>
                         <div className="grid grid-cols-2 gap-3">
                             {CONTRATOS.map((c) => (
                                 <button
@@ -215,10 +215,10 @@ function CreateJob() {
                                             : "border-white/10 hover:border-white/20"
                                         }`}
                                 >
-                                    <p className={`text-sm font-semibold ${form.contrato === c.value ? "text-[#C1502E]" : "text-[#1F2A44] dark:text-white"}`}>
+                                    <p className={`text-sm font-semibold ${form.contrato === c.value ? "text-[#C1502E]" : "text-[#1F2A44]"}`}>
                                         {c.label}
                                     </p>
-                                    <p className="text-[#6B7280] dark:text-white/70 text-xs mt-0.5">{c.descripcion}</p>
+                                    <p className="text-[#6B7280] text-xs mt-0.5">{c.descripcion}</p>
                                 </button>
                             ))}
                         </div>
@@ -227,7 +227,7 @@ function CreateJob() {
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1">
-                            <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Provincia</label>
+                            <label className="text-sm text-[#1F2A44] font-medium">Provincia</label>
                             <select
                                 name="provincia"
                                 value={form.provincia}
@@ -243,7 +243,7 @@ function CreateJob() {
                         </div>
 
                         <div className="flex flex-col gap-1">
-                            <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Ciudad</label>
+                            <label className="text-sm text-[#1F2A44] font-medium">Ciudad</label>
                             <select
                                 name="cityId"
                                 value={String(form.cityId)}
@@ -261,7 +261,7 @@ function CreateJob() {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Número de vacantes</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Número de vacantes</label>
                         <input
                             type="number"
                             name="vacantes"
@@ -269,19 +269,19 @@ function CreateJob() {
                             onChange={handleChange}
                             min={1}
                             max={99}
-                            className="w-full rounded-xl px-4 py-2.5 bg-white dark:bg-white/5 border border-white/10 text-[#1F2A44] dark:text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-white/10 text-[#1F2A44] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-[#1F2A44] dark:text-white font-medium">Descripción del puesto</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Descripción del puesto</label>
                         <textarea
                             name="descripcion"
                             value={form.descripcion}
                             onChange={handleChange}
                             rows={5}
                             placeholder="Describe el puesto, requisitos, condiciones, horarios..."
-                            className="w-full rounded-xl px-4 py-2.5 bg-white dark:bg-white/5 border border-white/10 text-[#1F2A44] dark:text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] resize-none"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-white/10 text-[#1F2A44] placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] resize-none"
                         />
                         {errors.descripcion && <p className="text-red-400 text-xs">{errors.descripcion}</p>}
                     </div>
@@ -290,7 +290,7 @@ function CreateJob() {
                         <button
                             type="button"
                             onClick={() => navigate(-1)}
-                            className="flex-1 py-3 rounded-xl font-semibold text-[#6B7280] dark:text-white/70 text-sm border border-white/10 hover:border-white/20 hover:text-white transition"
+                            className="flex-1 py-3 rounded-xl font-semibold text-[#6B7280] text-sm border border-white/10 hover:border-white/20 hover:text-white transition"
                         >
                             Cancelar
                         </button>
