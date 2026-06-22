@@ -49,6 +49,9 @@ function RegisterManual() {
     });
     const [errors, setErrors] = useState<FormErrors>({});
     const [loading, setLoading] = useState(false);
+    const [privacyChecked, setPrivacyChecked] = useState(
+        !!localStorage.getItem("hausseup_privacy_accepted")
+    );
 
     const ciudadesDisponibles =
         ciudadesEspana.find((p) => p.provincia === form.provincia)?.ciudades ?? [];
@@ -281,9 +284,30 @@ function RegisterManual() {
                         {errors.tipoUsuario && <p className="text-red-400 text-xs">{errors.tipoUsuario}</p>}
                     </div>
 
+                    {/* Aceptación de política de privacidad */}
+                    <label className="flex items-start gap-3 cursor-pointer">
+                        <input
+                            type="checkbox"
+                            checked={privacyChecked}
+                            onChange={(e) => setPrivacyChecked(e.target.checked)}
+                            className="mt-0.5 h-4 w-4 rounded border-white/20 cursor-pointer accent-[#C1502E]"
+                        />
+                        <span className="text-xs text-gray-300 leading-relaxed">
+                            He leído y acepto la{" "}
+                            <a
+                                href="/privacidad"
+                                target="_blank"
+                                rel="noopener noreferrer"
+                                className="text-[#C1502E] hover:underline font-medium"
+                            >
+                                Política de Privacidad
+                            </a>
+                        </span>
+                    </label>
+
                     <button
                         type="submit"
-                        disabled={loading}
+                        disabled={loading || !privacyChecked}
                         className="mt-2 w-full py-3 rounded-xl font-semibold text-white text-sm hover:brightness-110 transition disabled:opacity-50"
                         style={{ backgroundColor: "#C1502E" }}
                     >

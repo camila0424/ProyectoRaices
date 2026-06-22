@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { BrowserRouter, Routes, Route, Navigate, useLocation } from "react-router-dom";
 import Layout from "./components/common/Layout";
 import AuthLayout from "./components/common/AuthLayout";
@@ -11,6 +12,7 @@ import EmployerDashboard from "./pages/employer/EmployerDashboard";
 import CreateJob from "./pages/employer/CreateJob";
 import AuthCallback from "./pages/auth/AuthCallback";
 import PrivacyPolicy from "./pages/PrivacyPolicy";
+import PrivacyModal from "./components/common/PrivacyModal";
 import { useAuth } from "./context/AuthContext";
 import "./styles/App.css";
 
@@ -22,8 +24,19 @@ function ProtectedRoute({ children }: { children: React.ReactNode }) {
 }
 
 function App() {
+  const [showPrivacyModal, setShowPrivacyModal] = useState(
+    !localStorage.getItem("hausseup_privacy_accepted")
+  );
+
+  const handlePrivacyAccept = () => {
+    localStorage.setItem("hausseup_privacy_accepted", "true");
+    setShowPrivacyModal(false);
+  };
+
   return (
-    <BrowserRouter>
+    <>
+      {showPrivacyModal && <PrivacyModal onAccept={handlePrivacyAccept} />}
+      <BrowserRouter>
       <Routes>
 
         {/* Páginas públicas — con Header público y Footer */}
@@ -107,6 +120,7 @@ function App() {
 
       </Routes>
     </BrowserRouter>
+    </>
   );
 }
 
