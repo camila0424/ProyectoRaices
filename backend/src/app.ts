@@ -14,7 +14,21 @@ import { errorMiddleware } from "./middlewares/error.middleware";
 const app = express();
 const PORT = ENV.PORT;
 
-app.use(cors({ origin: ENV.FRONTEND_URL, credentials: true }));
+const ALLOWED_ORIGINS = [
+  "http://localhost:5173",
+  "https://hausseup.com",
+  "https://www.hausseup.com",
+];
+app.use(cors({
+  origin: (origin, callback) => {
+    if (!origin || ALLOWED_ORIGINS.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error(`CORS blocked: ${origin}`));
+    }
+  },
+  credentials: true,
+}));
 app.use(express.json());
 app.use(session({
   secret: ENV.JWT_SECRET,
