@@ -45,7 +45,7 @@ function RegisterManual() {
     const tipo = params.get("tipo");
     const [form, setForm] = useState<FormState>({
         ...initialForm,
-        tipoUsuario: tipo === "employer" ? "employer" : "",
+        tipoUsuario: tipo === "employer" ? "employer" : tipo === "worker" ? "worker" : "",
     });
     const [errors, setErrors] = useState<FormErrors>({});
     const [loading, setLoading] = useState(false);
@@ -133,7 +133,7 @@ function RegisterManual() {
                 <h1 className="text-[#1F2A44] text-2xl font-bold text-center mb-1">
                     Crea tu cuenta en Hausseup
                 </h1>
-                <p className="text-gray-400 text-sm text-center mb-8">
+                <p className="text-[#6B7280] text-sm text-center mb-8">
                     Completa tus datos para empezar
                 </p>
 
@@ -146,71 +146,71 @@ function RegisterManual() {
                 <form onSubmit={handleSubmit} className="flex flex-col gap-5">
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-gray-300 font-medium">Nombre completo</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Nombre completo</label>
                         <input
                             type="text"
                             name="nombre"
                             value={form.nombre}
                             onChange={handleChange}
                             placeholder="Tu nombre"
-                            className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E8D9C4] text-[#1F2A44] placeholder-[#9CA3AF] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                         {errors.nombre && <p className="text-red-400 text-xs">{errors.nombre}</p>}
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1">
-                            <label className="text-sm text-gray-300 font-medium">Teléfono</label>
+                            <label className="text-sm text-[#1F2A44] font-medium">Teléfono</label>
                             <input
                                 type="tel"
                                 name="telefono"
                                 value={form.telefono}
                                 onChange={handleChange}
                                 placeholder="+34 600 000 000"
-                                className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
+                                className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E8D9C4] text-[#1F2A44] placeholder-[#9CA3AF] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                             />
                             {errors.telefono && <p className="text-red-400 text-xs">{errors.telefono}</p>}
                         </div>
 
                         <div className="flex flex-col gap-1">
-                            <label className="text-sm text-gray-300 font-medium">Correo electrónico</label>
+                            <label className="text-sm text-[#1F2A44] font-medium">Correo electrónico</label>
                             <input
                                 type="email"
                                 name="correo"
                                 value={form.correo}
                                 onChange={handleChange}
                                 placeholder="tu@correo.com"
-                                className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
+                                className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E8D9C4] text-[#1F2A44] placeholder-[#9CA3AF] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                             />
                             {errors.correo && <p className="text-red-400 text-xs">{errors.correo}</p>}
                         </div>
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-gray-300 font-medium">Contraseña</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Contraseña</label>
                         <input
                             type="password"
                             name="contrasena"
                             value={form.contrasena}
                             onChange={handleChange}
                             placeholder="Mínimo 8 caracteres"
-                            className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E8D9C4] text-[#1F2A44] placeholder-[#9CA3AF] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                         {errors.contrasena && <p className="text-red-400 text-xs">{errors.contrasena}</p>}
                     </div>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div className="flex flex-col gap-1">
-                            <label className="text-sm text-gray-300 font-medium">Provincia</label>
+                            <label className="text-sm text-[#1F2A44] font-medium">Provincia</label>
                             <select
                                 name="provincia"
                                 value={form.provincia}
                                 onChange={handleChange}
-                                className="w-full rounded-xl px-4 py-2.5 bg-[#162236] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] appearance-none"
+                                className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E8D9C4] text-[#1F2A44] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] appearance-none"
                             >
-                                <option value="" className="bg-[#162236]">Selecciona provincia</option>
+                                <option value="">Selecciona provincia</option>
                                 {ciudadesEspana.map((p) => (
-                                    <option key={p.provincia} value={p.provincia} className="bg-[#162236]">
+                                    <option key={p.provincia} value={p.provincia}>
                                         {p.provincia}
                                     </option>
                                 ))}
@@ -219,17 +219,17 @@ function RegisterManual() {
                         </div>
 
                         <div className="flex flex-col gap-1">
-                            <label className="text-sm text-gray-300 font-medium">Ciudad</label>
+                            <label className="text-sm text-[#1F2A44] font-medium">Ciudad</label>
                             <select
                                 name="ciudad"
                                 value={form.ciudad}
                                 onChange={handleChange}
                                 disabled={!form.provincia}
-                                className="w-full rounded-xl px-4 py-2.5 bg-[#162236] border border-white/10 text-white text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] appearance-none disabled:opacity-40"
+                                className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E8D9C4] text-[#1F2A44] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D] appearance-none disabled:opacity-40"
                             >
-                                <option value="" className="bg-[#162236]">Selecciona ciudad</option>
+                                <option value="">Selecciona ciudad</option>
                                 {ciudadesDisponibles.map((c) => (
-                                    <option key={c} value={c} className="bg-[#162236]">{c}</option>
+                                    <option key={c} value={c}>{c}</option>
                                 ))}
                             </select>
                             {errors.ciudad && <p className="text-red-400 text-xs">{errors.ciudad}</p>}
@@ -237,34 +237,34 @@ function RegisterManual() {
                     </div>
 
                     <div className="flex flex-col gap-1">
-                        <label className="text-sm text-gray-300 font-medium">Documento de identidad</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">Documento de identidad</label>
                         <input
                             type="text"
                             name="documento"
                             value={form.documento}
                             onChange={handleChange}
                             placeholder="NIE, DNI o Pasaporte"
-                            className="w-full rounded-xl px-4 py-2.5 bg-white/5 border border-white/10 text-white placeholder-gray-500 text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
+                            className="w-full rounded-xl px-4 py-2.5 bg-white border border-[#E8D9C4] text-[#1F2A44] placeholder-[#9CA3AF] text-sm focus:outline-none focus:ring-2 focus:ring-[#E8A33D]"
                         />
                         {errors.documento && <p className="text-red-400 text-xs">{errors.documento}</p>}
                     </div>
 
                     {/* Busco / Ofrezco */}
                     <div className="flex flex-col gap-2">
-                        <label className="text-sm text-gray-300 font-medium">¿Qué buscas?</label>
+                        <label className="text-sm text-[#1F2A44] font-medium">¿Qué buscas?</label>
                         <div className="grid grid-cols-2 gap-3">
                             <button
                                 type="button"
                                 onClick={() => setForm((prev) => ({ ...prev, tipoUsuario: "worker" }))}
                                 className={`p-4 rounded-xl border text-left transition-all duration-200 ${form.tipoUsuario === "worker"
                                     ? "border-[#C1502E] bg-[#C1502E]/10"
-                                    : "border-white/10 hover:border-white/20"
+                                    : "border-[#E8D9C4] hover:border-[#C1502E]/50"
                                     }`}
                             >
-                                <p className={`text-sm font-semibold ${form.tipoUsuario === "worker" ? "text-[#C1502E]" : "text-white"}`}>
+                                <p className={`text-sm font-semibold ${form.tipoUsuario === "worker" ? "text-[#C1502E]" : "text-[#1F2A44]"}`}>
                                     🔍 Busco empleo
                                 </p>
-                                <p className="text-gray-400 text-xs mt-0.5">Quiero trabajar</p>
+                                <p className="text-[#6B7280] text-xs mt-0.5">Quiero trabajar</p>
                             </button>
 
                             <button
@@ -272,13 +272,13 @@ function RegisterManual() {
                                 onClick={() => setForm((prev) => ({ ...prev, tipoUsuario: "employer" }))}
                                 className={`p-4 rounded-xl border text-left transition-all duration-200 ${form.tipoUsuario === "employer"
                                     ? "border-[#C1502E] bg-[#C1502E]/10"
-                                    : "border-white/10 hover:border-white/20"
+                                    : "border-[#E8D9C4] hover:border-[#C1502E]/50"
                                     }`}
                             >
-                                <p className={`text-sm font-semibold ${form.tipoUsuario === "employer" ? "text-[#C1502E]" : "text-white"}`}>
+                                <p className={`text-sm font-semibold ${form.tipoUsuario === "employer" ? "text-[#C1502E]" : "text-[#1F2A44]"}`}>
                                     📋 Ofrezco empleo
                                 </p>
-                                <p className="text-gray-400 text-xs mt-0.5">Quiero contratar</p>
+                                <p className="text-[#6B7280] text-xs mt-0.5">Quiero contratar</p>
                             </button>
                         </div>
                         {errors.tipoUsuario && <p className="text-red-400 text-xs">{errors.tipoUsuario}</p>}
@@ -292,7 +292,7 @@ function RegisterManual() {
                             onChange={(e) => setPrivacyChecked(e.target.checked)}
                             className="mt-0.5 h-4 w-4 rounded border-white/20 cursor-pointer accent-[#C1502E]"
                         />
-                        <span className="text-xs text-gray-300 leading-relaxed">
+                        <span className="text-xs text-[#1F2A44]/70 leading-relaxed">
                             He leído y acepto la{" "}
                             <a
                                 href="/privacidad"
@@ -315,7 +315,7 @@ function RegisterManual() {
                     </button>
                 </form>
 
-                <p className="text-center text-gray-500 text-xs mt-6">
+                <p className="text-center text-[#6B7280] text-xs mt-6">
                     ¿Ya tienes cuenta?{" "}
                     <Link to="/login" className="text-[#C1502E] hover:underline font-medium">
                         Inicia sesión
