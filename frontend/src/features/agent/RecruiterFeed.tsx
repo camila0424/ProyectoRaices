@@ -281,7 +281,7 @@ function RecruiterFeed() {
         />
       )}
 
-      <AgentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <AgentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onQuickMessage={sendMessage} />
 
       <style>{`
         @keyframes pulse {

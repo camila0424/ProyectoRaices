@@ -306,7 +306,7 @@ function CompanionFeed() {
         />
       )}
 
-      <AgentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <AgentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onQuickMessage={sendMessage} />
 
       {/* estilos de animación de los puntos pulsantes */}
       <style>{`

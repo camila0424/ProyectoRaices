@@ -38,13 +38,15 @@ export function useAgentChat(): UseAgentChatReturn {
     async (text: string) => {
       if (!text.trim() || isLoading) return;
 
-      // añadir el mensaje del usuario al hilo inmediatamente
-      addMessage({
-        id: nextId(),
-        type: 'text',
-        role: 'user',
-        content: text.trim(),
-      });
+      // __init__ es una señal silenciosa para que el agente hable primero
+      if (text.trim() !== '__init__') {
+        addMessage({
+          id: nextId(),
+          type: 'text',
+          role: 'user',
+          content: text.trim(),
+        });
+      }
 
       setIsLoading(true);
       setInputValue('');

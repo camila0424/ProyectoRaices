@@ -4,17 +4,13 @@ import { useAuth } from '../../context/AuthContext';
 interface AgentDrawerProps {
   open: boolean;
   onClose: () => void;
+  onQuickMessage: (text: string) => void;
 }
 
-function AgentDrawer({ open, onClose }: AgentDrawerProps) {
+function AgentDrawer({ open, onClose, onQuickMessage }: AgentDrawerProps) {
   const navigate = useNavigate();
   const { usuario, logout } = useAuth();
   const role = usuario?.rol;
-
-  function go(path: string) {
-    onClose();
-    navigate(path);
-  }
 
   function handleLogout() {
     logout();
@@ -96,12 +92,20 @@ function AgentDrawer({ open, onClose }: AgentDrawerProps) {
         {/* opciones de navegación */}
         <nav style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '4px', padding: '0 12px' }}>
           {role === 'worker' && (
-            <DrawerItem label="Mis candidaturas" icon="📋" onClick={() => go('/candidaturas')} />
+            <DrawerItem
+              label="Mis candidaturas"
+              icon="📋"
+              onClick={() => { onClose(); onQuickMessage('Muéstrame mis candidaturas'); }}
+            />
           )}
           {role === 'employer' && (
-            <DrawerItem label="Mis ofertas" icon="💼" onClick={() => go('/mis-ofertas')} />
+            <DrawerItem
+              label="Mis anuncios"
+              icon="💼"
+              onClick={() => { onClose(); onQuickMessage('Muéstrame mis anuncios'); }}
+            />
           )}
-          <DrawerItem label="Ajustes" icon="⚙️" onClick={() => go('/ajustes')} />
+          <DrawerItem label="Ajustes" icon="⚙️" onClick={() => { onClose(); navigate('/ajustes'); }} />
         </nav>
 
         {/* cerrar sesión al fondo */}
