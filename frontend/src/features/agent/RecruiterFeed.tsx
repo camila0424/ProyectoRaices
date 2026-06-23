@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import type { JobCardData, CandidateCardData } from '../../types/agent';
 import { useAgentChat } from './useAgentChat';
 import MessageBubble from './MessageBubble';
 import JobCard from './JobCard';
@@ -127,13 +128,13 @@ function RecruiterFeed() {
                   <JobCard
                     job={msg.card.data}
                     onInterested={() =>
-                      sendMessage(`Confirmo la oferta de ${msg.card.data.title}`)
+                      sendMessage(`Confirmo la oferta de ${(msg.card.data as JobCardData).title}`)
                     }
                     onPass={() =>
-                      sendMessage(`Quiero modificar la oferta de ${msg.card.data.title}`)
+                      sendMessage(`Quiero modificar la oferta de ${(msg.card.data as JobCardData).title}`)
                     }
                     onLearnMore={() =>
-                      sendMessage(`Muéstrame los candidatos para ${msg.card.data.title}`)
+                      sendMessage(`Muéstrame los candidatos para ${(msg.card.data as JobCardData).title}`)
                     }
                   />
                 </div>
@@ -146,13 +147,13 @@ function RecruiterFeed() {
                   <CandidateCard
                     candidate={msg.card.data}
                     onInterested={() =>
-                      sendMessage(`Quiero contactar a ${msg.card.data.name}`)
+                      sendMessage(`Quiero contactar a ${(msg.card.data as CandidateCardData).name}`)
                     }
                     onPass={() =>
-                      sendMessage(`${msg.card.data.name} no encaja con lo que busco`)
+                      sendMessage(`${(msg.card.data as CandidateCardData).name} no encaja con lo que busco`)
                     }
                     onViewFullProfile={() =>
-                      sendMessage(`Ver perfil completo de ${msg.card.data.name}`)
+                      sendMessage(`Ver perfil completo de ${(msg.card.data as CandidateCardData).name}`)
                     }
                   />
                 </div>

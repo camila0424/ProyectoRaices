@@ -20,13 +20,14 @@ import { useAuth } from "./context/AuthContext";
 import "./styles/App.css";
 
 function ProtectedRoute({ children }: { children: React.ReactNode }) {
-  const { isAuthenticated, usuario } = useAuth();
+  const { isAuthenticated } = useAuth();
   const location = useLocation();
   if (!isAuthenticated) return <Navigate to="/login" state={{ from: location.pathname }} replace />;
   return <>{children}</>;
 }
 
 function AppContent() {
+  const { usuario } = useAuth();
   const [showPrivacyModal, setShowPrivacyModal] = useState(
     !localStorage.getItem("hausseup_privacy_accepted")
   );

@@ -1,4 +1,5 @@
 import { useEffect, useRef } from 'react';
+import type { JobCardData, CandidateCardData } from '../../types/agent';
 import { useAgentChat } from './useAgentChat';
 import MessageBubble from './MessageBubble';
 import JobCard from './JobCard';
@@ -146,14 +147,14 @@ function CompanionFeed() {
                     job={msg.card.data}
                     onInterested={() =>
                       sendMessage(
-                        `Me interesa el puesto de ${msg.card.data.title} en ${(msg.card.data as { company: string }).company}`
+                        `Me interesa el puesto de ${(msg.card.data as JobCardData).title} en ${(msg.card.data as JobCardData).company}`
                       )
                     }
                     onPass={() =>
-                      sendMessage(`No me interesa ${msg.card.data.title}`)
+                      sendMessage(`No me interesa ${(msg.card.data as JobCardData).title}`)
                     }
                     onLearnMore={() =>
-                      sendMessage(`Cuéntame más sobre ${msg.card.data.title}`)
+                      sendMessage(`Cuéntame más sobre ${(msg.card.data as JobCardData).title}`)
                     }
                   />
                 </div>
@@ -167,14 +168,14 @@ function CompanionFeed() {
                     candidate={msg.card.data}
                     onInterested={() =>
                       sendMessage(
-                        `Quiero contactar a ${msg.card.data.name}`
+                        `Quiero contactar a ${(msg.card.data as CandidateCardData).name}`
                       )
                     }
                     onPass={() =>
-                      sendMessage(`${msg.card.data.name} no encaja`)
+                      sendMessage(`${(msg.card.data as CandidateCardData).name} no encaja`)
                     }
                     onViewFullProfile={() =>
-                      sendMessage(`Ver perfil completo de ${msg.card.data.name}`)
+                      sendMessage(`Ver perfil completo de ${(msg.card.data as CandidateCardData).name}`)
                     }
                   />
                 </div>
