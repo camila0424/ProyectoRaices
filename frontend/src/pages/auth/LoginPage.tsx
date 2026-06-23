@@ -3,7 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import { api } from "../../services/api";
 import { useAuth } from "../../context/AuthContext";
 
-const BACKEND_URL = "http://localhost:3001/api";
+const BACKEND_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001/api";
 
 interface FormLogin {
     correo: string;

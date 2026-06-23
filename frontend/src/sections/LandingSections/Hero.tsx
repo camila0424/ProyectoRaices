@@ -72,7 +72,7 @@ function Hero() {
                     </Link>
 
                     <a
-                        href={isAuthenticated ? "/dashboard-empleador" : "http://localhost:3001/api/auth/google?rol=employer"}
+                        href={isAuthenticated ? "/dashboard-empleador" : `${import.meta.env.VITE_API_URL ?? "http://localhost:3001/api"}/auth/google?rol=employer`}
                         className="w-full sm:w-auto text-center inline-flex items-center justify-center px-8 py-4 rounded-xl font-semibold transition-all duration-300 hover:scale-[1.03]"
                         style={{
                             color: "var(--text-hero)",
