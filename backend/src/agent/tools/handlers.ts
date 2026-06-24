@@ -336,23 +336,28 @@ async function handleCrearOfertaEmpleo(
   input: Record<string, unknown>,
   userId: string
 ): Promise<unknown> {
-  // insertar en estado 'draft' — se publica al confirmar
+  // resolver city_id: usar el del input, o buscar Vitoria-Gasteiz, o caer en Madrid (id=1)
+  let resolvedCityId = input.cityId as number | null | undefined;
+  if (resolvedCityId == null) {
+    const { rows: cityRows } = await pool.query(
+      `SELECT id FROM cities WHERE name = 'Vitoria-Gasteiz' LIMIT 1`
+    );
+    resolvedCityId = cityRows[0]?.id ?? 1;
+  }
+
   const { rows } = await pool.query(
     `INSERT INTO jobs (
-       employer_id, title, description, location, salary,
-       schedule, contract_type, paperwork_required, city_id, status, created_at
-     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'draft', NOW())
-     RETURNING id, title, company_name`,
+       employer_id, city_id, title, description,
+       contract_type, requires_nie, status
+     ) VALUES ($1, $2, $3, $4, $5, $6, 'paused')
+     RETURNING id, title`,
     [
       userId,
+      resolvedCityId,
       input.title,
       input.description,
-      input.location,
-      input.salary || null,
-      input.schedule || null,
-      input.contractType || null,
-      input.paperworkRequired,
-      input.cityId || null,
+      mapContractType(input.contractType),
+      input.paperworkRequired !== 'none',
     ]
   );
 
@@ -526,6 +531,30 @@ async function handleLogAuditEvent(
 }
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────
+
+// mapea el valor libre que puede mandar el agente al enum contract_type de PG
+function mapContractType(value: unknown): string {
+  const map: Record<string, string> = {
+    full_time:   'full_time',
+    fulltime:    'full_time',
+    'full-time': 'full_time',
+    completa:    'full_time',
+    part_time:   'part_time',
+    parttime:    'part_time',
+    'part-time': 'part_time',
+    parcial:     'part_time',
+    temporary:   'temporary',
+    temporal:    'temporary',
+    freelance:   'freelance',
+    autonomo:    'freelance',
+    autónomo:    'freelance',
+    internship:  'internship',
+    practicas:   'internship',
+    prácticas:   'internship',
+  };
+  const key = String(value ?? '').toLowerCase().trim();
+  return map[key] ?? 'full_time';
+}
 
 // cálculo simple de match score sin embeddings
 // devuelve 0-100 basado en coincidencia de campos clave
