@@ -363,6 +363,30 @@ async function handleCrearOfertaEmpleo(
 
   const newJob = rows[0];
 
+  await pool.query(
+    `INSERT INTO agent_user_memory (user_id, memory_key, memory_value)
+     VALUES ($1, $2, $3)
+     ON CONFLICT (user_id, memory_key)
+     DO UPDATE SET memory_value = $3, updated_at = NOW()`,
+    [userId, `job_${newJob.id}_salary`, JSON.stringify(input.salary || '')]
+  );
+
+  await pool.query(
+    `INSERT INTO agent_user_memory (user_id, memory_key, memory_value)
+     VALUES ($1, $2, $3)
+     ON CONFLICT (user_id, memory_key)
+     DO UPDATE SET memory_value = $3, updated_at = NOW()`,
+    [userId, `job_${newJob.id}_paperwork`, JSON.stringify(input.paperworkRequired || '')]
+  );
+
+  await pool.query(
+    `INSERT INTO agent_user_memory (user_id, memory_key, memory_value)
+     VALUES ($1, $2, $3)
+     ON CONFLICT (user_id, memory_key)
+     DO UPDATE SET memory_value = $3, updated_at = NOW()`,
+    [userId, `job_${newJob.id}_salary_info`, JSON.stringify(input.salary || '')]
+  );
+
   // crear acción pendiente para que el empleador confirme la publicación
   const pendingAction: PendingAction = {
     id: randomUUID(),
