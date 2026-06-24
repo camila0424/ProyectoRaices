@@ -152,8 +152,8 @@ function RecruiterFeed() {
                         applications_count: jobData.applications_count as number,
                         created_at: jobData.created_at as string,
                       }}
-                      onEdit={(jobId, jobTitle) =>
-                        sendMessage(`Quiero editar el anuncio "${jobTitle}" (id: ${jobId}): `)
+                      onEdit={(_jobId, jobTitle) =>
+                        sendMessage(`Quiero editar el anuncio "${jobTitle}"`)
                       }
                     />
                   </div>
