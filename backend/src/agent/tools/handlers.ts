@@ -81,7 +81,9 @@ async function handleBuscarEmpleos(
 
   // construir query dinámica según los filtros que proporcione el agente
   let query = `
-    SELECT j.*, c.name as city_name
+    SELECT j.id, j.title, j.description, j.contract_type,
+           j.requires_nie, j.city_id, j.status, j.created_at,
+           c.name as city_name
     FROM jobs j
     LEFT JOIN cities c ON j.city_id = c.id
     WHERE j.status = 'active'
@@ -131,27 +133,23 @@ async function handleBuscarEmpleos(
           languages: profile.languages,
         },
         {
-          id: job.id as number,
+          id: job.id as string,
           title: job.title as string,
-          company: job.company_name as string,
+          company: 'Empresa en Hausseup',
           location: job.city_name as string,
           description: job.description as string,
-          salary: job.salary as string,
-          schedule: job.schedule as string,
           contractType: job.contract_type as string,
-          paperworkRequired: job.paperwork_required as string,
+          paperworkRequired: (job.requires_nie ? 'required' : 'none') as string,
         }
       );
 
       return {
         id: job.id,
-        company: job.company_name,
+        company: 'Empresa en Hausseup',
         title: job.title,
         location: job.city_name,
-        salary: job.salary,
-        schedule: job.schedule,
         contractType: job.contract_type,
-        paperworkRequired: job.paperwork_required,
+        paperworkRequired: job.requires_nie ? 'required' : 'none',
         description: job.description,
         matchScore,
         matchReason,
@@ -466,13 +464,13 @@ async function handleRecomendarCandidatos(
   // obtener candidatos con perfil activo
   // en una versión futura esto usará embeddings + similitud coseno
   const { rows: candidates } = await pool.query(
-    `SELECT u.id, u.name, u.city, u.migration_status,
-            u.sector, u.experience_summary, u.languages,
-            u.availability, u.photo
+    `SELECT u.id, u.full_name as name, u.bio as experience_summary,
+            u.is_available as availability, u.avatar_url as photo,
+            u.city_id, u.role
      FROM users u
      WHERE u.role = 'worker'
        AND u.id NOT IN (
-         SELECT user_id FROM applications WHERE job_id = $1
+         SELECT worker_id FROM applications WHERE job_id = $1
        )
      LIMIT $2`,
     [jobId, limit * 3] // traemos más para rankear
@@ -489,13 +487,10 @@ async function handleRecomendarCandidatos(
 
       const matchReason = await generateCandidateMatchReason(
         {
-          userId: c.id as number,
+          userId: c.id as string,
           name: c.name as string,
-          city: c.city as string,
-          sector: c.sector as string,
           experienceSummary: c.experience_summary as string,
-          languages: c.languages as string[],
-          availability: c.availability as string,
+          availability: c.availability ? 'Disponible' : 'No disponible',
         },
         {
           id: job.id,

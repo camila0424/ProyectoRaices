@@ -248,7 +248,7 @@ function CompanionFeed() {
           onChange={(e) => setInputValue(e.target.value)}
           onKeyDown={handleKeyDown}
           placeholder="Escribe o dale al micro..."
-          disabled={isLoading || !!pendingAction}
+          disabled={isLoading}
           style={{
             flex: 1,
             padding: '12px 16px',
@@ -262,7 +262,7 @@ function CompanionFeed() {
         />
         <button
           onClick={() => sendMessage(inputValue)}
-          disabled={!inputValue.trim() || isLoading || !!pendingAction}
+          disabled={!inputValue.trim() || isLoading}
           style={{
             width: '44px',
             height: '44px',
