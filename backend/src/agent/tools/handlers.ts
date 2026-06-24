@@ -336,28 +336,15 @@ async function handleCrearOfertaEmpleo(
   input: Record<string, unknown>,
   userId: string
 ): Promise<unknown> {
-  // igual que aplicar_a_empleo, requiere confirmación antes de publicar
-  // primero buscamos el employer_id asociado al usuario
-  const { rows: empRows } = await pool.query(
-    'SELECT id FROM employers WHERE user_id = $1',
-    [userId]
-  );
-
-  if (empRows.length === 0) {
-    return { error: 'No se encontró un perfil de empresa asociado a tu cuenta.' };
-  }
-
-  const employerId = empRows[0].id;
-
   // insertar en estado 'draft' — se publica al confirmar
   const { rows } = await pool.query(
     `INSERT INTO jobs (
        employer_id, title, description, location, salary,
        schedule, contract_type, paperwork_required, city_id, status, created_at
-     ) VALUES ($1,$2,$3,$4,$5,$6,$7,$8,$9,'draft',NOW())
+     ) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, 'draft', NOW())
      RETURNING id, title, company_name`,
     [
-      employerId,
+      userId,
       input.title,
       input.description,
       input.location,
