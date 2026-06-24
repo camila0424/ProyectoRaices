@@ -383,25 +383,33 @@ async function handleEditarOfertaEmpleo(
     return { error: 'Oferta no encontrada o no tienes permiso para editarla.' };
   }
 
-  const fieldMap: Record<string, string> = {
-    title: 'title',
-    description: 'description',
-    contractType: 'contract_type',
-    requiresNie: 'requires_nie',
-    status: 'status',
-  };
-
   const setClauses: string[] = [];
   const params: unknown[] = [];
+  const changedFields: string[] = [];
 
-  for (const [inputKey, dbColumn] of Object.entries(fieldMap)) {
+  const directFields: Record<string, string> = {
+    title: 'title',
+    description: 'description',
+    requiresNie: 'requires_nie',
+    status: 'status',
+    vacancies: 'vacancies',
+  };
+
+  for (const [inputKey, dbColumn] of Object.entries(directFields)) {
     if (input[inputKey] !== undefined) {
       params.push(input[inputKey]);
       setClauses.push(`${dbColumn} = $${params.length}`);
+      changedFields.push(inputKey);
     }
   }
 
-  // city viene como nombre de ciudad — resolverlo a city_id (SMALLINT)
+  if (input.contractType !== undefined) {
+    params.push(mapContractType(input.contractType));
+    setClauses.push(`contract_type = $${params.length}`);
+    changedFields.push('contrato');
+  }
+
+  // city by name (legacy field)
   if (input.city !== undefined) {
     const { rows: cityRows } = await pool.query(
       'SELECT id FROM cities WHERE name ILIKE $1 LIMIT 1',
@@ -410,20 +418,49 @@ async function handleEditarOfertaEmpleo(
     if (cityRows.length > 0) {
       params.push(cityRows[0].id);
       setClauses.push(`city_id = $${params.length}`);
+      changedFields.push('ciudad');
     }
   }
 
-  if (setClauses.length === 0) {
+  // cityName — resolve to city_id
+  if (input.cityName !== undefined) {
+    const { rows: cityRows } = await pool.query(
+      'SELECT id FROM cities WHERE name ILIKE $1 LIMIT 1',
+      [`%${input.cityName}%`]
+    );
+    if (cityRows.length > 0) {
+      params.push(cityRows[0].id);
+      setClauses.push(`city_id = $${params.length}`);
+      changedFields.push('ciudad');
+    }
+  }
+
+  if (setClauses.length === 0 && input.salary === undefined) {
     return { error: 'No hay campos para actualizar.' };
   }
 
-  params.push(input.jobId);
-  await pool.query(
-    `UPDATE jobs SET ${setClauses.join(', ')}, updated_at = NOW() WHERE id = $${params.length}`,
-    params
-  );
+  if (setClauses.length > 0) {
+    params.push(input.jobId);
+    await pool.query(
+      `UPDATE jobs SET ${setClauses.join(', ')}, updated_at = NOW() WHERE id = $${params.length}`,
+      params
+    );
+  }
 
-  return { success: true, message: 'Oferta actualizada correctamente.' };
+  // salary has no column in jobs — store in agent_user_memory
+  if (input.salary !== undefined) {
+    await pool.query(
+      `INSERT INTO agent_user_memory (user_id, memory_key, memory_value)
+       VALUES ($1, $2, $3)
+       ON CONFLICT (user_id, memory_key)
+       DO UPDATE SET memory_value = $3, updated_at = NOW()`,
+      [userId, `job_${input.jobId}_salary`, String(input.salary)]
+    );
+    changedFields.push('salario');
+  }
+
+  const changed = changedFields.join(', ');
+  return { success: true, message: `Oferta actualizada. Campos modificados: ${changed}.` };
 }
 
 async function handleCrearOfertaEmpleo(

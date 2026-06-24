@@ -1,3 +1,5 @@
+import { useState, useEffect } from 'react';
+
 interface JobPostingCardProps {
   job: {
     id: string;
@@ -23,6 +25,17 @@ function formatDate(isoString: string): string {
 }
 
 function JobPostingCard({ job, onEdit }: JobPostingCardProps) {
+  const [cityName, setCityName] = useState(job.city_name || '');
+
+  useEffect(() => {
+    if (job.city_id && !job.city_name) {
+      fetch(`${import.meta.env.VITE_API_URL}/cities/${job.city_id}`)
+        .then(r => r.json())
+        .then(data => setCityName(data.name || String(job.city_id)))
+        .catch(() => setCityName(String(job.city_id)));
+    }
+  }, [job.city_id]);
+
   return (
     <div
       style={{
@@ -51,7 +64,7 @@ function JobPostingCard({ job, onEdit }: JobPostingCardProps) {
       <div style={{ display: 'flex', flexDirection: 'column', gap: '6px', marginBottom: '16px' }}>
         <p style={rowStyle}>
           <span style={labelStyle}>Ciudad:</span>{' '}
-          <span style={valueStyle}>{job.city_name || job.city_id || 'Ver anuncio'}</span>
+          <span style={valueStyle}>{cityName || 'Ver anuncio'}</span>
         </p>
         <p style={rowStyle}>
           <span style={labelStyle}>Contrato:</span>{' '}
