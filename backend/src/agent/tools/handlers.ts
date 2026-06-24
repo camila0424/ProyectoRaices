@@ -1,7 +1,7 @@
 import { randomUUID } from 'crypto';
 import type { PendingAction } from '../types';
 import { generateMatchReason, generateCandidateMatchReason } from './matchReason';
-import { setUserMemory } from '../memory.repository';
+
 import pool from '../../config/db';
 
 // mapa en memoria para acciones pendientes de confirmación (HITL)
@@ -166,9 +166,8 @@ async function handleBuscarEmpleos(
 
 async function handleObtenerPerfil(userId: string): Promise<unknown> {
   const { rows } = await pool.query(
-    `SELECT id, name, email, phone, city, migration_status,
-            sector, experience_summary, languages, salary_expectation,
-            availability, extra_info, verified, created_at
+    `SELECT id, full_name, email, phone_whatsapp, avatar_url, city_id,
+            role, bio, is_available, is_verified, created_at
      FROM users WHERE id = $1`,
     [userId]
   );
@@ -179,12 +178,10 @@ async function handleActualizarPerfil(
   input: Record<string, unknown>,
   userId: string
 ): Promise<unknown> {
-  // solo columnas que existen en la tabla users
   const fieldMap: Record<string, string> = {
-    fullName: 'full_name',
+    bio: 'bio',
     phoneWhatsapp: 'phone_whatsapp',
     avatarUrl: 'avatar_url',
-    bio: 'bio',
     isAvailable: 'is_available',
   };
 
@@ -198,17 +195,26 @@ async function handleActualizarPerfil(
     }
   }
 
-  if (setClauses.length === 0) {
-    return { success: true, message: 'Nada que actualizar' };
+  if (setClauses.length > 0) {
+    params.push(userId);
+    await pool.query(
+      `UPDATE users SET ${setClauses.join(', ')}, updated_at = NOW() WHERE id = $${params.length}`,
+      params
+    );
   }
 
-  params.push(userId);
-  const query = `UPDATE users SET ${setClauses.join(', ')}, updated_at = NOW() WHERE id = $${params.length}`;
-  await pool.query(query, params);
-
-  // guardar todos los campos en agent_user_memory (incluyendo los que no van a users)
+  // todo lo que no va a users se persiste en agent_user_memory
+  const userFields = new Set(Object.keys(fieldMap));
   for (const [inputKey, value] of Object.entries(input)) {
-    await setUserMemory(userId, inputKey, value);
+    if (!userFields.has(inputKey)) {
+      await pool.query(
+        `INSERT INTO agent_user_memory (user_id, memory_key, memory_value)
+         VALUES ($1, $2, $3)
+         ON CONFLICT (user_id, memory_key)
+         DO UPDATE SET memory_value = $3, updated_at = NOW()`,
+        [userId, inputKey, value]
+      );
+    }
   }
 
   return { success: true };
