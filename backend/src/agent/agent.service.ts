@@ -27,14 +27,22 @@ export async function runAgentLoop(
   agentType: AgentType
 ): Promise<AgentResponse> {
   // preparar contexto: memoria, herramientas y nombre del usuario
-  const [userMemory, recentHistoryText, historyMessages, userRow] = await Promise.all([
+  const [userMemory, recentHistoryText, historyMessages] = await Promise.all([
     getUserMemoryText(userId),
     getRecentHistoryText(userId, 10),
     getConversationMessages(userId, 20),
-    pool.query<{ name: string }>('SELECT name FROM users WHERE id = $1', [userId]),
   ]);
 
-  const userName = userRow.rows[0]?.name ?? '';
+  let userName = '';
+  try {
+    const userRow = await pool.query<{ full_name: string }>(
+      'SELECT full_name FROM users WHERE id = $1',
+      [userId]
+    );
+    userName = userRow.rows[0]?.full_name ?? '';
+  } catch (err) {
+    console.error('Could not fetch user name:', (err as Error).message);
+  }
 
   const systemPrompt =
     agentType === 'companion'
