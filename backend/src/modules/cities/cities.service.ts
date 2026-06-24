@@ -12,3 +12,11 @@ export async function obtenerCiudades() {
   );
   return result.rows as CityRow[];
 }
+
+export async function obtenerCiudadPorId(id: number): Promise<CityRow | null> {
+  const result = await pool.query(
+    "SELECT id, name, region FROM cities WHERE id = $1",
+    [id]
+  );
+  return result.rows[0] ?? null;
+}
