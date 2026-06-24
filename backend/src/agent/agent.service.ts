@@ -7,7 +7,6 @@ import { buildCompanionPrompt } from './prompts/companion.prompt';
 import { buildRecruiterPrompt } from './prompts/recruiter.prompt';
 import pool from '../config/db';
 import {
-  getConversationMessages,
   getUserMemoryText,
   getRecentHistoryText,
   saveConversationTurn,
@@ -24,14 +23,18 @@ const MAX_ITERATIONS = 5;
 export async function runAgentLoop(
   userMessage: string,
   userId: string,
-  agentType: AgentType
+  agentType: AgentType,
+  history?: Array<{ role: 'user' | 'assistant'; content: string }>
 ): Promise<AgentResponse> {
   // preparar contexto: memoria, herramientas y nombre del usuario
-  const [userMemory, recentHistoryText, historyMessages] = await Promise.all([
+  const [userMemory, recentHistoryText] = await Promise.all([
     getUserMemoryText(userId),
     getRecentHistoryText(userId, 10),
-    getConversationMessages(userId, 20),
   ]);
+  const historyMessages: Anthropic.MessageParam[] = (history ?? []).map((m) => ({
+    role: m.role,
+    content: m.content,
+  }));
 
   let userName = '';
   try {

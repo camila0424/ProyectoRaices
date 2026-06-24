@@ -16,7 +16,7 @@ export async function handleAgentMessage(req: AuthRequest, res: Response): Promi
       return;
     }
 
-    const { message, conversationId } = req.body as AgentMessageRequest;
+    const { message, history } = req.body as AgentMessageRequest;
 
     if (!message || typeof message !== 'string' || message.trim().length === 0) {
       res.status(400).json({ error: 'El mensaje no puede estar vacío' });
@@ -27,7 +27,7 @@ export async function handleAgentMessage(req: AuthRequest, res: Response): Promi
     // worker → Agente Compañero, employer → Agente de Selección
     const agentType = userRole === 'employer' ? 'recruiter' : 'companion';
 
-    const response = await runAgentLoop(message.trim(), userId, agentType);
+    const response = await runAgentLoop(message.trim(), userId, agentType, history);
 
     res.json({
       success: true,

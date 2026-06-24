@@ -24,10 +24,15 @@ export function useAgentChat(): UseAgentChatReturn {
 
   // useRef para que las callbacks no tengan dependencias desactualizadas
   const pendingActionRef = useRef<PendingAction | null>(null);
+  const messagesRef = useRef<ChatMessage[]>([]);
 
   // añade un mensaje al hilo
   const addMessage = useCallback((msg: ChatMessage) => {
-    setMessages((prev) => [...prev, msg]);
+    setMessages((prev) => {
+      const next = [...prev, msg];
+      messagesRef.current = next;
+      return next;
+    });
   }, []);
 
   // genera un ID único simple para cada mensaje
@@ -61,7 +66,12 @@ export function useAgentChat(): UseAgentChatReturn {
               'Content-Type': 'application/json',
               Authorization: `Bearer ${token}`,
             },
-            body: JSON.stringify({ message: text.trim() }),
+            body: JSON.stringify({
+              message: text.trim(),
+              history: messagesRef.current
+                .filter((m): m is Extract<ChatMessage, { type: 'text' }> => m.type === 'text')
+                .map((m) => ({ role: m.role === 'agent' ? 'assistant' : 'user', content: m.content })),
+            }),
           }
         );
 

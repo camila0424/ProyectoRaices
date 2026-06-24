@@ -72,6 +72,7 @@ export interface CandidateCardData {
 export interface AgentMessageRequest {
   message: string;
   conversationId?: number;
+  history?: Array<{ role: 'user' | 'assistant'; content: string }>;
 }
 
 // lo que entra al endpoint POST /api/agent/confirm-action
