@@ -3,6 +3,7 @@ import type { JobCardData, CandidateCardData } from '../../types/agent';
 import { useAgentChat } from './useAgentChat';
 import MessageBubble from './MessageBubble';
 import JobCard from './JobCard';
+import JobPostingCard from './JobPostingCard';
 import CandidateCard from './CandidateCard';
 import ActionConfirmModal from './ActionConfirmModal';
 import AgentDrawer from './AgentDrawer';
@@ -132,6 +133,31 @@ function RecruiterFeed() {
 
           if (msg.type === 'card') {
             if (msg.card.type === 'job') {
+              const jobData = msg.card.data as JobCardData & { id?: string; applications_count?: number; created_at?: string };
+              const isPostingCard = jobData.id && jobData.applications_count !== undefined && jobData.created_at;
+
+              if (isPostingCard) {
+                return (
+                  <div key={msg.id} style={{ marginBottom: '8px' }}>
+                    <JobPostingCard
+                      job={{
+                        id: jobData.id as string,
+                        title: jobData.title,
+                        city_name: jobData.location,
+                        contract_type: jobData.contractType || '',
+                        salary: jobData.salary,
+                        paperwork: jobData.paperworkRequired,
+                        applications_count: jobData.applications_count as number,
+                        created_at: jobData.created_at as string,
+                      }}
+                      onEdit={(jobId) =>
+                        sendMessage(`Quiero editar el anuncio ${jobId}: `)
+                      }
+                    />
+                  </div>
+                );
+              }
+
               return (
                 <div key={msg.id} style={{ marginBottom: '8px' }}>
                   <JobCard

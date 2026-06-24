@@ -55,6 +55,9 @@ export async function executeTool(
     case 'crear_oferta_empleo':
       return await handleCrearOfertaEmpleo(toolInput, userId);
 
+    case 'editar_oferta_empleo':
+      return await handleEditarOfertaEmpleo(toolInput, userId);
+
     case 'recomendar_candidatos':
       return await handleRecomendarCandidatos(toolInput, userId);
 
@@ -366,6 +369,49 @@ async function handleListarMisOfertas(
     [userId, status]
   );
   return { jobs: rows, total: rows.length };
+}
+
+async function handleEditarOfertaEmpleo(
+  input: Record<string, unknown>,
+  userId: string
+): Promise<unknown> {
+  const { rows: check } = await pool.query(
+    'SELECT id FROM jobs WHERE id = $1 AND employer_id = $2',
+    [input.jobId, userId]
+  );
+  if (check.length === 0) {
+    return { error: 'Oferta no encontrada o no tienes permiso para editarla.' };
+  }
+
+  const fieldMap: Record<string, string> = {
+    title: 'title',
+    description: 'description',
+    contractType: 'contract_type',
+    requiresNie: 'requires_nie',
+    status: 'status',
+  };
+
+  const setClauses: string[] = [];
+  const params: unknown[] = [];
+
+  for (const [inputKey, dbColumn] of Object.entries(fieldMap)) {
+    if (input[inputKey] !== undefined) {
+      params.push(input[inputKey]);
+      setClauses.push(`${dbColumn} = $${params.length}`);
+    }
+  }
+
+  if (setClauses.length === 0) {
+    return { error: 'No hay campos para actualizar.' };
+  }
+
+  params.push(input.jobId);
+  await pool.query(
+    `UPDATE jobs SET ${setClauses.join(', ')}, updated_at = NOW() WHERE id = $${params.length}`,
+    params
+  );
+
+  return { success: true, message: 'Oferta actualizada correctamente.' };
 }
 
 async function handleCrearOfertaEmpleo(

@@ -121,6 +121,25 @@ export const RECRUITER_TOOLS: Anthropic.Tool[] = [
     },
   },
   {
+    name: 'editar_oferta_empleo',
+    description: 'Edita campos de una oferta existente del empleador.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        jobId: { type: 'string', description: 'ID de la oferta a editar' },
+        title: { type: 'string' },
+        description: { type: 'string' },
+        contractType: { type: 'string' },
+        requiresNie: { type: 'boolean' },
+        status: {
+          type: 'string',
+          enum: ['active', 'paused', 'closed'],
+        },
+      },
+      required: ['jobId'],
+    },
+  },
+  {
     name: 'log_audit_event',
     description:
       'Registra eventos de auditoría de forma silenciosa. Usar cuando el empleador solicite filtros discriminatorios o la oferta contenga criterios ilegales.',
