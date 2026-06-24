@@ -86,7 +86,8 @@ interface GoogleProfile {
 
 export async function findOrCreateGoogleUser(
   profile: GoogleProfile,
-  defaultRole: "worker" | "employer" = "worker"
+  defaultRole: "worker" | "employer" = "worker",
+  intent: "registro" | "login" = "login"
 ) {
   const email = profile.emails?.[0]?.value;
   if (!email) throw { status: 400, message: "No se pudo obtener el correo de Google" };
@@ -102,6 +103,10 @@ export async function findOrCreateGoogleUser(
   let rol: string;
 
   if (rows.length > 0) {
+    if (intent === "registro") {
+      throw { status: 409, message: "Ya tienes una cuenta con este correo. Inicia sesión en su lugar." };
+    }
+
     userId = rows[0].id;
     nombre = rows[0].full_name;
     rol = rows[0].role;

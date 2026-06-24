@@ -10,9 +10,10 @@ router.post("/login", login);
 
 router.get("/google", (req, res, next) => {
   const rol = (req.query.rol as string) ?? "worker";
+  const intent = (req.query.intent as string) ?? "login";
   passport.authenticate("google", {
     scope: ["profile", "email"],
-    state: rol,
+    state: `${rol}:${intent}`,
   })(req, res, next);
 });
 

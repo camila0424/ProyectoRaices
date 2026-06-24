@@ -13,12 +13,18 @@ passport.use(
     },
     async (req: any, _accessToken: string, _refreshToken: string, profile: any, done: any) => {
       try {
-        const state = req.query?.state as string;
-        const defaultRole = state === "employer" ? "employer" : "worker";
-        const user = await findOrCreateGoogleUser(profile, defaultRole);
+        const state = (req.query?.state as string) ?? "";
+        const [rawRole, rawIntent] = state.split(":");
+        const defaultRole = rawRole === "employer" ? "employer" : "worker";
+        const intent = rawIntent === "registro" ? "registro" : "login";
+        const user = await findOrCreateGoogleUser(profile, defaultRole, intent);
         done(null, user);
-      } catch (error) {
-        done(error as Error, undefined);
+      } catch (error: any) {
+        if (error?.status === 409) {
+          done(null, { _isDuplicate: true });
+        } else {
+          done(error as Error, undefined);
+        }
       }
     }
   )

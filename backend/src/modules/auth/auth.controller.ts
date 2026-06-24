@@ -29,13 +29,19 @@ export async function login(
 }
 
 export function googleCallback(req: Request, res: Response): void {
-  const user = req.user as { token: string; id: string; nombre: string; correo: string; rol: string };
+  const user = req.user as { token?: string; id?: string; nombre?: string; correo?: string; rol?: string; _isDuplicate?: boolean };
+
+  if (user._isDuplicate) {
+    res.redirect(`${ENV.FRONTEND_URL}/auth/callback?error=duplicate_email`);
+    return;
+  }
+
   const params = new URLSearchParams({
-    token: user.token,
-    id: user.id,
-    nombre: user.nombre,
-    correo: user.correo,
-    rol: user.rol,
+    token: user.token!,
+    id: user.id!,
+    nombre: user.nombre!,
+    correo: user.correo!,
+    rol: user.rol!,
   });
   res.redirect(`${ENV.FRONTEND_URL}/auth/callback?${params.toString()}`);
 }

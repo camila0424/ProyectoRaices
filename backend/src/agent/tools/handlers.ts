@@ -1,6 +1,7 @@
 import { randomUUID } from 'crypto';
 import type { PendingAction } from '../types';
 import { generateMatchReason, generateCandidateMatchReason } from './matchReason';
+import { setUserMemory } from '../memory.repository';
 import pool from '../../config/db';
 
 // mapa en memoria para acciones pendientes de confirmación (HITL)
@@ -178,16 +179,13 @@ async function handleActualizarPerfil(
   input: Record<string, unknown>,
   userId: string
 ): Promise<unknown> {
-  // construir SET dinámico solo con los campos que vienen
+  // solo columnas que existen en la tabla users
   const fieldMap: Record<string, string> = {
-    city: 'city',
-    migrationStatus: 'migration_status',
-    sector: 'sector',
-    experienceSummary: 'experience_summary',
-    languages: 'languages',
-    salaryExpectation: 'salary_expectation',
-    availability: 'availability',
-    extraInfo: 'extra_info',
+    fullName: 'full_name',
+    phoneWhatsapp: 'phone_whatsapp',
+    avatarUrl: 'avatar_url',
+    bio: 'bio',
+    isAvailable: 'is_available',
   };
 
   const setClauses: string[] = [];
@@ -208,15 +206,9 @@ async function handleActualizarPerfil(
   const query = `UPDATE users SET ${setClauses.join(', ')}, updated_at = NOW() WHERE id = $${params.length}`;
   await pool.query(query, params);
 
-  // también guardar en agent_user_memory para acceso rápido en el prompt
+  // guardar todos los campos en agent_user_memory (incluyendo los que no van a users)
   for (const [inputKey, value] of Object.entries(input)) {
-    await pool.query(
-      `INSERT INTO agent_user_memory (user_id, memory_key, memory_value)
-       VALUES ($1, $2, $3)
-       ON CONFLICT (user_id, memory_key)
-       DO UPDATE SET memory_value = $3, updated_at = NOW()`,
-      [userId, inputKey, JSON.stringify(value)]
-    );
+    await setUserMemory(userId, inputKey, value);
   }
 
   return { success: true };

@@ -38,7 +38,7 @@ function RegisterOptions() {
 
                 <div className="flex flex-col gap-3">
                     <a
-                        href={`${BACKEND_URL}/auth/google?role=${tipo}`}
+                        href={`${BACKEND_URL}/auth/google?rol=${tipo}&intent=registro`}
                         className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold text-sm border border-[#E8D9C4] hover:bg-[#EDE1CE] transition"
                     >
                         <img
