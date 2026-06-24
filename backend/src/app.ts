@@ -45,7 +45,7 @@ app.use("/api/auth", authRoutes);
 app.use("/api/users", usersRoutes);
 app.use("/api/jobs", jobsRoutes);
 app.use("/api/applications", applicationsRoutes);
-app.use("/api/cities", citiesRoutes);
+app.use("/api/cities", citiesRoutes); // cities route registered
 app.use("/api/agent", agentRoutes);
 
 // Health check
