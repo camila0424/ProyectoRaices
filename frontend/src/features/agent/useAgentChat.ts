@@ -46,7 +46,7 @@ export function useAgentChat(): UseAgentChatReturn {
       // __init__, __silent__ y __jobid:UUID__ son señales silenciosas que no muestran burbuja raw
       const displayText = text.replace(/^__jobid:[^_]+__/, '').replace('__silent__', '').trim();
 
-      if (text.trim() !== '__init__' && !text.startsWith('__silent__')) {
+      if (text.trim() !== '__init__') {
         addMessage({
           id: nextId(),
           type: 'text',
@@ -69,7 +69,7 @@ export function useAgentChat(): UseAgentChatReturn {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              message: text.replace('__silent__', '').trim(), // __jobid:UUID__ se deja para que Claude lo lea
+              message: text.trim(), // __jobid:UUID__ se deja para que Claude lo lea
               history: messagesRef.current
                 .filter((m): m is Extract<ChatMessage, { type: 'text' }> => m.type === 'text')
                 .map((m) => ({ role: m.role === 'agent' ? 'assistant' : 'user', content: m.content })),
