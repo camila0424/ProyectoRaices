@@ -91,15 +91,21 @@ export function useAgentChat(): UseAgentChatReturn {
           });
         }
 
-        // añadir tarjetas inline si las hay (empleos o candidatos)
-        if (data.cards && Array.isArray(data.cards)) {
-          for (const card of data.cards) {
-            addMessage({
-              id: nextId(),
-              type: 'card',
+        // reemplazar tarjetas del mismo tipo para evitar acumulación
+        if (data.cards && Array.isArray(data.cards) && data.cards.length > 0) {
+          setMessages(prev => {
+            const sinCardsViejas = prev.filter(m =>
+              m.type !== 'card' || m.card.type !== data.cards[0].type
+            );
+            const nuevasCards = data.cards.map((card: AgentCard) => ({
+              id: `card-${Date.now()}-${Math.random()}`,
+              type: 'card' as const,
               card,
-            });
-          }
+            }));
+            const next = [...sinCardsViejas, ...nuevasCards];
+            messagesRef.current = next;
+            return next;
+          });
         }
 
         // guardar la acción pendiente si existe
