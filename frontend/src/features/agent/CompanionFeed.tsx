@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { JobCardData, CandidateCardData } from '../../types/agent';
 import { useAgentChat } from './useAgentChat';
+import { useAuth } from '../../context/AuthContext';
 import MessageBubble from './MessageBubble';
 import JobCard from './JobCard';
 import CandidateCard from './CandidateCard';
@@ -19,6 +20,10 @@ function CompanionFeed() {
     inputValue,
     setInputValue,
   } = useAgentChat();
+
+  const { usuario } = useAuth();
+  const agentName = 'María';
+  const agentAvatar = '/img/maria.jpeg';
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -89,26 +94,19 @@ function CompanionFeed() {
             fontSize: '15px',
           }}
         >
-          tu agente Hausseup
+          Chat con {agentName}, tu agente de acompañamiento
         </span>
 
-        {/* avatar placeholder del agente */}
-        <div
+        <img
+          src={agentAvatar}
+          alt="Avatar de María"
           style={{
             width: '34px',
             height: '34px',
             borderRadius: '50%',
-            background: '#C1502E',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FFFFFF',
-            fontWeight: '700',
-            fontSize: '14px',
+            objectFit: 'cover',
           }}
-        >
-          H
-        </div>
+        />
       </div>
 
       {/* ── THREAD SCROLLABLE ── */}

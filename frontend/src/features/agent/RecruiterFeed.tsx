@@ -1,6 +1,7 @@
 import { useEffect, useRef, useState } from 'react';
 import type { JobCardData, CandidateCardData } from '../../types/agent';
 import { useAgentChat } from './useAgentChat';
+import { useAuth } from '../../context/AuthContext';
 import MessageBubble from './MessageBubble';
 import JobCard from './JobCard';
 import JobPostingCard from './JobPostingCard';
@@ -20,6 +21,10 @@ function RecruiterFeed() {
     inputValue,
     setInputValue,
   } = useAgentChat();
+
+  const { usuario } = useAuth();
+  const agentName = 'Pablo';
+  const agentAvatar = '/img/pablo.jpeg';
 
   const [drawerOpen, setDrawerOpen] = useState(false);
 
@@ -81,25 +86,19 @@ function RecruiterFeed() {
         </button>
 
         <span style={{ color: '#F7EEE0', fontWeight: '600', fontSize: '15px' }}>
-          agente de selección
+          Chat con {agentName}, tu agente de contratación
         </span>
 
-        <div
+        <img
+          src={agentAvatar}
+          alt="Avatar de Pablo"
           style={{
             width: '34px',
             height: '34px',
             borderRadius: '50%',
-            background: '#C1502E',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            color: '#FFFFFF',
-            fontWeight: '700',
-            fontSize: '14px',
+            objectFit: 'cover',
           }}
-        >
-          H
-        </div>
+        />
       </div>
 
       {/* ── THREAD ── */}
