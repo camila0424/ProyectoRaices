@@ -81,8 +81,7 @@ export function useAgentChat(): UseAgentChatReturn {
 
         const data = await res.json();
 
-        // añadir la respuesta de texto del agente solo si no hay cards
-        if (data.message && !(data.cards && data.cards.length > 0)) {
+        if (data.message) {
           addMessage({
             id: nextId(),
             type: 'text',
