@@ -94,14 +94,14 @@ function AgentDrawer({ open, onClose, onQuickMessage }: AgentDrawerProps) {
             <DrawerItem
               label="Mis candidaturas"
               icon="📋"
-              onClick={() => { onClose(); onQuickMessage('Muéstrame mis candidaturas'); }}
+              onClick={() => { onClose(); onQuickMessage('__silent__Muéstrame mis candidaturas'); }}
             />
           )}
           {usuario?.rol === 'employer' && (
             <DrawerItem
               label="Mis anuncios"
               icon="💼"
-              onClick={() => { onClose(); onQuickMessage('Muéstrame mis anuncios'); }}
+              onClick={() => { onClose(); onQuickMessage('__silent__Muéstrame mis anuncios'); }}
             />
           )}
           <DrawerItem label="Ajustes" icon="⚙️" onClick={() => { onClose(); navigate('/ajustes'); }} />

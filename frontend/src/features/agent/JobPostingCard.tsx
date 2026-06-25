@@ -24,6 +24,17 @@ function formatDate(isoString: string): string {
   return `${dd}/${mm}/${yyyy}`;
 }
 
+function formatContractType(raw?: string): string {
+  const map: Record<string, string> = {
+    full_time: 'Tiempo completo',
+    part_time: 'Media jornada',
+    temporary: 'Temporal',
+    freelance: 'Autónomo / Freelance',
+    internship: 'Prácticas',
+  };
+  return raw ? (map[raw] ?? raw) : 'Ver anuncio';
+}
+
 function JobPostingCard({ job, onEdit }: JobPostingCardProps) {
   const [cityName, setCityName] = useState(job.city_name || '');
 
@@ -47,6 +58,8 @@ function JobPostingCard({ job, onEdit }: JobPostingCardProps) {
         maxWidth: '100%',
         boxSizing: 'border-box',
         marginBottom: '8px',
+        position: 'relative',
+        zIndex: 1,
       }}
     >
       <h3
@@ -68,7 +81,7 @@ function JobPostingCard({ job, onEdit }: JobPostingCardProps) {
         </p>
         <p style={rowStyle}>
           <span style={labelStyle}>Contrato:</span>{' '}
-          <span style={valueStyle}>{job.contract_type || 'Ver anuncio'}</span>
+          <span style={valueStyle}>{formatContractType(job.contract_type)}</span>
         </p>
         <p style={rowStyle}>
           <span style={labelStyle}>Salario:</span>{' '}

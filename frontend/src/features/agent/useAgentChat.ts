@@ -43,8 +43,8 @@ export function useAgentChat(): UseAgentChatReturn {
     async (text: string) => {
       if (!text.trim() || isLoading) return;
 
-      // __init__ es una señal silenciosa para que el agente hable primero
-      if (text.trim() !== '__init__') {
+      // __init__ y __silent__ son señales silenciosas que no muestran burbuja de usuario
+      if (text.trim() !== '__init__' && !text.startsWith('__silent__')) {
         addMessage({
           id: nextId(),
           type: 'text',
@@ -67,7 +67,7 @@ export function useAgentChat(): UseAgentChatReturn {
               Authorization: `Bearer ${token}`,
             },
             body: JSON.stringify({
-              message: text.trim(),
+              message: text.replace('__silent__', '').trim(),
               history: messagesRef.current
                 .filter((m): m is Extract<ChatMessage, { type: 'text' }> => m.type === 'text')
                 .map((m) => ({ role: m.role === 'agent' ? 'assistant' : 'user', content: m.content })),
