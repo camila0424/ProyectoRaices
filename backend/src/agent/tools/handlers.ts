@@ -136,7 +136,7 @@ async function handleBuscarEmpleos(
           languages: profile.languages,
         },
         {
-          id: job.id as string,
+          id: job.id as number,
           title: job.title as string,
           company: 'Empresa en Hausseup',
           location: job.city_name as string,
@@ -598,7 +598,7 @@ async function handleRecomendarCandidatos(
 
       const matchReason = await generateCandidateMatchReason(
         {
-          userId: c.id as string,
+          userId: c.id as number,
           name: c.name as string,
           experienceSummary: c.experience_summary as string,
           availability: c.availability ? 'Disponible' : 'No disponible',
