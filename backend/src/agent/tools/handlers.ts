@@ -264,7 +264,7 @@ export async function executeConfirmedAction(
 
       // verificar que no haya aplicado antes
       const { rows: existing } = await pool.query(
-        'SELECT id FROM applications WHERE user_id = $1 AND job_id = $2',
+        'SELECT id FROM applications WHERE worker_id = $1 AND job_id = $2',
         [userId, jobId]
       );
 
@@ -273,7 +273,7 @@ export async function executeConfirmedAction(
       }
 
       await pool.query(
-        `INSERT INTO applications (user_id, job_id, status, created_at)
+        `INSERT INTO applications (worker_id, job_id, status, created_at)
          VALUES ($1, $2, 'pending', NOW())`,
         [userId, jobId]
       );
@@ -319,11 +319,10 @@ export async function executeConfirmedAction(
 
 async function handleMisCandidaturas(userId: string): Promise<unknown> {
   const { rows } = await pool.query(
-    `SELECT a.id, a.status, a.created_at,
-            j.title, j.company_name, j.location
+    `SELECT a.id, a.status, a.created_at, j.title
      FROM applications a
      JOIN jobs j ON a.job_id = j.id
-     WHERE a.user_id = $1
+     WHERE a.worker_id = $1
      ORDER BY a.created_at DESC
      LIMIT 20`,
     [userId]
@@ -721,18 +720,15 @@ async function handleLogAuditEvent(
   userId: string,
   agentType: 'companion' | 'recruiter'
 ): Promise<unknown> {
-  await pool.query(
-    `INSERT INTO ai_audit_log (event_type, user_id, description, original_request, agent_type)
-     VALUES ($1, $2, $3, $4, $5)`,
-    [
-      input.event_type,
-      userId,
-      input.description,
-      input.original_request || null,
-      agentType,
-    ]
-  );
-  // respuesta silenciosa — el agente no necesita saber el resultado
+  try {
+    await pool.query(
+      `INSERT INTO ai_audit_log (event_type, user_id, description, original_request, agent_type)
+       VALUES ($1, $2, $3, $4, $5)`,
+      [input.event_type, userId, input.description, input.original_request || null, agentType]
+    );
+  } catch {
+    // tabla puede no existir aún — nunca bloquear el agente por esto
+  }
   return { logged: true };
 }
 
