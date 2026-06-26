@@ -140,10 +140,10 @@ function RecruiterFeed() {
                       job={{
                         id: jobData.id as string,
                         title: jobData.title,
-                        city_name: jobData.location,
+                        city_name: (jobData as any).city_name || jobData.location,
                         city_id: jobData.city_id,
-                        contract_type: jobData.contractType,
-                        salary: jobData.salary,
+                        contract_type: jobData.contractType || (jobData as any).contract_type,
+                        salary: (jobData as any).salary,
                         paperwork: jobData.paperworkRequired,
                         requires_nie: jobData.requires_nie,
                         applications_count: jobData.applications_count as number,

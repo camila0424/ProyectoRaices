@@ -361,11 +361,17 @@ async function handleListarMisOfertas(
 ): Promise<unknown> {
   const status = (input.status as string) || 'active';
   const { rows } = await pool.query(
-    `SELECT id, title, status, city_id, contract_type,
-            requires_nie, created_at, applications_count
-     FROM jobs
-     WHERE employer_id = $1 AND status = $2
-     ORDER BY created_at DESC`,
+    `SELECT j.id, j.title, j.status, j.city_id, j.contract_type,
+            j.requires_nie, j.created_at, j.applications_count,
+            c.name as city_name,
+            m.memory_value as salary
+     FROM jobs j
+     LEFT JOIN cities c ON j.city_id = c.id
+     LEFT JOIN agent_user_memory m
+       ON m.user_id = $1
+       AND m.memory_key = CONCAT('job_', j.id::text, '_salary')
+     WHERE j.employer_id = $1 AND j.status = $2
+     ORDER BY j.created_at DESC`,
     [userId, status]
   );
   return { jobs: rows, total: rows.length };
@@ -481,10 +487,26 @@ async function handleCrearOfertaEmpleo(
   // resolver city_id: usar el del input, o buscar Vitoria-Gasteiz, o caer en Madrid (id=1)
   let resolvedCityId = input.cityId as number | null | undefined;
   if (resolvedCityId == null) {
-    const { rows: cityRows } = await pool.query(
-      `SELECT id FROM cities WHERE name = 'Vitoria-Gasteiz' LIMIT 1`
-    );
-    resolvedCityId = cityRows[0]?.id ?? 1;
+    if (input.cityName) {
+      const { rows: cityRows } = await pool.query(
+        'SELECT id FROM cities WHERE name ILIKE $1 LIMIT 1',
+        [`%${input.cityName}%`]
+      );
+      resolvedCityId = cityRows[0]?.id ?? null;
+    }
+    if (resolvedCityId == null && input.city) {
+      const { rows: cityRows } = await pool.query(
+        'SELECT id FROM cities WHERE name ILIKE $1 LIMIT 1',
+        [`%${input.city}%`]
+      );
+      resolvedCityId = cityRows[0]?.id ?? null;
+    }
+    if (resolvedCityId == null) {
+      const { rows: cityRows } = await pool.query(
+        `SELECT id FROM cities WHERE name = 'Madrid' LIMIT 1`
+      );
+      resolvedCityId = cityRows[0]?.id ?? 1;
+    }
   }
 
   const { rows } = await pool.query(
