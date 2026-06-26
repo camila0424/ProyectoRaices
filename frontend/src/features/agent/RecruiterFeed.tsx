@@ -121,43 +121,76 @@ function RecruiterFeed() {
           </div>
         )}
 
-        {messages.map((msg) => {
-          if (msg.type === 'text') {
-            return (
-              <MessageBubble key={msg.id} role={msg.role} content={msg.content} />
-            );
-          }
-
-          if (msg.type === 'card') {
-            if (msg.card.type === 'job') {
-              const jobData = msg.card.data as JobCardData & { id?: string; applications_count?: number; created_at?: string; city_id?: number; requires_nie?: boolean };
-              const isPostingCard = jobData.id && jobData.applications_count !== undefined && jobData.created_at;
-
-              if (isPostingCard) {
-                return (
-                  <div key={msg.id} style={{ marginBottom: '8px' }}>
-                    <JobPostingCard
-                      job={{
-                        id: jobData.id as string,
-                        title: jobData.title,
-                        city_name: (jobData as any).city_name || jobData.location,
-                        city_id: jobData.city_id,
-                        contract_type: jobData.contractType || (jobData as any).contract_type,
-                        salary: (jobData as any).salary,
-                        paperwork: jobData.paperworkRequired,
-                        requires_nie: jobData.requires_nie,
-                        applications_count: jobData.applications_count as number,
-                        created_at: jobData.created_at as string,
-                      }}
-                      onEdit={(jobId, jobTitle) =>
-                        sendMessage(`__jobid:${jobId}__Quiero editar el anuncio "${jobTitle}"`)
-                      }
-                    />
-                  </div>
-                );
+        {(() => {
+          const elements: React.ReactNode[] = [];
+          let i = 0;
+          while (i < messages.length) {
+            const msg = messages[i];
+            // agrupar posting cards consecutivas en scroll horizontal
+            if (
+              msg.type === 'card' &&
+              msg.card.type === 'job' &&
+              (msg.card.data as any).applications_count !== undefined
+            ) {
+              const group: typeof messages = [];
+              while (
+                i < messages.length &&
+                messages[i].type === 'card' &&
+                (messages[i] as any).card?.type === 'job' &&
+                (messages[i] as any).card?.data?.applications_count !== undefined
+              ) {
+                group.push(messages[i]);
+                i++;
               }
+              elements.push(
+                <div
+                  key={`group-${group[0].id}`}
+                  style={{
+                    display: 'flex',
+                    flexDirection: 'row',
+                    gap: '12px',
+                    overflowX: 'auto',
+                    paddingBottom: '8px',
+                    marginBottom: '8px',
+                  }}
+                >
+                  {group.map((gMsg) => {
+                    const jobData = (gMsg as any).card.data as any;
+                    return (
+                      <div key={gMsg.id} style={{ flexShrink: 0 }}>
+                        <JobPostingCard
+                          job={{
+                            id: jobData.id,
+                            title: jobData.title,
+                            description: jobData.description,
+                            city_name: jobData.city_name || jobData.location,
+                            city_id: jobData.city_id,
+                            contract_type: jobData.contractType || jobData.contract_type,
+                            salary: jobData.salary,
+                            paperwork: jobData.paperworkRequired,
+                            requires_nie: jobData.requires_nie,
+                            applications_count: jobData.applications_count,
+                            created_at: jobData.created_at,
+                          }}
+                          onEdit={(jobId, jobTitle) =>
+                            sendMessage(`__jobid:${jobId}__Quiero editar el anuncio "${jobTitle}"`)
+                          }
+                        />
+                      </div>
+                    );
+                  })}
+                </div>
+              );
+              continue;
+            }
 
-              return (
+            // resto de mensajes: texto, candidatos, job cards normales
+            if (msg.type === 'text') {
+              elements.push(
+                <MessageBubble key={msg.id} role={msg.role} content={msg.content} />
+              );
+            } else if (msg.type === 'card' && msg.card.type === 'job') {
+              elements.push(
                 <div key={msg.id} style={{ marginBottom: '8px' }}>
                   <JobCard
                     job={msg.card.data}
@@ -173,10 +206,8 @@ function RecruiterFeed() {
                   />
                 </div>
               );
-            }
-
-            if (msg.card.type === 'candidate') {
-              return (
+            } else if (msg.type === 'card' && msg.card.type === 'candidate') {
+              elements.push(
                 <div key={msg.id} style={{ marginBottom: '8px' }}>
                   <CandidateCard
                     candidate={msg.card.data}
@@ -193,10 +224,10 @@ function RecruiterFeed() {
                 </div>
               );
             }
+            i++;
           }
-
-          return null;
-        })}
+          return elements;
+        })()}
 
         {isLoading && (
           <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '12px' }}>

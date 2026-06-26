@@ -97,6 +97,23 @@ export function useAgentChat(): UseAgentChatReturn {
         // reemplazar tarjetas del mismo tipo para evitar acumulación
         if (data.cards && Array.isArray(data.cards) && data.cards.length > 0) {
           setMessages(prev => {
+            // si llega 1 sola card, reemplaza solo esa por id — evita borrar todas las del tipo
+            if (data.cards.length === 1) {
+              const newCardData = data.cards[0];
+              const cardId = (newCardData.data as any)?.id;
+              const sinCardVieja = cardId
+                ? prev.filter(m => !(m.type === 'card' && (m.card.data as any)?.id === cardId))
+                : prev;
+              const nuevaCard = {
+                id: `card-${Date.now()}-${Math.random()}`,
+                type: 'card' as const,
+                card: newCardData,
+              };
+              const next = [...sinCardVieja, nuevaCard];
+              messagesRef.current = next;
+              return next;
+            }
+            // si llegan múltiples cards del mismo tipo, reemplaza todas las del tipo
             const sinCardsViejas = prev.filter(m =>
               m.type !== 'card' || m.card.type !== data.cards[0].type
             );

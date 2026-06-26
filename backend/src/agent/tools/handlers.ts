@@ -360,7 +360,7 @@ async function handleListarMisOfertas(
 ): Promise<unknown> {
   const status = (input.status as string) || 'active';
   const { rows } = await pool.query(
-    `SELECT j.id, j.title, j.status, j.city_id, j.contract_type,
+    `SELECT j.id, j.title, j.description, j.status, j.city_id, j.contract_type,
             j.requires_nie, j.created_at, j.applications_count,
             c.name as city_name,
             m.memory_value as salary
@@ -467,10 +467,17 @@ async function handleEditarOfertaEmpleo(
 
   const changed = changedFields.join(', ');
   const { rows: updatedJob } = await pool.query(
-    `SELECT id, title, status, city_id, contract_type,
-            requires_nie, created_at, applications_count
-     FROM jobs WHERE id = $1`,
-    [input.jobId]
+    `SELECT j.id, j.title, j.description, j.status, j.city_id, j.contract_type,
+            j.requires_nie, j.created_at, j.applications_count,
+            c.name as city_name,
+            m.memory_value as salary
+     FROM jobs j
+     LEFT JOIN cities c ON j.city_id = c.id
+     LEFT JOIN agent_user_memory m
+       ON m.user_id = $1
+       AND m.memory_key = CONCAT('job_', j.id::text, '_salary')
+     WHERE j.id = $2`,
+    [userId, input.jobId]
   );
   return {
     success: true,

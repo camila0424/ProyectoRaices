@@ -4,6 +4,7 @@ interface JobPostingCardProps {
   job: {
     id: string;
     title: string;
+    description?: string;
     city_name?: string;
     city_id?: string | number;
     contract_type?: string;
@@ -54,8 +55,9 @@ function JobPostingCard({ job, onEdit }: JobPostingCardProps) {
         borderRadius: '16px',
         boxShadow: '0 2px 8px rgba(31,42,68,0.08)',
         padding: '20px',
-        width: '280px',
-        maxWidth: '100%',
+        width: '260px',
+        minWidth: '260px',
+        maxWidth: '260px',
         boxSizing: 'border-box',
         marginBottom: '8px',
         position: 'relative',
@@ -102,6 +104,21 @@ function JobPostingCard({ job, onEdit }: JobPostingCardProps) {
           <span style={valueStyle}>{formatDate(job.created_at)}</span>
         </p>
       </div>
+
+      {job.description && (
+        <p style={{
+          fontSize: '13px',
+          color: '#4B4B4B',
+          margin: '0 0 12px',
+          lineHeight: '1.5',
+          display: '-webkit-box',
+          WebkitLineClamp: 2,
+          WebkitBoxOrient: 'vertical',
+          overflow: 'hidden',
+        } as React.CSSProperties}>
+          {job.description}
+        </p>
+      )}
 
       <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
         <button
