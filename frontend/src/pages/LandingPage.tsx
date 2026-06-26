@@ -1,3 +1,4 @@
+import { useState, useRef, useEffect } from 'react';
 import { Link } from 'react-router-dom';
 
 const playfair = "'Playfair Display', serif";
@@ -73,26 +74,26 @@ function WhatsAppIcon() {
 }
 
 function LandingPage() {
+  const [menuOpen, setMenuOpen] = useState(false);
+  const navRef = useRef<HTMLElement>(null);
+
+  // cierra el menú al hacer clic fuera del nav
+  useEffect(() => {
+    if (!menuOpen) return;
+    const handleClick = (e: MouseEvent) => {
+      if (navRef.current && !navRef.current.contains(e.target as Node)) {
+        setMenuOpen(false);
+      }
+    };
+    document.addEventListener('mousedown', handleClick);
+    return () => document.removeEventListener('mousedown', handleClick);
+  }, [menuOpen]);
+
   return (
     <>
-      <style>{`
-        @keyframes eyebrowPulse {
-          0%, 100% { opacity: 1; }
-          50% { opacity: 0.4; }
-        }
-        .pulse-dot {
-          display: inline-block;
-          width: 8px; height: 8px;
-          background: #E8A33D;
-          border-radius: 50%;
-          margin-right: 8px;
-          animation: eyebrowPulse 2s infinite;
-          vertical-align: middle;
-        }
-      `}</style>
-
       {/* ── NAV ──────────────────────────────────────────────── */}
       <nav
+        ref={navRef}
         style={{
           position: 'fixed',
           top: 0,
@@ -121,7 +122,9 @@ function LandingPage() {
             <span style={{ color: '#1F2A44' }}>hausse</span>
             <span style={{ color: '#C1502E' }}>up</span>
           </span>
-          <div style={{ display: 'flex', alignItems: 'center', gap: '12px' }}>
+
+          {/* Botones desktop */}
+          <div className="hidden md:flex items-center gap-3">
             <Link
               to="/login"
               style={{
@@ -153,7 +156,79 @@ function LandingPage() {
               Registrarme
             </Link>
           </div>
+
+          {/* Botón hamburguesa — solo mobile */}
+          <button
+            className="md:hidden"
+            onClick={() => setMenuOpen(prev => !prev)}
+            aria-label="Abrir menú"
+            style={{
+              background: 'none',
+              border: 'none',
+              fontSize: '22px',
+              cursor: 'pointer',
+              color: '#1F2A44',
+              lineHeight: 1,
+              padding: '4px 8px',
+            }}
+          >
+            {menuOpen ? '✕' : '☰'}
+          </button>
         </div>
+
+        {/* Menú desplegable mobile */}
+        {menuOpen && (
+          <div
+            className="md:hidden"
+            style={{
+              position: 'fixed',
+              top: '64px',
+              left: 0,
+              right: 0,
+              backgroundColor: '#F7EEE0',
+              boxShadow: '0 8px 24px rgba(31,42,68,0.15)',
+              zIndex: 99,
+              padding: '16px 24px',
+              display: 'flex',
+              flexDirection: 'column',
+              gap: '12px',
+            }}
+          >
+            <Link
+              to="/login"
+              onClick={() => setMenuOpen(false)}
+              style={{
+                fontFamily: inter,
+                fontSize: '15px',
+                color: '#1F2A44',
+                border: '1.5px solid #1F2A44',
+                borderRadius: '9999px',
+                padding: '10px 16px',
+                textDecoration: 'none',
+                textAlign: 'center',
+              }}
+            >
+              Iniciar sesión
+            </Link>
+            <Link
+              to="/registro"
+              onClick={() => setMenuOpen(false)}
+              style={{
+                fontFamily: inter,
+                fontSize: '15px',
+                fontWeight: 600,
+                color: 'white',
+                backgroundColor: '#C1502E',
+                borderRadius: '9999px',
+                padding: '10px 16px',
+                textDecoration: 'none',
+                textAlign: 'center',
+              }}
+            >
+              Registrarme
+            </Link>
+          </div>
+        )}
       </nav>
 
       {/* ── HERO ─────────────────────────────────────────────── */}
@@ -165,33 +240,7 @@ function LandingPage() {
 
           {/* Columna izquierda */}
           <div>
-            {/* Eyebrow pill */}
-            <div
-              style={{
-                display: 'inline-flex',
-                alignItems: 'center',
-                backgroundColor: '#1F2A44',
-                borderRadius: '9999px',
-                padding: '6px 14px',
-                marginBottom: '32px',
-              }}
-            >
-              <span className="pulse-dot" />
-              <span
-                style={{
-                  fontFamily: inter,
-                  fontSize: '12px',
-                  fontWeight: 600,
-                  letterSpacing: '0.08em',
-                  color: '#E8A33D',
-                  textTransform: 'uppercase',
-                }}
-              >
-                RED DE EMPLEO PARA LATINOS EN ESPAÑA
-              </span>
-            </div>
-
-            {/* H1 */}
+            {/* H1 — primer elemento visible del hero (eyebrow eliminado) */}
             <h1
               style={{
                 fontFamily: playfair,
@@ -225,7 +274,7 @@ function LandingPage() {
             {/* CTAs */}
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '32px' }}>
               <Link
-                to="/registro?tipo=candidato"
+                to="/registro/opciones?tipo=worker"
                 style={{
                   fontFamily: inter,
                   fontSize: '16px',
@@ -243,7 +292,7 @@ function LandingPage() {
                 <WhatsAppIcon /> Busco empleo
               </Link>
               <Link
-                to="/registro?tipo=empleador"
+                to="/registro/opciones?tipo=employer"
                 style={{
                   fontFamily: inter,
                   fontSize: '16px',
@@ -387,22 +436,9 @@ function LandingPage() {
       </section>
 
       {/* ── AGENTES ──────────────────────────────────────────── */}
-      <section style={{ backgroundColor: '#1F2A44' }} className="py-24 px-6">
+      <section style={{ backgroundColor: '#1F2A44' }} className="py-12 px-6">
         <div className="max-w-5xl mx-auto">
-          <p
-            style={{
-              fontFamily: inter,
-              fontSize: '12px',
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              color: '#E8A33D',
-              textTransform: 'uppercase',
-              textAlign: 'center',
-              marginBottom: '16px',
-            }}
-          >
-            LOS AGENTES
-          </p>
+          {/* eyebrow "LOS AGENTES" eliminado */}
           <h2
             style={{
               fontFamily: playfair,
@@ -432,85 +468,111 @@ function LandingPage() {
           <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
 
             {/* Tarjeta María */}
-            <div style={{ backgroundColor: '#C1502E', borderRadius: '24px', padding: '40px' }}>
-              <img
-                src="/img/maria.jpeg"
-                alt="María"
-                style={{ width: '72px', height: '72px', borderRadius: '50%', border: '3px solid white', objectFit: 'cover', marginBottom: '16px', display: 'block' }}
-              />
-              <p style={{ fontFamily: inter, fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.70)', textTransform: 'uppercase', marginBottom: '8px' }}>
-                PARA CANDIDATOS
-              </p>
-              <h3 style={{ fontFamily: playfair, fontWeight: 700, fontSize: '48px', color: 'white', margin: '0 0 12px' }}>
-                María
-              </h3>
-              <p style={{ fontFamily: inter, fontSize: '16px', color: 'rgba(255,255,255,0.80)', marginBottom: '24px', lineHeight: 1.5 }}>
-                Tu guía personal en el mercado laboral español. Te ayuda a encontrar trabajo sin CV y en tu idioma.
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {mariaFeatures.map(feat => (
-                  <li key={feat} style={{ fontFamily: inter, fontSize: '15px', color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontWeight: 700 }}>✓</span> {feat}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/registro?tipo=candidato"
-                style={{
-                  display: 'inline-block',
-                  fontFamily: inter,
-                  fontWeight: 600,
-                  fontSize: '15px',
-                  color: '#C1502E',
-                  backgroundColor: 'white',
-                  borderRadius: '9999px',
-                  padding: '12px 24px',
-                  textDecoration: 'none',
-                }}
-              >
-                Hablar con María ▶
-              </Link>
+            <div style={{ backgroundColor: '#C1502E', borderRadius: '24px', padding: '32px 40px' }}>
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                {/* Foto grande */}
+                <img
+                  src="/img/maria.jpeg"
+                  alt="María"
+                  style={{
+                    width: '96px',
+                    height: '96px',
+                    borderRadius: '50%',
+                    border: '3px solid white',
+                    objectFit: 'cover',
+                    flexShrink: 0,
+                  }}
+                />
+                {/* Contenido */}
+                <div>
+                  <p style={{ fontFamily: inter, fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.70)', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    PARA CANDIDATOS
+                  </p>
+                  <h3 style={{ fontFamily: playfair, fontWeight: 700, fontSize: '40px', color: 'white', margin: '0 0 12px' }}>
+                    María
+                  </h3>
+                  <p style={{ fontFamily: inter, fontSize: '15px', color: 'rgba(255,255,255,0.80)', marginBottom: '20px', lineHeight: 1.5 }}>
+                    Tu guía personal en el mercado laboral español. Te ayuda a encontrar trabajo sin CV y en tu idioma.
+                  </p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {mariaFeatures.map(feat => (
+                      <li key={feat} style={{ fontFamily: inter, fontSize: '14px', color: 'white', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: 700 }}>✓</span> {feat}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    to="/registro/opciones?tipo=worker"
+                    style={{
+                      display: 'inline-block',
+                      fontFamily: inter,
+                      fontWeight: 600,
+                      fontSize: '15px',
+                      color: '#C1502E',
+                      backgroundColor: 'white',
+                      borderRadius: '9999px',
+                      padding: '12px 24px',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Hablar con María ▶
+                  </Link>
+                </div>
+              </div>
             </div>
 
             {/* Tarjeta Pablo */}
-            <div style={{ backgroundColor: '#E8A33D', borderRadius: '24px', padding: '40px' }}>
-              <img
-                src="/img/pablo.jpeg"
-                alt="Pablo"
-                style={{ width: '72px', height: '72px', borderRadius: '50%', border: '3px solid white', objectFit: 'cover', marginBottom: '16px', display: 'block' }}
-              />
-              <p style={{ fontFamily: inter, fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(31,42,68,0.70)', textTransform: 'uppercase', marginBottom: '8px' }}>
-                PARA EMPLEADORES
-              </p>
-              <h3 style={{ fontFamily: playfair, fontWeight: 700, fontSize: '48px', color: '#1F2A44', margin: '0 0 12px' }}>
-                Pablo
-              </h3>
-              <p style={{ fontFamily: inter, fontSize: '16px', color: 'rgba(31,42,68,0.80)', marginBottom: '24px', lineHeight: 1.5 }}>
-                Tu asistente de selección. Publica vacantes en lenguaje natural y recibe candidatos listos para empezar.
-              </p>
-              <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
-                {pabloFeatures.map(feat => (
-                  <li key={feat} style={{ fontFamily: inter, fontSize: '15px', color: '#1F2A44', display: 'flex', alignItems: 'center', gap: '8px' }}>
-                    <span style={{ fontWeight: 700 }}>✓</span> {feat}
-                  </li>
-                ))}
-              </ul>
-              <Link
-                to="/registro?tipo=empleador"
-                style={{
-                  display: 'inline-block',
-                  fontFamily: inter,
-                  fontWeight: 600,
-                  fontSize: '15px',
-                  color: 'white',
-                  backgroundColor: '#1F2A44',
-                  borderRadius: '9999px',
-                  padding: '12px 24px',
-                  textDecoration: 'none',
-                }}
-              >
-                Hablar con Pablo →
-              </Link>
+            <div style={{ backgroundColor: '#E8A33D', borderRadius: '24px', padding: '32px 40px' }}>
+              <div className="flex flex-col md:flex-row gap-6 items-start">
+                {/* Foto grande */}
+                <img
+                  src="/img/pablo.jpeg"
+                  alt="Pablo"
+                  style={{
+                    width: '96px',
+                    height: '96px',
+                    borderRadius: '50%',
+                    border: '3px solid white',
+                    objectFit: 'cover',
+                    flexShrink: 0,
+                  }}
+                />
+                {/* Contenido */}
+                <div>
+                  <p style={{ fontFamily: inter, fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(31,42,68,0.70)', textTransform: 'uppercase', marginBottom: '4px' }}>
+                    PARA EMPLEADORES
+                  </p>
+                  <h3 style={{ fontFamily: playfair, fontWeight: 700, fontSize: '40px', color: '#1F2A44', margin: '0 0 12px' }}>
+                    Pablo
+                  </h3>
+                  <p style={{ fontFamily: inter, fontSize: '15px', color: 'rgba(31,42,68,0.80)', marginBottom: '20px', lineHeight: 1.5 }}>
+                    Tu asistente de selección. Publica vacantes en lenguaje natural y recibe candidatos listos para empezar.
+                  </p>
+                  <ul style={{ listStyle: 'none', padding: 0, margin: '0 0 24px', display: 'flex', flexDirection: 'column', gap: '8px' }}>
+                    {pabloFeatures.map(feat => (
+                      <li key={feat} style={{ fontFamily: inter, fontSize: '14px', color: '#1F2A44', display: 'flex', alignItems: 'center', gap: '8px' }}>
+                        <span style={{ fontWeight: 700 }}>✓</span> {feat}
+                      </li>
+                    ))}
+                  </ul>
+                  <Link
+                    to="/registro/opciones?tipo=employer"
+                    style={{
+                      display: 'inline-block',
+                      fontFamily: inter,
+                      fontWeight: 600,
+                      fontSize: '15px',
+                      color: 'white',
+                      backgroundColor: '#1F2A44',
+                      borderRadius: '9999px',
+                      padding: '12px 24px',
+                      textDecoration: 'none',
+                    }}
+                  >
+                    Hablar con Pablo →
+                  </Link>
+                </div>
+              </div>
             </div>
 
           </div>
@@ -550,22 +612,9 @@ function LandingPage() {
       </section>
 
       {/* ── NÚMEROS ──────────────────────────────────────────── */}
-      <section style={{ backgroundColor: '#F7EEE0' }} className="py-24 px-6">
+      <section style={{ backgroundColor: '#F7EEE0' }} className="pt-8 pb-24 px-6">
         <div className="max-w-5xl mx-auto">
-          <p
-            style={{
-              fontFamily: inter,
-              fontSize: '12px',
-              fontWeight: 600,
-              letterSpacing: '0.1em',
-              color: '#C1502E',
-              textTransform: 'uppercase',
-              textAlign: 'center',
-              marginBottom: '16px',
-            }}
-          >
-            EL MERCADO QUE NADIE ATENDÍA
-          </p>
+          {/* eyebrow "EL MERCADO QUE NADIE ATENDÍA" eliminado */}
           <h2
             style={{
               fontFamily: playfair,
@@ -623,7 +672,7 @@ function LandingPage() {
           </p>
           <div style={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '12px' }}>
             <Link
-              to="/registro?tipo=candidato"
+              to="/registro/opciones?tipo=worker"
               style={{
                 fontFamily: inter,
                 fontSize: '16px',
@@ -641,7 +690,7 @@ function LandingPage() {
               <WhatsAppIcon /> Busco empleo — Hablar con María
             </Link>
             <Link
-              to="/registro?tipo=empleador"
+              to="/registro/opciones?tipo=employer"
               style={{
                 fontFamily: inter,
                 fontSize: '16px',
@@ -659,109 +708,7 @@ function LandingPage() {
         </div>
       </section>
 
-      {/* ── FOOTER ───────────────────────────────────────────── */}
-      <footer style={{ backgroundColor: '#1F2A44', padding: '64px 6% 0' }}>
-        <div className="grid grid-cols-1 md:grid-cols-4 gap-12 pb-16">
-
-          {/* Brand */}
-          <div>
-            <p style={{ fontFamily: inter, fontWeight: 600, fontSize: '20px', margin: '0 0 12px' }}>
-              <span style={{ color: 'white' }}>hausse</span>
-              <span style={{ color: '#E8A33D' }}>up</span>
-            </p>
-            <p style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.60)', lineHeight: 1.6, margin: 0 }}>
-              Red de empleo para latinos en España. Con dignidad.
-            </p>
-          </div>
-
-          {/* Producto */}
-          <div>
-            <h3 style={{ fontFamily: inter, fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.40)', textTransform: 'uppercase', margin: '0 0 16px' }}>
-              PRODUCTO
-            </h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <li>
-                <Link to="/registro?tipo=candidato" style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.70)', textDecoration: 'none' }}>
-                  Para candidatos
-                </Link>
-              </li>
-              <li>
-                <Link to="/registro?tipo=empleador" style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.70)', textDecoration: 'none' }}>
-                  Para empleadores
-                </Link>
-              </li>
-              <li>
-                <a href="#how" style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.70)', textDecoration: 'none' }}>
-                  Cómo funciona
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Empresa */}
-          <div>
-            <h3 style={{ fontFamily: inter, fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.40)', textTransform: 'uppercase', margin: '0 0 16px' }}>
-              EMPRESA
-            </h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <li>
-                <Link to="/about" style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.70)', textDecoration: 'none' }}>
-                  Sobre nosotros
-                </Link>
-              </li>
-              <li>
-                <a href="mailto:hola@hausseup.com" style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.70)', textDecoration: 'none' }}>
-                  Contacto
-                </a>
-              </li>
-            </ul>
-          </div>
-
-          {/* Comunidad */}
-          <div>
-            <h3 style={{ fontFamily: inter, fontSize: '12px', fontWeight: 600, letterSpacing: '0.1em', color: 'rgba(255,255,255,0.40)', textTransform: 'uppercase', margin: '0 0 16px' }}>
-              COMUNIDAD
-            </h3>
-            <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: '8px' }}>
-              <li>
-                <a href="https://youtube.com/@gustavo.perignan" target="_blank" rel="noopener noreferrer" style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.70)', textDecoration: 'none' }}>
-                  YouTube
-                </a>
-              </li>
-              <li>
-                <a href="https://linkedin.com/company/hausseup" target="_blank" rel="noopener noreferrer" style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.70)', textDecoration: 'none' }}>
-                  LinkedIn
-                </a>
-              </li>
-            </ul>
-          </div>
-
-        </div>
-
-        <div
-          style={{
-            borderTop: '1px solid rgba(255,255,255,0.10)',
-            padding: '24px 0',
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            flexWrap: 'wrap',
-            gap: '12px',
-          }}
-        >
-          <p style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.40)', margin: 0 }}>
-            © 2026 Hausseup. Todos los derechos reservados.
-          </p>
-          <div style={{ display: 'flex', gap: '24px' }}>
-            <Link to="/privacidad" style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.40)', textDecoration: 'none' }}>
-              Política de privacidad
-            </Link>
-            <Link to="/terminos" style={{ fontFamily: inter, fontSize: '14px', color: 'rgba(255,255,255,0.40)', textDecoration: 'none' }}>
-              Términos
-            </Link>
-          </div>
-        </div>
-      </footer>
+      {/* footer eliminado — lo renderiza Layout → Footer.tsx para evitar duplicado */}
     </>
   );
 }
