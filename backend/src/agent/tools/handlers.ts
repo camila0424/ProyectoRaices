@@ -4,6 +4,10 @@ import { generateMatchReason, generateCandidateMatchReason } from './matchReason
 
 import pool from '../../config/db';
 import {
+  recordSignal,
+  updateEmotionalState,
+} from '../memory/signals.repository';
+import {
   generateEmbedding,
   cosineSimilarity,
   upsertEmbedding,
@@ -89,6 +93,14 @@ export async function executeTool(
 
     case 'programar_entrevista':
       return await handleProgramarEntrevista(toolInput, userId);
+
+    // ─── TOOLS DE APRENDIZAJE ───────────────────────────────────────────
+
+    case 'registrar_senal':
+      return await handleRegistrarSenal(toolInput, userId);
+
+    case 'actualizar_estado_emocional':
+      return await handleActualizarEstadoEmocional(toolInput, userId);
 
     // ─── TOOL COMPARTIDA ────────────────────────────────────────────────
 
@@ -1008,6 +1020,43 @@ async function regenerateWorkerEmbedding(userId: string): Promise<void> {
   } catch (err) {
     console.error('[embeddings] worker regen error:', (err as Error).message);
   }
+}
+
+async function handleRegistrarSenal(
+  input: Record<string, unknown>,
+  userId: string
+): Promise<unknown> {
+  const signalType = input.signalType as string;
+  const signalValue = input.signalValue as string;
+  const metadata = (input.metadata as Record<string, unknown>) || {};
+
+  if (!signalType || !signalValue) {
+    return { error: 'Faltan signalType o signalValue' };
+  }
+
+  await recordSignal(userId, {
+    signalType: signalType as 'job_rejected' | 'candidate_rejected' | 'application_made' | 'preference_stated' | 'job_filled' | 'worker_hired',
+    signalValue,
+    metadata,
+  });
+
+  return { success: true };
+}
+
+async function handleActualizarEstadoEmocional(
+  input: Record<string, unknown>,
+  userId: string
+): Promise<unknown> {
+  const currentMood = input.currentMood as string | undefined;
+  const contextSummary = input.contextSummary as string | undefined;
+  const urgencyLevel = input.urgencyLevel as string | undefined;
+
+  if (!currentMood && !contextSummary && !urgencyLevel) {
+    return { error: 'Debe haber al menos un campo' };
+  }
+
+  await updateEmotionalState(userId, { currentMood, contextSummary, urgencyLevel });
+  return { success: true };
 }
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────

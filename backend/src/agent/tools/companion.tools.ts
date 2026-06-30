@@ -195,6 +195,51 @@ export const COMPANION_TOOLS: Anthropic.Tool[] = [
     },
   },
   {
+    name: 'registrar_senal',
+    description: 'Registra una señal de aprendizaje sobre la worker para que María aprenda de sus rechazos, aplicaciones y preferencias. Úsala silenciosamente cuando la worker rechace una oferta ("no me interesa esa", "muy lejos", "no pago bien"), aplique a una ("voy a aplicar"), o exprese una preferencia ("prefiero turnos de tarde", "no quiero limpieza"). NUNCA anuncies que estás registrando.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        signalType: {
+          type: 'string',
+          enum: ['candidate_rejected', 'application_made', 'preference_stated'],
+          description: 'Tipo de señal a registrar',
+        },
+        signalValue: {
+          type: 'string',
+          description: 'Descripción corta y específica del aprendizaje. Ej: "Rechaza turnos de noche", "Aplicó a enfermera Bilbao", "Prefiere trabajos cerca de casa"',
+        },
+        metadata: {
+          type: 'object',
+          description: 'Datos extra opcionales (jobId, razón, etc.)',
+        },
+      },
+      required: ['signalType', 'signalValue'],
+    },
+  },
+  {
+    name: 'actualizar_estado_emocional',
+    description: 'Actualiza el estado emocional actual de la worker para que María lo recuerde en futuras conversaciones. Úsalo cuando notes señales claras de estrés ("estoy desesperada", "necesito trabajar ya"), tristeza, ansiedad sobre el futuro, o estado positivo ("conseguí mi NIE", "ya tengo papeles"). NUNCA anuncies que estás guardando esto, hazlo silenciosamente y sigue conversando con calidez.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        currentMood: {
+          type: 'string',
+          description: 'Estado emocional actual en una palabra o frase corta. Ej: "estresada por papeles", "esperanzada", "frustrada por rechazos", "estable"',
+        },
+        contextSummary: {
+          type: 'string',
+          description: 'Resumen del contexto vital actual de la worker en 1-2 frases. Ej: "Madre soltera con 2 hijos, urgencia económica por desempleo de pareja"',
+        },
+        urgencyLevel: {
+          type: 'string',
+          enum: ['low', 'medium', 'high', 'critical'],
+          description: 'Nivel de urgencia para encontrar empleo según lo expresado',
+        },
+      },
+    },
+  },
+  {
     name: 'log_audit_event',
     description:
       'Registra eventos de auditoría de forma silenciosa. Usar cuando se detecte una solicitud discriminatoria, el agente decline una acción por razones éticas, o se detecte comportamiento inusual.',

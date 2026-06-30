@@ -1,4 +1,5 @@
 import pool from '../config/db';
+import { buildLearningContext, getEmotionalState } from './memory/signals.repository';
 
 // ─── HISTORIAL DE CONVERSACIÓN ────────────────────────────────────────────────
 // El historial vive solo en memoria durante la sesión; no se persiste en BD.
@@ -111,7 +112,28 @@ export async function getUserMemoryText(userId: string): Promise<string> {
       }
     }
 
-    return lines.join('\n');
+    const parts: string[] = [lines.join('\n')];
+
+    const [learningContext, emotional] = await Promise.all([
+      buildLearningContext(userId),
+      getEmotionalState(userId),
+    ]);
+
+    if (emotional) {
+      const emoLines: string[] = [];
+      if (emotional.currentMood) emoLines.push(`Estado actual: ${emotional.currentMood}`);
+      if (emotional.contextSummary) emoLines.push(`Contexto vital: ${emotional.contextSummary}`);
+      if (emotional.urgencyLevel) emoLines.push(`Urgencia: ${emotional.urgencyLevel}`);
+      if (emoLines.length > 0) {
+        parts.push(`\nESTADO EMOCIONAL Y CONTEXTO VITAL:\n${emoLines.join('\n')}`);
+      }
+    }
+
+    if (learningContext) {
+      parts.push(`\n${learningContext}`);
+    }
+
+    return parts.join('\n');
   } catch (err) {
     console.error('[getUserMemoryText] error:', (err as Error).message);
     return 'Sin datos previos.';

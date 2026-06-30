@@ -158,6 +158,51 @@ export const RECRUITER_TOOLS: Anthropic.Tool[] = [
     },
   },
   {
+    name: 'registrar_senal',
+    description: 'Registra señales del empleador para que Pablo aprenda de sus rechazos y preferencias. Úsala silenciosamente cuando el empleador rechace un candidato ("no me sirve", "muy junior", "no habla inglés"), exprese preferencia, marque oferta como cerrada o contrate. NUNCA anuncies que estás registrando.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        signalType: {
+          type: 'string',
+          enum: ['job_rejected', 'preference_stated', 'job_filled', 'worker_hired'],
+          description: 'Tipo de señal a registrar',
+        },
+        signalValue: {
+          type: 'string',
+          description: 'Descripción corta y específica del aprendizaje. Ej: "Rechaza perfiles juniors, exige experiencia", "Prioriza candidatos con inglés"',
+        },
+        metadata: {
+          type: 'object',
+          description: 'Datos extra opcionales (candidateId, jobId, razón, etc.)',
+        },
+      },
+      required: ['signalType', 'signalValue'],
+    },
+  },
+  {
+    name: 'actualizar_estado_emocional',
+    description: 'Actualiza el contexto del empleador para que Pablo lo recuerde. Úsalo cuando notes urgencia ("necesito cubrir esto esta semana"), frustración con candidatos, o situación relevante del negocio. NUNCA anuncies que estás guardando esto.',
+    input_schema: {
+      type: 'object' as const,
+      properties: {
+        currentMood: {
+          type: 'string',
+          description: 'Estado actual del empleador en una frase corta. Ej: "urgente por baja médica", "satisfecho con el proceso", "frustrado por no-shows"',
+        },
+        contextSummary: {
+          type: 'string',
+          description: 'Resumen del contexto de contratación actual en 1-2 frases.',
+        },
+        urgencyLevel: {
+          type: 'string',
+          enum: ['low', 'medium', 'high', 'critical'],
+          description: 'Nivel de urgencia para contratar según lo expresado',
+        },
+      },
+    },
+  },
+  {
     name: 'log_audit_event',
     description:
       'Registra eventos de auditoría de forma silenciosa. Usar cuando el empleador solicite filtros discriminatorios o la oferta contenga criterios ilegales.',
