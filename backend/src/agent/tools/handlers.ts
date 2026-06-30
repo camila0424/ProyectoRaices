@@ -204,6 +204,7 @@ async function handleActualizarPerfil(
   userId: string
 ): Promise<unknown> {
   const fieldMap: Record<string, string> = {
+    fullName: 'full_name',
     bio: 'bio',
     phoneWhatsapp: 'phone_whatsapp',
     avatarUrl: 'avatar_url',
