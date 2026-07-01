@@ -26,6 +26,9 @@ export async function runAgentLoop(
   agentType: AgentType,
   history?: Array<{ role: 'user' | 'assistant'; content: string }>
 ): Promise<AgentResponse> {
+  console.log('[agent DEBUG] userMessage recibido:', JSON.stringify(userMessage));
+  console.log('[agent DEBUG] agentType:', agentType, 'userId:', userId);
+
   // preparar contexto: memoria, herramientas y nombre del usuario
   const [userMemory, recentHistoryText] = await Promise.all([
     getUserMemoryText(userId),
@@ -64,6 +67,8 @@ export async function runAgentLoop(
       return { message: literalMessage };
     }
   }
+
+  console.log('[agent DEBUG] short-circuit NO se disparó, continuando al modelo');
 
   const systemPrompt =
     agentType === 'companion'
