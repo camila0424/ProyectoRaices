@@ -218,10 +218,13 @@ function EmployerDashboard() {
                                                 </span>
                                             </div>
                                             <div className="flex gap-2">
-                                                <button className="px-4 py-1.5 rounded-lg text-xs text-[#1F2A44] hover:text-[#1F2A44] border border-[#E8D9C4] hover:border-[#E8A33D] transition">
+                                                <button
+                                                    onClick={() => alert(`Para editar esta oferta, usa el chat con Pablo. Dile: 'Quiero editar la oferta de ${anuncio.titulo}'.`)}
+                                                    className="px-4 py-1.5 rounded-lg text-xs text-[#1F2A44] hover:text-[#1F2A44] border border-[#E8D9C4] hover:border-[#E8A33D] transition">
                                                     Editar
                                                 </button>
                                                 <button
+                                                    onClick={() => alert(`Para ver candidatos, usa el chat con Pablo. Dile: 'Muéstrame los candidatos de ${anuncio.titulo}'.`)}
                                                     className="px-4 py-1.5 rounded-lg text-xs text-white hover:brightness-110 transition"
                                                     style={{ backgroundColor: "#C1502E" }}
                                                 >

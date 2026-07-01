@@ -963,20 +963,27 @@ async function handleGuardarProfesion(
   input: Record<string, unknown>,
   userId: string
 ): Promise<unknown> {
-  await pool.query(
-    `INSERT INTO user_professions
-     (user_id, profession_name, years_experience, has_title, title_homologated, description, is_primary)
-     VALUES ($1, $2, $3, $4, $5, $6, $7)`,
-    [
-      userId,
-      input.professionName,
-      input.yearsExperience || null,
-      input.hasTitle || false,
-      input.titleHomologated || false,
-      input.description || null,
-      input.isPrimary || false,
-    ]
+  const { rows: existing } = await pool.query(
+    `SELECT id FROM user_professions
+     WHERE user_id = $1 AND LOWER(profession_name) = LOWER($2)`,
+    [userId, input.professionName]
   );
+  if (existing.length === 0) {
+    await pool.query(
+      `INSERT INTO user_professions
+       (user_id, profession_name, years_experience, has_title, title_homologated, description, is_primary)
+       VALUES ($1, $2, $3, $4, $5, $6, $7)`,
+      [
+        userId,
+        input.professionName,
+        input.yearsExperience || null,
+        input.hasTitle || false,
+        input.titleHomologated || false,
+        input.description || null,
+        input.isPrimary || false,
+      ]
+    );
+  }
   // regenerar embedding en background tras cualquier cambio del perfil
   regenerateWorkerEmbedding(userId).catch((e) => console.error('[embeddings] regen failed:', e));
   return { success: true };
@@ -1002,11 +1009,18 @@ async function handleGuardarCertificacion(
   input: Record<string, unknown>,
   userId: string
 ): Promise<unknown> {
-  await pool.query(
-    `INSERT INTO user_certifications (user_id, certification_name, details)
-     VALUES ($1, $2, $3)`,
-    [userId, input.certificationName, input.details || null]
+  const { rows: existing } = await pool.query(
+    `SELECT id FROM user_certifications
+     WHERE user_id = $1 AND LOWER(certification_name) = LOWER($2)`,
+    [userId, input.certificationName]
   );
+  if (existing.length === 0) {
+    await pool.query(
+      `INSERT INTO user_certifications (user_id, certification_name, details)
+       VALUES ($1, $2, $3)`,
+      [userId, input.certificationName, input.details || null]
+    );
+  }
   // regenerar embedding en background tras cualquier cambio del perfil
   regenerateWorkerEmbedding(userId).catch((e) => console.error('[embeddings] regen failed:', e));
   return { success: true };
@@ -1016,11 +1030,18 @@ async function handleGuardarDisposicionProfesion(
   input: Record<string, unknown>,
   userId: string
 ): Promise<unknown> {
-  await pool.query(
-    `INSERT INTO user_open_to_professions (user_id, profession_name)
-     VALUES ($1, $2)`,
+  const { rows: existing } = await pool.query(
+    `SELECT id FROM user_open_to_professions
+     WHERE user_id = $1 AND LOWER(profession_name) = LOWER($2)`,
     [userId, input.professionName]
   );
+  if (existing.length === 0) {
+    await pool.query(
+      `INSERT INTO user_open_to_professions (user_id, profession_name)
+       VALUES ($1, $2)`,
+      [userId, input.professionName]
+    );
+  }
   // regenerar embedding en background tras cualquier cambio del perfil
   regenerateWorkerEmbedding(userId).catch((e) => console.error('[embeddings] regen failed:', e));
   return { success: true };

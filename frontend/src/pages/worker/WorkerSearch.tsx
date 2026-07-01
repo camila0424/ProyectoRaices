@@ -568,8 +568,11 @@ function WorkerSearch() {
         try {
             await api.post("/applications", { jobId: empleo.id });
             setAplicados((prev) => new Set([...prev, empleo.id]));
-        } catch {
-            // silencioso — el usuario seguirá viendo el botón activo
+        } catch (error) {
+            const mensaje = error instanceof Error && error.message
+                ? error.message
+                : 'No pudimos enviar tu candidatura. Vuelve a intentarlo en un momento.';
+            alert(mensaje);
         } finally {
             setAplicando(null);
         }

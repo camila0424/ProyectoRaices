@@ -58,7 +58,7 @@ export async function deleteUser(
     return;
   }
   try {
-    await pool.query("DELETE FROM users WHERE id = ?", [req.userId]);
+    await pool.query("DELETE FROM users WHERE id = $1", [req.userId]);
     res.json({ mensaje: "Cuenta eliminada correctamente" });
   } catch (error) {
     console.error("Error eliminando cuenta:", error);
