@@ -61,9 +61,10 @@ export async function runAgentLoop(
         `${greeting}Soy María, tu agente en Hausseup. Antes de nada, gracias por confiar en nosotros ` +
         `y darle una oportunidad a esta plataforma que estamos construyendo con mucho cariño para la ` +
         `comunidad latina en España. Estoy aquí para ayudarte a encontrar trabajo digno y armar tu perfil ` +
-        `para que las empresas te encuentren. Lo que me cuentes queda entre nosotras. Cuéntame un poco de ` +
-        `ti: de dónde vienes, cuánto tiempo llevas en España, a qué te has dedicado profesionalmente y ` +
-        `cómo te ves trabajando aquí. Cuéntame con calma, sin formularios.`;
+        `para que las empresas te encuentren. Lo que me cuentes queda entre nosotras. Puedes contarme ` +
+        `con calma, sin formularios, o si tienes tu CV a mano puedes subirlo tocando el clip aquí abajo ` +
+        `y yo lo leo por ti. Cuéntame un poco de ti: de dónde vienes, cuánto tiempo llevas en España, ` +
+        `a qué te has dedicado profesionalmente y cómo te ves trabajando aquí.`;
       await saveConversationTurn(userId, userMessage, literalMessage);
       return { message: literalMessage };
     }

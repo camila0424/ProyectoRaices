@@ -18,12 +18,49 @@ function CompanionFeed() {
     confirmAction,
     inputValue,
     setInputValue,
+    addAgentMessage,
   } = useAgentChat();
 
   const agentName = 'María';
   const agentAvatar = '/img/maria.jpeg';
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const cvInputRef = useRef<HTMLInputElement>(null);
+
+  async function handleCVUpload(e: React.ChangeEvent<HTMLInputElement>) {
+    const file = e.target.files?.[0];
+    if (!file) return;
+
+    addAgentMessage('Estoy leyendo tu CV, dame un momento.');
+
+    const formData = new FormData();
+    formData.append('cv', file);
+
+    try {
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/agent/upload-cv`, {
+        method: 'POST',
+        headers: { Authorization: `Bearer ${localStorage.getItem('token')}` },
+        body: formData,
+      });
+
+      if (!res.ok) {
+        const errData = await res.json().catch(() => ({}));
+        addAgentMessage(errData.error || 'No pude leer tu CV. ¿Lo intentamos de otra forma?');
+        return;
+      }
+
+      const data = await res.json();
+      const parts: string[] = [];
+      parts.push('Ya terminé de leer tu CV.');
+      if (data.summary) parts.push(data.summary);
+      parts.push('Guardé todo en tu perfil. Solo me falta confirmar dos cosas: ¿en qué ciudad de España vives ahora mismo? Y ¿qué tipo de trabajo estás buscando aquí?');
+      addAgentMessage(parts.join(' '));
+    } catch {
+      addAgentMessage('Algo salió mal subiendo tu CV. Vuelve a intentarlo en un momento.');
+    } finally {
+      if (cvInputRef.current) cvInputRef.current.value = '';
+    }
+  }
 
   // referencia al final del hilo para hacer scroll automático
   const bottomRef = useRef<HTMLDivElement>(null);
@@ -238,6 +275,38 @@ function CompanionFeed() {
           flexShrink: 0,
         }}
       >
+        <input
+          ref={cvInputRef}
+          type="file"
+          accept="application/pdf"
+          style={{ display: 'none' }}
+          onChange={handleCVUpload}
+        />
+        <button
+          type="button"
+          onClick={() => cvInputRef.current?.click()}
+          title="Subir CV en PDF"
+          style={{
+            width: '44px',
+            height: '44px',
+            borderRadius: '50%',
+            background: '#1F2A44',
+            border: 'none',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            cursor: 'pointer',
+            flexShrink: 0,
+            transition: 'background 0.2s',
+          }}
+          onMouseEnter={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#C1502E'; }}
+          onMouseLeave={(e) => { (e.currentTarget as HTMLButtonElement).style.background = '#1F2A44'; }}
+          aria-label="Subir CV"
+        >
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#FFFFFF" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+            <path d="M21.44 11.05l-9.19 9.19a6 6 0 0 1-8.49-8.49l9.19-9.19a4 4 0 0 1 5.66 5.66l-9.2 9.19a2 2 0 0 1-2.83-2.83l8.49-8.48" />
+          </svg>
+        </button>
         <input
           type="text"
           value={inputValue}

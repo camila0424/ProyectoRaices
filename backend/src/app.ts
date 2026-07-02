@@ -10,6 +10,7 @@ import jobsRoutes from "./modules/jobs/jobs.routes";
 import applicationsRoutes from "./modules/applications/applications.routes";
 import citiesRoutes from "./modules/cities/cities.routes";
 import agentRoutes from "./agent/agent.routes";
+import cvRoutes from "./agent/cv/cv.routes";
 import { errorMiddleware } from "./middlewares/error.middleware";
 
 const app = express();
@@ -47,6 +48,7 @@ app.use("/api/jobs", jobsRoutes);
 app.use("/api/applications", applicationsRoutes);
 app.use("/api/cities", citiesRoutes); // cities route registered
 app.use("/api/agent", agentRoutes);
+app.use("/api/agent", cvRoutes);
 
 // Health check
 app.get("/health", async (_req, res) => {

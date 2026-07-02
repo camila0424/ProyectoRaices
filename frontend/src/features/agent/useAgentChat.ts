@@ -16,6 +16,7 @@ interface UseAgentChatReturn {
   setInputValue: (v: string) => void;
   profileModalData: any;
   closeProfileModal: () => void;
+  addAgentMessage: (text: string) => void;
 }
 
 export function useAgentChat(): UseAgentChatReturn {
@@ -227,5 +228,12 @@ export function useAgentChat(): UseAgentChatReturn {
     setInputValue,
     profileModalData,
     closeProfileModal: () => setProfileModalData(null),
+    addAgentMessage: (text: string) =>
+      addMessage({
+        id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        type: 'text',
+        role: 'agent',
+        content: text,
+      }),
   };
 }
