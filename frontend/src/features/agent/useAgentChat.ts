@@ -1,10 +1,11 @@
 import { useState, useCallback, useRef } from 'react';
 import type { AgentCard, PendingAction } from '../../types/agent';
 
-// un mensaje en el hilo conversacional puede ser texto o una tarjeta inline
+// un mensaje en el hilo conversacional puede ser texto, tarjeta o adjunto de archivo
 export type ChatMessage =
   | { id: string; type: 'text'; role: 'user' | 'agent'; content: string }
-  | { id: string; type: 'card'; card: AgentCard };
+  | { id: string; type: 'card'; card: AgentCard }
+  | { id: string; type: 'file'; role: 'user'; fileName: string; fileSize: number };
 
 interface UseAgentChatReturn {
   messages: ChatMessage[];
@@ -17,6 +18,7 @@ interface UseAgentChatReturn {
   profileModalData: any;
   closeProfileModal: () => void;
   addAgentMessage: (text: string) => void;
+  addUserFileMessage: (fileName: string, fileSize: number) => void;
 }
 
 export function useAgentChat(): UseAgentChatReturn {
@@ -234,6 +236,14 @@ export function useAgentChat(): UseAgentChatReturn {
         type: 'text',
         role: 'agent',
         content: text,
+      }),
+    addUserFileMessage: (fileName: string, fileSize: number) =>
+      addMessage({
+        id: `msg-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`,
+        type: 'file',
+        role: 'user',
+        fileName,
+        fileSize,
       }),
   };
 }

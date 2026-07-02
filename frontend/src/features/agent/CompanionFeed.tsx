@@ -7,6 +7,27 @@ import CandidateCard from './CandidateCard';
 import ActionConfirmModal from './ActionConfirmModal';
 import AgentDrawer from './AgentDrawer';
 
+function TypingDots() {
+  return (
+    <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '12px' }}>
+      <div
+        style={{
+          padding: '12px 16px',
+          background: '#F7EEE0',
+          borderRadius: '18px 18px 18px 4px',
+          display: 'flex',
+          alignItems: 'center',
+          border: '1px solid rgba(31,42,68,0.08)',
+        }}
+      >
+        <div className="typing-dots">
+          <span /><span /><span />
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // pantalla principal del candidato: /agente
 // estructura fija: header 60px + thread scrollable + input 80px
 function CompanionFeed() {
@@ -19,19 +40,23 @@ function CompanionFeed() {
     inputValue,
     setInputValue,
     addAgentMessage,
+    addUserFileMessage,
   } = useAgentChat();
 
   const agentName = 'María';
   const agentAvatar = '/img/maria.jpeg';
 
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [isProcessingCV, setIsProcessingCV] = useState(false);
   const cvInputRef = useRef<HTMLInputElement>(null);
 
   async function handleCVUpload(e: React.ChangeEvent<HTMLInputElement>) {
     const file = e.target.files?.[0];
     if (!file) return;
 
+    addUserFileMessage(file.name, file.size);
     addAgentMessage('Estoy leyendo tu CV, dame un momento.');
+    setIsProcessingCV(true);
 
     const formData = new FormData();
     formData.append('cv', file);
@@ -58,6 +83,7 @@ function CompanionFeed() {
     } catch {
       addAgentMessage('Algo salió mal subiendo tu CV. Vuelve a intentarlo en un momento.');
     } finally {
+      setIsProcessingCV(false);
       if (cvInputRef.current) cvInputRef.current.value = '';
     }
   }
@@ -168,7 +194,7 @@ function CompanionFeed() {
           </div>
         )}
 
-        {/* renderizar cada mensaje: texto o tarjeta */}
+        {/* renderizar cada mensaje: texto, tarjeta o adjunto */}
         {messages.map((msg) => {
           if (msg.type === 'text') {
             return (
@@ -177,6 +203,54 @@ function CompanionFeed() {
                 role={msg.role}
                 content={msg.content}
               />
+            );
+          }
+
+          if (msg.type === 'file') {
+            return (
+              <div
+                key={msg.id}
+                style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: '12px' }}
+              >
+                <div
+                  style={{
+                    background: '#1F2A44',
+                    borderRadius: '12px',
+                    padding: '10px 14px',
+                    display: 'flex',
+                    alignItems: 'center',
+                    gap: '10px',
+                    maxWidth: '260px',
+                  }}
+                >
+                  <svg
+                    width="20" height="20" viewBox="0 0 24 24"
+                    fill="none" stroke="#F7EEE0" strokeWidth="2"
+                    strokeLinecap="round" strokeLinejoin="round"
+                    style={{ flexShrink: 0 }}
+                  >
+                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z" />
+                    <polyline points="14 2 14 8 20 8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                  </svg>
+                  <div>
+                    <div
+                      style={{
+                        color: '#F7EEE0',
+                        fontSize: '13px',
+                        fontWeight: '500',
+                        wordBreak: 'break-all',
+                      }}
+                    >
+                      {msg.fileName}
+                    </div>
+                    <div style={{ color: 'rgba(247,238,224,0.7)', fontSize: '12px', marginTop: '2px' }}>
+                      {Math.round(msg.fileSize / 1024)} KB
+                    </div>
+                  </div>
+                </div>
+              </div>
             );
           }
 
@@ -227,36 +301,11 @@ function CompanionFeed() {
           return null;
         })}
 
-        {/* indicador de que el agente está escribiendo */}
-        {isLoading && (
-          <div style={{ display: 'flex', justifyContent: 'flex-start', marginBottom: '12px' }}>
-            <div
-              style={{
-                padding: '12px 16px',
-                background: '#F7EEE0',
-                borderRadius: '18px 18px 18px 4px',
-                display: 'flex',
-                gap: '4px',
-                alignItems: 'center',
-              }}
-            >
-              {/* tres puntos pulsantes */}
-              {[0, 1, 2].map((i) => (
-                <span
-                  key={i}
-                  style={{
-                    width: '6px',
-                    height: '6px',
-                    borderRadius: '50%',
-                    background: '#C1502E',
-                    opacity: 0.6,
-                    animation: `pulse 1.2s ease-in-out ${i * 0.2}s infinite`,
-                  }}
-                />
-              ))}
-            </div>
-          </div>
-        )}
+        {/* indicador de que el agente está escribiendo (chat normal) */}
+        {isLoading && <TypingDots />}
+
+        {/* indicador de procesamiento de CV */}
+        {isProcessingCV && <TypingDots />}
 
         {/* ancla para el scroll automático */}
         <div ref={bottomRef} />
@@ -373,11 +422,25 @@ function CompanionFeed() {
 
       <AgentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onQuickMessage={sendMessage} agentType="companion" />
 
-      {/* estilos de animación de los puntos pulsantes */}
+      {/* estilos de los puntos de escritura */}
       <style>{`
-        @keyframes pulse {
-          0%, 100% { opacity: 0.3; transform: scale(0.8); }
-          50% { opacity: 1; transform: scale(1.2); }
+        .typing-dots {
+          display: inline-flex;
+          gap: 4px;
+          padding: 4px 0;
+        }
+        .typing-dots span {
+          width: 8px;
+          height: 8px;
+          border-radius: 50%;
+          background-color: #1F2A44;
+          animation: typingPulse 1.4s infinite ease-in-out;
+        }
+        .typing-dots span:nth-child(2) { animation-delay: 0.2s; }
+        .typing-dots span:nth-child(3) { animation-delay: 0.4s; }
+        @keyframes typingPulse {
+          0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
+          30% { opacity: 1; transform: translateY(-4px); }
         }
       `}</style>
     </div>
