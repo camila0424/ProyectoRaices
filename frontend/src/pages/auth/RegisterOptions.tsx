@@ -1,12 +1,33 @@
-import { useEffect } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate, useSearchParams, Link } from "react-router-dom";
 
 const BACKEND_URL = import.meta.env.VITE_API_URL ?? "http://localhost:3001/api";
+
+function isInAppBrowser(): boolean {
+  if (typeof navigator === 'undefined') return false;
+  const ua = navigator.userAgent || '';
+  const patterns = [
+    /FBAN|FBAV/i,
+    /Instagram/i,
+    /LinkedInApp/i,
+    /Twitter/i,
+    /Line/i,
+    /MicroMessenger/i,
+    /TikTok/i,
+    /wv\)/i,
+  ];
+  return patterns.some((rx) => rx.test(ua));
+}
 
 function RegisterOptions() {
     const [params] = useSearchParams();
     const navigate = useNavigate();
     const tipo = params.get("tipo");
+    const [isWebview, setIsWebview] = useState(false);
+
+    useEffect(() => {
+        setIsWebview(isInAppBrowser());
+    }, []);
 
     useEffect(() => {
         if (tipo !== "worker" && tipo !== "employer") {
@@ -36,18 +57,51 @@ function RegisterOptions() {
                     {label} — elige cómo registrarte
                 </p>
 
-                <div className="flex flex-col gap-3">
-                    <a
-                        href={`${BACKEND_URL}/auth/google?rol=${tipo}&intent=registro`}
-                        className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold text-sm border border-[#E8D9C4] hover:bg-[#EDE1CE] transition"
+                {isWebview && (
+                    <div
+                        className="mb-4 px-4 py-3 rounded-xl"
+                        style={{
+                            backgroundColor: 'rgba(234, 179, 8, 0.15)',
+                            border: '1px solid rgba(234, 179, 8, 0.30)',
+                        }}
                     >
-                        <img
-                            src="https://www.svgrepo.com/show/475656/google-color.svg"
-                            alt="Google"
-                            className="w-5 h-5"
-                        />
-                        Continuar con Google
-                    </a>
+                        <p className="text-[#1F2A44] text-sm font-bold mb-1">
+                            Parece que abriste Hausseup desde otra app.
+                        </p>
+                        <p className="text-[#1F2A44] text-sm">
+                            Para poder iniciar sesión con Google, ábrelo desde tu navegador (Chrome, Safari, etc). Copia el enlace hausseup.com y pégalo en tu navegador.
+                        </p>
+                    </div>
+                )}
+
+                <div className="flex flex-col gap-3">
+                    {isWebview ? (
+                        <button
+                            type="button"
+                            onClick={() => alert('Abre Hausseup en tu navegador para usar Google login')}
+                            className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold text-sm border border-[#E8D9C4]"
+                            style={{ opacity: 0.5, cursor: 'not-allowed' }}
+                        >
+                            <img
+                                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                                alt="Google"
+                                className="w-5 h-5"
+                            />
+                            Continuar con Google
+                        </button>
+                    ) : (
+                        <a
+                            href={`${BACKEND_URL}/auth/google?rol=${tipo}&intent=registro`}
+                            className="flex items-center justify-center gap-3 w-full py-3 rounded-xl bg-white text-gray-800 font-semibold text-sm border border-[#E8D9C4] hover:bg-[#EDE1CE] transition"
+                        >
+                            <img
+                                src="https://www.svgrepo.com/show/475656/google-color.svg"
+                                alt="Google"
+                                className="w-5 h-5"
+                            />
+                            Continuar con Google
+                        </a>
+                    )}
 
                     <div className="flex items-center gap-3 my-1">
                         <div className="flex-1 h-px bg-[#E8D9C4]" />
