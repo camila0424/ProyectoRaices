@@ -3,6 +3,7 @@ import type { PendingAction } from '../types';
 import { generateMatchReason, generateCandidateMatchReason } from './matchReason';
 
 import pool from '../../config/db';
+import sendTelegramAlert from '../../notifications/telegram';
 import {
   recordSignal,
   updateEmotionalState,
@@ -106,6 +107,9 @@ export async function executeTool(
 
     case 'log_audit_event':
       return await handleLogAuditEvent(toolInput, userId, agentType);
+
+    case 'reportar_error':
+      return await handleReportarError(toolInput, userId, agentType);
 
     default:
       return { error: `Tool desconocida: ${toolName}` };
@@ -1169,6 +1173,84 @@ async function handleActualizarEstadoEmocional(
 
   await updateEmotionalState(userId, { currentMood, contextSummary, urgencyLevel });
   return { success: true };
+}
+
+async function handleReportarError(
+  input: Record<string, unknown>,
+  userId: string,
+  agentType: 'companion' | 'recruiter'
+): Promise<unknown> {
+  try {
+    await pool.query(
+      `INSERT INTO error_reports
+        (user_id, agent_type, what_was_doing, what_went_wrong, what_expected, screen_or_action, source)
+       VALUES ($1, $2, $3, $4, $5, $6, 'agent')`,
+      [
+        userId,
+        agentType,
+        input.whatWasDoing,
+        input.whatWentWrong,
+        input.whatExpected || null,
+        input.screenOrAction || null,
+      ]
+    );
+
+    sendReportToTelegram({
+      userId,
+      agentType,
+      whatWasDoing: String(input.whatWasDoing),
+      whatWentWrong: String(input.whatWentWrong),
+      screenOrAction: input.screenOrAction ? String(input.screenOrAction) : undefined,
+      source: 'agent',
+    }).catch((e) => console.error('[telegram] fallo async:', e));
+
+    return {
+      success: true,
+      message: 'Reporte guardado. El equipo lo revisará pronto.',
+    };
+  } catch (err) {
+    console.error('[handleReportarError] error:', (err as Error).message);
+    return { success: false, message: 'No pude guardar el reporte, pero lo tengo anotado.' };
+  }
+}
+
+export async function sendReportToTelegram(data: {
+  userId: string;
+  agentType: string;
+  whatWasDoing: string;
+  whatWentWrong: string;
+  screenOrAction?: string;
+  source: 'agent' | 'manual';
+  deviceInfo?: string;
+}): Promise<void> {
+  const { rows } = await pool.query(
+    'SELECT full_name, email FROM users WHERE id = $1',
+    [data.userId]
+  );
+  const user = rows[0] || {};
+  const agentEmoji = data.agentType === 'companion' ? '👩' : '👨';
+  const sourceEmoji = data.source === 'agent' ? '🤖' : '📝';
+
+  const text =
+    `${sourceEmoji} <b>Reporte de error en Hausseup</b>\n\n` +
+    `<b>Agente:</b> ${agentEmoji} ${data.agentType === 'companion' ? 'María (worker)' : 'Pablo (employer)'}\n` +
+    `<b>Usuario:</b> ${user.full_name || '(sin nombre)'} · ${user.email || '(sin email)'}\n` +
+    `<b>ID:</b> ${data.userId}\n\n` +
+    `<b>Qué estaba haciendo:</b>\n${data.whatWasDoing}\n\n` +
+    `<b>Qué falló:</b>\n${data.whatWentWrong}\n` +
+    (data.screenOrAction ? `\n<b>Pantalla/acción:</b> ${data.screenOrAction}\n` : '') +
+    (data.deviceInfo ? `\n<b>Dispositivo:</b> ${data.deviceInfo}\n` : '');
+
+  const ok = await sendTelegramAlert(text);
+
+  if (ok) {
+    await pool.query(
+      `UPDATE error_reports
+       SET notified_telegram = TRUE
+       WHERE user_id = $1 AND created_at > NOW() - INTERVAL '1 minute'`,
+      [data.userId]
+    );
+  }
 }
 
 // ─── HELPERS ─────────────────────────────────────────────────────────────────

@@ -349,7 +349,7 @@ function RecruiterFeed() {
         />
       )}
 
-      <AgentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onQuickMessage={sendMessage} />
+      <AgentDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} onQuickMessage={sendMessage} agentType="recruiter" />
 
       {profileModalData && (
         <CandidateProfileCard

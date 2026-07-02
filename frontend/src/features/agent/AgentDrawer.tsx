@@ -3,21 +3,27 @@ import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../context/AuthContext';
 import { api } from '../../services/api';
 
-type ModalState = 'none' | 'choice' | 'confirm-delete';
+type ModalState = 'none' | 'choice' | 'confirm-delete' | 'report';
 
 interface AgentDrawerProps {
   open: boolean;
   onClose: () => void;
   onQuickMessage: (text: string) => void;
+  agentType: 'companion' | 'recruiter';
 }
 
-function AgentDrawer({ open, onClose, onQuickMessage }: AgentDrawerProps) {
+function AgentDrawer({ open, onClose, onQuickMessage, agentType }: AgentDrawerProps) {
   const navigate = useNavigate();
   const { usuario, logout } = useAuth();
   const [modalState, setModalState] = useState<ModalState>('none');
   const [deleteInput, setDeleteInput] = useState('');
   const [loading, setLoading] = useState(false);
   const [toast, setToast] = useState<string | null>(null);
+
+  // estado del formulario de reporte
+  const [reportWasDoing, setReportWasDoing] = useState('');
+  const [reportWentWrong, setReportWentWrong] = useState('');
+  const [reportScreen, setReportScreen] = useState('');
 
   function handleLogout() {
     logout();
@@ -32,6 +38,42 @@ function AgentDrawer({ open, onClose, onQuickMessage }: AgentDrawerProps) {
   function closeModal() {
     setModalState('none');
     setDeleteInput('');
+    setReportWasDoing('');
+    setReportWentWrong('');
+    setReportScreen('');
+  }
+
+  async function handleSubmitReport() {
+    if (!reportWasDoing.trim() || !reportWentWrong.trim()) return;
+    setLoading(true);
+    try {
+      const deviceInfo = `${navigator.userAgent} · ${window.innerWidth}x${window.innerHeight}`;
+      const res = await fetch(`${import.meta.env.VITE_API_URL}/agent/report-issue`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          Authorization: `Bearer ${localStorage.getItem('token')}`,
+        },
+        body: JSON.stringify({
+          agentType,
+          whatWasDoing: reportWasDoing,
+          whatWentWrong: reportWentWrong,
+          screenOrAction: reportScreen || undefined,
+          deviceInfo,
+        }),
+      });
+      const data = await res.json();
+      if (res.ok) {
+        closeModal();
+        showToast(data.message || 'Gracias, ya lo tenemos. Vamos a revisarlo.');
+      } else {
+        showToast(data.error || 'No pudimos enviar el reporte. Vuelve a intentarlo.');
+      }
+    } catch {
+      showToast('No pudimos enviar el reporte. Vuelve a intentarlo.');
+    } finally {
+      setLoading(false);
+    }
   }
 
   async function handlePause() {
@@ -160,6 +202,11 @@ function AgentDrawer({ open, onClose, onQuickMessage }: AgentDrawerProps) {
         {/* acciones de cuenta al fondo */}
         <div style={{ padding: '0 12px', borderTop: '1px solid rgba(247,238,224,0.1)', paddingTop: '16px', display: 'flex', flexDirection: 'column', gap: '4px' }}>
           <DrawerItem
+            label="Reportar un problema"
+            icon="⚠️"
+            onClick={() => setModalState('report')}
+          />
+          <DrawerItem
             label="Eliminar cuenta"
             icon="🗑️"
             onClick={() => setModalState('choice')}
@@ -183,6 +230,152 @@ function AgentDrawer({ open, onClose, onQuickMessage }: AgentDrawerProps) {
             padding: '20px',
           }}
         >
+          {modalState === 'report' && (
+            <div
+              style={{
+                background: '#fff',
+                borderRadius: '16px',
+                padding: '28px 24px',
+                maxWidth: '380px',
+                width: '100%',
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '14px',
+              }}
+            >
+              <h2
+                style={{
+                  margin: 0,
+                  fontSize: '20px',
+                  fontWeight: '700',
+                  color: '#1F2A44',
+                  fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif",
+                }}
+              >
+                Reportar un problema
+              </h2>
+              <p
+                style={{
+                  margin: 0,
+                  fontSize: '14px',
+                  color: '#4A5568',
+                  lineHeight: 1.5,
+                  fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif",
+                }}
+              >
+                Cuéntanos qué falló y lo revisamos cuanto antes.
+              </p>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#1F2A44', fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif" }}>
+                  ¿Qué estabas haciendo cuando pasó? *
+                </label>
+                <textarea
+                  value={reportWasDoing}
+                  onChange={(e) => setReportWasDoing(e.target.value.slice(0, 500))}
+                  placeholder="Ej: Estaba buscando empleos en Madrid..."
+                  rows={3}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    border: '1.5px solid #D4D4D4',
+                    fontSize: '14px',
+                    fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif",
+                    color: '#1F2A44',
+                    resize: 'vertical',
+                    outline: 'none',
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#1F2A44', fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif" }}>
+                  ¿Qué falló? *
+                </label>
+                <textarea
+                  value={reportWentWrong}
+                  onChange={(e) => setReportWentWrong(e.target.value.slice(0, 500))}
+                  placeholder="Ej: La app se quedó cargando y nunca apareció nada..."
+                  rows={3}
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    border: '1.5px solid #D4D4D4',
+                    fontSize: '14px',
+                    fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif",
+                    color: '#1F2A44',
+                    resize: 'vertical',
+                    outline: 'none',
+                  }}
+                />
+              </div>
+
+              <div style={{ display: 'flex', flexDirection: 'column', gap: '6px' }}>
+                <label style={{ fontSize: '13px', fontWeight: '600', color: '#1F2A44', fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif" }}>
+                  ¿En qué pantalla o acción? (opcional)
+                </label>
+                <input
+                  type="text"
+                  value={reportScreen}
+                  onChange={(e) => setReportScreen(e.target.value.slice(0, 200))}
+                  placeholder="Ej: Chat con María, al enviar candidatura"
+                  style={{
+                    padding: '10px 12px',
+                    borderRadius: '10px',
+                    border: '1.5px solid #D4D4D4',
+                    fontSize: '14px',
+                    fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif",
+                    color: '#1F2A44',
+                    outline: 'none',
+                  }}
+                />
+              </div>
+
+              <button
+                onClick={handleSubmitReport}
+                disabled={loading || reportWasDoing.trim().length < 3 || reportWentWrong.trim().length < 3}
+                style={{
+                  padding: '14px',
+                  borderRadius: '10px',
+                  border: 'none',
+                  background:
+                    !loading && reportWasDoing.trim().length >= 3 && reportWentWrong.trim().length >= 3
+                      ? '#1F2A44'
+                      : '#B0BEC5',
+                  color: '#fff',
+                  fontSize: '15px',
+                  fontWeight: '600',
+                  fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif",
+                  cursor:
+                    !loading && reportWasDoing.trim().length >= 3 && reportWentWrong.trim().length >= 3
+                      ? 'pointer'
+                      : 'not-allowed',
+                  transition: 'background 0.15s',
+                }}
+              >
+                {loading ? 'Enviando...' : 'Enviar reporte'}
+              </button>
+
+              <button
+                onClick={closeModal}
+                disabled={loading}
+                style={{
+                  padding: '12px',
+                  borderRadius: '10px',
+                  border: 'none',
+                  background: 'none',
+                  color: '#4A5568',
+                  fontSize: '14px',
+                  fontWeight: '500',
+                  fontFamily: "'Inter', 'DM Sans', system-ui, sans-serif",
+                  cursor: 'pointer',
+                }}
+              >
+                Cancelar
+              </button>
+            </div>
+          )}
+
           {modalState === 'choice' && (
             <div
               style={{
